@@ -1,0 +1,8 @@
+# Flare by Monarch - robots.txt
+# https://flare.monarch.xyz
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://flare.monarch.xyz/sitemap.xml
