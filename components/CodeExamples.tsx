@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { CodeBlock } from './ui/CodeBlock';
 
@@ -108,32 +108,57 @@ export function CodeExamples() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Tab buttons */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          {/* Tab buttons - horizontal scroll on mobile */}
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide">
             {examples.map((example, index) => (
-              <button
+              <motion.button
                 key={example.title}
                 onClick={() => setActiveIndex(index)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 className={cn(
-                  'px-4 py-2 rounded-md text-sm font-medium transition-all',
+                  'px-4 py-2.5 rounded-md text-sm font-medium transition-all whitespace-nowrap flex-shrink-0',
                   activeIndex === index
-                    ? 'bg-gradient-flare text-white'
+                    ? 'bg-gradient-flare text-white shadow-lg shadow-[#ff6b35]/20'
                     : 'bg-background border border-border text-secondary hover:text-foreground hover:border-[#ff6b35]/30'
                 )}
               >
                 {example.title}
-              </button>
+              </motion.button>
             ))}
           </div>
 
-          {/* Active example */}
-          <div className="bg-background rounded-lg border border-border overflow-hidden">
-            <div className="px-6 py-4 border-b border-border">
-              <h3 className="font-zen font-bold">{examples[activeIndex].title}</h3>
-              <p className="text-secondary text-sm">{examples[activeIndex].description}</p>
+          {/* Active example with animated transition */}
+          <motion.div 
+            className="bg-background rounded-lg border border-border overflow-hidden"
+            layout
+          >
+            <div className="px-4 sm:px-6 py-4 border-b border-border">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <h3 className="font-zen font-bold">{examples[activeIndex].title}</h3>
+                  <p className="text-secondary text-sm">{examples[activeIndex].description}</p>
+                </motion.div>
+              </AnimatePresence>
             </div>
-            <CodeBlock code={examples[activeIndex].code} language="json" />
-          </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <CodeBlock code={examples[activeIndex].code} language="json" />
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         </motion.div>
       </div>
     </section>

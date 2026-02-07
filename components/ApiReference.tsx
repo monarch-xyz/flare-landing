@@ -51,13 +51,13 @@ export function ApiReference() {
             </p>
           </motion.div>
 
-          {/* API table */}
+          {/* API table - desktop */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-background rounded-lg border border-border overflow-hidden mb-8"
+            className="hidden sm:block bg-background rounded-lg border border-border overflow-hidden mb-8"
           >
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -65,12 +65,19 @@ export function ApiReference() {
                   <tr className="border-b border-border">
                     <th className="text-left px-6 py-4 text-sm font-medium text-secondary">Method</th>
                     <th className="text-left px-6 py-4 text-sm font-medium text-secondary">Endpoint</th>
-                    <th className="text-left px-6 py-4 text-sm font-medium text-secondary hidden sm:table-cell">Description</th>
+                    <th className="text-left px-6 py-4 text-sm font-medium text-secondary">Description</th>
                   </tr>
                 </thead>
                 <tbody>
                   {endpoints.map((endpoint, index) => (
-                    <tr key={index} className="border-b border-border last:border-0 hover:bg-hovered transition-colors">
+                    <motion.tr 
+                      key={index} 
+                      className="border-b border-border last:border-0 hover:bg-hovered transition-colors"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
                       <td className="px-6 py-4">
                         <span className={`inline-block px-2 py-1 rounded text-xs font-mono font-medium ${
                           endpoint.method === 'GET' ? 'bg-green-500/10 text-green-500' :
@@ -83,15 +90,41 @@ export function ApiReference() {
                       <td className="px-6 py-4">
                         <code className="text-sm font-mono text-[#ff6b35]">{endpoint.path}</code>
                       </td>
-                      <td className="px-6 py-4 text-secondary text-sm hidden sm:table-cell">
+                      <td className="px-6 py-4 text-secondary text-sm">
                         {endpoint.description}
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </motion.div>
+
+          {/* API cards - mobile */}
+          <div className="sm:hidden space-y-3 mb-8">
+            {endpoints.map((endpoint, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="bg-background rounded-lg border border-border p-4"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-mono font-medium ${
+                    endpoint.method === 'GET' ? 'bg-green-500/10 text-green-500' :
+                    endpoint.method === 'POST' ? 'bg-blue-500/10 text-blue-500' :
+                    'bg-red-500/10 text-red-500'
+                  }`}>
+                    {endpoint.method}
+                  </span>
+                  <code className="text-sm font-mono text-[#ff6b35]">{endpoint.path}</code>
+                </div>
+                <p className="text-secondary text-sm">{endpoint.description}</p>
+              </motion.div>
+            ))}
+          </div>
 
           {/* CTA */}
           <motion.div

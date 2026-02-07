@@ -48,18 +48,31 @@ export function Features() {
         </motion.div>
 
         {/* Feature grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {features.map((feature, index) => (
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+        >
+          {features.map((feature) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
             >
-              <Card className="h-full">
+              <Card className="h-full group">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-[#ff6b35]/10 rounded-lg">
+                  <div className="p-3 bg-[#ff6b35]/10 rounded-lg transition-all duration-300 group-hover:bg-[#ff6b35]/20 group-hover:scale-110">
                     <feature.icon className="w-6 h-6 text-[#ff6b35]" />
                   </div>
                   <div>
@@ -70,7 +83,7 @@ export function Features() {
               </Card>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

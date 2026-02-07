@@ -63,22 +63,34 @@ export function ForAgents() {
               just webhooks when it matters.
             </p>
 
-            {/* Flow diagram */}
-            <div className="flex items-center gap-4 flex-wrap">
-              <div className="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg border border-border">
+            {/* Flow diagram - vertical on mobile, horizontal on desktop */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <motion.div 
+                className="flex items-center gap-2 px-4 py-2.5 bg-surface rounded-lg border border-border w-full sm:w-auto"
+                whileHover={{ scale: 1.02, borderColor: 'rgba(255, 107, 53, 0.3)' }}
+                transition={{ duration: 0.2 }}
+              >
                 <RiFlashlightLine className="w-5 h-5 text-[#ff6b35]" />
                 <span className="text-sm font-medium">Flare Signal</span>
-              </div>
-              <RiArrowRightSLine className="w-6 h-6 text-secondary" />
-              <div className="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg border border-border">
+              </motion.div>
+              <RiArrowRightSLine className="w-6 h-6 text-secondary rotate-90 sm:rotate-0 self-center" />
+              <motion.div 
+                className="flex items-center gap-2 px-4 py-2.5 bg-surface rounded-lg border border-border w-full sm:w-auto"
+                whileHover={{ scale: 1.02, borderColor: 'rgba(255, 107, 53, 0.3)' }}
+                transition={{ duration: 0.2 }}
+              >
                 <span className="text-lg">🔔</span>
                 <span className="text-sm font-medium">Webhook</span>
-              </div>
-              <RiArrowRightSLine className="w-6 h-6 text-secondary" />
-              <div className="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg border border-border">
+              </motion.div>
+              <RiArrowRightSLine className="w-6 h-6 text-secondary rotate-90 sm:rotate-0 self-center" />
+              <motion.div 
+                className="flex items-center gap-2 px-4 py-2.5 bg-surface rounded-lg border border-border w-full sm:w-auto"
+                whileHover={{ scale: 1.02, borderColor: 'rgba(255, 107, 53, 0.3)' }}
+                transition={{ duration: 0.2 }}
+              >
                 <RiRobot2Line className="w-5 h-5 text-[#ff6b35]" />
                 <span className="text-sm font-medium">Agent Action</span>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
 

@@ -8,22 +8,28 @@ const steps = [
     icon: RiCodeSSlashLine,
     title: 'Define',
     description: 'Write conditions in simple JSON DSL. Thresholds, changes, time windows — all composable.',
-    code: `"type": "change"
-"by": { "percent": 20 }`,
+    codeLines: [
+      { key: '"type"', value: '"change"' },
+      { key: '"by"', value: '{ "percent": 20 }' },
+    ],
   },
   {
     icon: RiCloudLine,
     title: 'Deploy',
     description: 'Register your signal via REST API. Flare handles the indexing and evaluation.',
-    code: `POST /signals
-{ "name": "Whale Alert" }`,
+    codeLines: [
+      { method: 'POST', path: '/signals' },
+      { key: null, value: '{ "name": "Whale Alert" }' },
+    ],
   },
   {
     icon: RiNotification3Line,
     title: 'React',
     description: 'Receive webhooks when conditions trigger. Your agent takes action automatically.',
-    code: `webhook_url: "..."
-→ { triggered: true }`,
+    codeLines: [
+      { key: 'webhook_url', value: '"..."' },
+      { arrow: true, value: '{ triggered: true }' },
+    ],
   },
 ];
 
@@ -55,40 +61,86 @@ export function HowItWorks() {
         </motion.div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.15
+              }
+            }
+          }}
+        >
           {steps.map((step, index) => (
             <motion.div
               key={step.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
               className="relative"
             >
               {/* Step number */}
-              <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-flare rounded-full flex items-center justify-center text-white font-bold text-sm">
+              <motion.div 
+                className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-7 h-7 md:w-8 md:h-8 bg-gradient-flare rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm shadow-lg shadow-[#ff6b35]/30"
+                whileHover={{ scale: 1.1 }}
+              >
                 {index + 1}
-              </div>
+              </motion.div>
 
               {/* Card */}
-              <div className="bg-background rounded-lg p-6 border border-border h-full">
-                <step.icon className="w-10 h-10 text-[#ff6b35] mb-4" />
-                <h3 className="font-zen text-xl font-bold mb-2">{step.title}</h3>
+              <div className="bg-background rounded-lg p-5 md:p-6 border border-border h-full transition-all duration-300 hover:border-[#ff6b35]/30 hover:shadow-lg hover:shadow-[#ff6b35]/5">
+                <step.icon className="w-8 h-8 md:w-10 md:h-10 text-[#ff6b35] mb-3 md:mb-4" />
+                <h3 className="font-zen text-lg md:text-xl font-bold mb-2">{step.title}</h3>
                 <p className="text-secondary mb-4 text-sm leading-relaxed">{step.description}</p>
                 
-                {/* Mini code block */}
-                <pre className="text-xs bg-surface rounded-md p-3 overflow-x-auto">
-                  <code className="text-[#ff6b35]/80">{step.code}</code>
-                </pre>
+                {/* Mini code block with syntax highlighting */}
+                <div className="text-xs bg-[#011627] dark:bg-[#011627] rounded-md p-3 overflow-x-auto font-mono custom-scrollbar">
+                  {step.codeLines.map((line, i) => (
+                    <div key={i} className="whitespace-nowrap">
+                      {'method' in line && line.method && (
+                        <>
+                          <span className="text-green-400">{line.method}</span>
+                          <span className="text-gray-300"> {line.path}</span>
+                        </>
+                      )}
+                      {'arrow' in line && line.arrow && (
+                        <>
+                          <span className="text-[#ff6b35]">→</span>
+                          <span className="text-gray-300"> {line.value}</span>
+                        </>
+                      )}
+                      {'key' in line && line.key && (
+                        <>
+                          <span className="text-[#7fdbca]">{line.key}</span>
+                          <span className="text-gray-300">: </span>
+                          <span className="text-[#ecc48d]">{line.value}</span>
+                        </>
+                      )}
+                      {'key' in line && line.key === null && (
+                        <span className="text-gray-300">{line.value}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Connector line (desktop only) */}
+              {/* Connector line - vertical on mobile, horizontal on desktop */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-[#ff6b35]/50 to-transparent" />
+                <>
+                  {/* Mobile connector (vertical) */}
+                  <div className="md:hidden absolute -bottom-4 left-1/2 -translate-x-1/2 w-0.5 h-4 bg-gradient-to-b from-[#ff6b35]/50 to-transparent" />
+                  {/* Desktop connector (horizontal) */}
+                  <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-[#ff6b35]/50 to-transparent" />
+                </>
               )}
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

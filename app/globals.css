@@ -305,3 +305,13 @@ pre {
   background-color: var(--color-text-secondary);
   border-radius: 20px;
 }
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
