@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { RiArrowRightLine } from 'react-icons/ri';
+import { RiArrowRightLine, RiRobot2Line, RiFlashlightLine, RiShieldCheckLine } from 'react-icons/ri';
 import { Button } from './ui/Button';
 import { SectionTag } from './ui/SectionTag';
 
 const typingPhrases = [
-  'Alert when a whale exits',
-  'Track position drops in real-time',
-  'Trigger webhooks on utilization spikes',
-  'Monitor market health 24/7',
+  'Alert when whales move',
+  'Catch liquidation risks early', 
+  'Track position changes in real-time',
+  'Monitor utilization spikes 24/7',
+  'Trigger actions on market events',
 ];
 
 function TypingAnimation() {
@@ -81,7 +82,7 @@ export function Hero() {
               transition={{ duration: 0.5 }}
               className="mb-6"
             >
-              <SectionTag>Event Infrastructure for Agents</SectionTag>
+              <SectionTag>The Event Layer for AI Agents</SectionTag>
             </motion.div>
 
             {/* Headline - no initial opacity:0 to avoid delaying LCP */}
@@ -96,34 +97,69 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg sm:text-xl md:text-2xl mb-10 h-8 sm:h-10"
+              className="text-lg sm:text-xl md:text-2xl mb-6 h-8 sm:h-10"
             >
               <TypingAnimation />
             </motion.div>
+
+            {/* Value prop */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="text-secondary text-lg mb-8 max-w-xl"
+            >
+              Give your AI agent superpowers. Define conditions in simple JSON, 
+              get webhooks when they trigger. No polling, no indexers, no infrastructure.
+            </motion.p>
 
             {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 mb-12"
             >
               <a
+                href="#onboarding"
+                className="no-underline"
+              >
+                <Button variant="primary" size="lg" className="w-full sm:w-auto min-w-[180px] font-zen">
+                  Get Started
+                  <RiArrowRightLine className="ml-2 w-5 h-5" />
+                </Button>
+              </a>
+              <a 
                 href="https://github.com/monarch-xyz/flare/blob/main/docs/ARCHITECTURE.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="no-underline"
               >
-                <Button variant="primary" size="lg" className="w-full sm:w-auto min-w-[180px] font-zen">
-                  View Docs
-                  <RiArrowRightLine className="ml-2 w-5 h-5" />
-                </Button>
-              </a>
-              <a href="#how-it-works" className="no-underline">
                 <Button variant="secondary" size="lg" className="w-full sm:w-auto min-w-[180px] font-zen">
-                  Learn More
+                  Read Docs
                 </Button>
               </a>
+            </motion.div>
+
+            {/* Trust signals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-wrap items-center gap-6 text-sm text-secondary"
+            >
+              <div className="flex items-center gap-2">
+                <RiRobot2Line className="w-4 h-4 text-[#ff6b35]" />
+                <span>Built for agents</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <RiFlashlightLine className="w-4 h-4 text-[#ff6b35]" />
+                <span>Sub-minute latency</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <RiShieldCheckLine className="w-4 h-4 text-[#ff6b35]" />
+                <span>Signed webhooks</span>
+              </div>
             </motion.div>
           </div>
         </div>

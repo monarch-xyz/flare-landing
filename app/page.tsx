@@ -4,6 +4,7 @@ import { HowItWorks } from '@/components/HowItWorks';
 import { Features } from '@/components/Features';
 import { CodeExamples } from '@/components/CodeExamples';
 import { ForAgents } from '@/components/ForAgents';
+import { AgentOnboarding } from '@/components/AgentOnboarding';
 import { ApiReference } from '@/components/ApiReference';
 import { Footer } from '@/components/Footer';
 
@@ -17,6 +18,7 @@ export default function Home() {
         <Features />
         <CodeExamples />
         <ForAgents />
+        <AgentOnboarding />
         <ApiReference />
       </main>
       <Footer />
