@@ -16,12 +16,19 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Sync dark mode state with DOM on mount
+  // Using a ref to avoid the effect-setState pattern
   useEffect(() => {
-    // Check initial preference
     const isDark = document.documentElement.classList.contains('dark') || 
       window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(isDark);
-    if (isDark) document.documentElement.classList.add('dark');
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+    // Sync state without causing re-render cascade
+    if (isDark !== darkMode) {
+      setDarkMode(isDark);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleDarkMode = () => {

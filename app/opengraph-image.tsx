@@ -157,19 +157,19 @@ export default async function Image() {
             >
               <span><span style={{ color: '#6e6e6e' }}>{'{'}</span></span>
               <span style={{ paddingLeft: '20px' }}>
-                <span style={{ color: '#ff9f1c' }}>"metric"</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>"Position.supplyShares"</span><span style={{ color: '#6e6e6e' }}>,</span>
+                <span style={{ color: '#ff9f1c' }}>{'"metric"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"Position.supplyShares"'}</span><span style={{ color: '#6e6e6e' }}>,</span>
               </span>
               <span style={{ paddingLeft: '20px' }}>
-                <span style={{ color: '#ff9f1c' }}>"operator"</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>"decreasedBy"</span><span style={{ color: '#6e6e6e' }}>,</span>
+                <span style={{ color: '#ff9f1c' }}>{'"operator"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"decreasedBy"'}</span><span style={{ color: '#6e6e6e' }}>,</span>
               </span>
               <span style={{ paddingLeft: '20px' }}>
-                <span style={{ color: '#ff9f1c' }}>"threshold"</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#79c0ff' }}>0.5</span><span style={{ color: '#6e6e6e' }}>,</span>
+                <span style={{ color: '#ff9f1c' }}>{'"threshold"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#79c0ff' }}>0.5</span><span style={{ color: '#6e6e6e' }}>,</span>
               </span>
               <span style={{ paddingLeft: '20px' }}>
-                <span style={{ color: '#ff9f1c' }}>"window"</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>"1h"</span><span style={{ color: '#6e6e6e' }}>,</span>
+                <span style={{ color: '#ff9f1c' }}>{'"window"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"1h"'}</span><span style={{ color: '#6e6e6e' }}>,</span>
               </span>
               <span style={{ paddingLeft: '20px' }}>
-                <span style={{ color: '#ff9f1c' }}>"webhook"</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>"https://..."</span>
+                <span style={{ color: '#ff9f1c' }}>{'"webhook"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"https://..."'}</span>
               </span>
               <span><span style={{ color: '#6e6e6e' }}>{'}'}</span></span>
             </div>
