@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { CodeBlock } from './ui/CodeBlock';
 
 const examples = [
   {
@@ -131,9 +132,7 @@ export function CodeExamples() {
               <h3 className="font-zen font-bold">{examples[activeIndex].title}</h3>
               <p className="text-secondary text-sm">{examples[activeIndex].description}</p>
             </div>
-            <pre className="p-6 overflow-x-auto custom-scrollbar text-sm">
-              <code className="text-foreground">{examples[activeIndex].code}</code>
-            </pre>
+            <CodeBlock code={examples[activeIndex].code} language="json" />
           </div>
         </motion.div>
       </div>

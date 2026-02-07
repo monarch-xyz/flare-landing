@@ -2,6 +2,33 @@
 
 import { motion } from 'framer-motion';
 import { RiRobot2Line, RiArrowRightSLine, RiFlashlightLine } from 'react-icons/ri';
+import { CodeBlock } from './ui/CodeBlock';
+
+const agentSkillCode = `# Flare Monitoring Skill
+
+## Setup
+Register signals for your monitored positions:
+\`\`\`bash
+curl -X POST https://api.flare.monarch.xyz/signals \\
+  -H "Authorization: Bearer $API_KEY" \\
+  -d @signal.json
+\`\`\`
+
+## Webhook Handler
+When triggered, your agent receives:
+\`\`\`json
+{
+  "signal_id": "sig_abc123",
+  "triggered": true,
+  "condition": "Whale position dropped 25%",
+  "timestamp": "2024-01-15T12:00:00Z"
+}
+\`\`\`
+
+## Agent Response
+→ Analyze the trigger event
+→ Decide on action (alert, rebalance, exit)
+→ Execute or notify human`;
 
 export function ForAgents() {
   return (
@@ -64,35 +91,14 @@ export function ForAgents() {
           >
             <div className="bg-surface rounded-lg border border-border overflow-hidden">
               <div className="px-4 py-3 border-b border-border flex items-center gap-2">
-                <span className="text-sm font-mono text-secondary">agent-skill.md</span>
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                </div>
+                <span className="text-sm font-mono text-secondary ml-2">agent-skill.md</span>
               </div>
-              <pre className="p-6 overflow-x-auto custom-scrollbar text-sm">
-                <code className="text-foreground">{`# Flare Monitoring Skill
-
-## Setup
-Register signals for your monitored positions:
-\`\`\`bash
-curl -X POST https://api.flare.monarch.xyz/signals \\
-  -H "Authorization: Bearer $API_KEY" \\
-  -d @signal.json
-\`\`\`
-
-## Webhook Handler
-When triggered, your agent receives:
-\`\`\`json
-{
-  "signal_id": "sig_abc123",
-  "triggered": true,
-  "condition": "Whale position dropped 25%",
-  "timestamp": "2024-01-15T12:00:00Z"
-}
-\`\`\`
-
-## Agent Response
-→ Analyze the trigger event
-→ Decide on action (alert, rebalance, exit)
-→ Execute or notify human`}</code>
-              </pre>
+              <CodeBlock code={agentSkillCode} language="markdown" />
             </div>
           </motion.div>
         </div>
