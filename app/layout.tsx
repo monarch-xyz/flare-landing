@@ -1,5 +1,28 @@
 import type { Metadata } from 'next';
+import { Inter, JetBrains_Mono, Zen_Kaku_Gothic_New } from 'next/font/google';
 import './globals.css';
+
+// Self-hosted fonts via next/font (eliminates render-blocking requests)
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+  weight: ['400', '500', '600'],
+});
+
+// Zen Kaku Gothic New for headings - subsetted to Latin only via next/font
+const zenKakuGothicNew = Zen_Kaku_Gothic_New({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-zen',
+  weight: '700',
+});
 
 const siteUrl = 'https://flare.monarch.xyz';
 
@@ -100,7 +123,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body suppressHydrationWarning>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} ${zenKakuGothicNew.variable}`} suppressHydrationWarning>
         {children}
       </body>
     </html>

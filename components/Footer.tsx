@@ -31,9 +31,10 @@ export function Footer() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={link.label}
                 className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors no-underline"
               >
-                <link.icon className="w-5 h-5" />
+                <link.icon className="w-5 h-5" aria-hidden="true" />
                 <span className="text-sm hidden sm:inline">{link.label}</span>
               </a>
             ))}

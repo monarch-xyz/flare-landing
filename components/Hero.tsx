@@ -84,17 +84,12 @@ export function Hero() {
               <SectionTag>Event Infrastructure for Agents</SectionTag>
             </motion.div>
 
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-zen text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-            >
+            {/* Headline - no initial opacity:0 to avoid delaying LCP */}
+            <h1 className="font-zen text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
               Watch the Chain
               <br />
               <span className="text-gradient-flare">While You Sleep</span>
-            </motion.h1>
+            </h1>
 
             {/* Typing subtitle */}
             <motion.div
