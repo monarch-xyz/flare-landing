@@ -8,28 +8,25 @@ const steps = [
     icon: RiCodeSSlashLine,
     title: 'Define',
     description: 'Write conditions in simple JSON DSL. Thresholds, changes, time windows — all composable.',
-    codeLines: [
-      { key: '"type"', value: '"change"' },
-      { key: '"by"', value: '{ "percent": 20 }' },
-    ],
+    code: `"type": "change"
+"metric": "Morpho.Position.supplyShares"
+"by": { "percent": 20 }`,
   },
   {
     icon: RiCloudLine,
     title: 'Deploy',
     description: 'Register your signal via REST API. Flare handles the indexing and evaluation.',
-    codeLines: [
-      { method: 'POST', path: '/signals' },
-      { key: null, value: '{ "name": "Whale Alert" }' },
-    ],
+    code: `POST /api/v1/signals
+Authorization: Bearer sk_...
+{ "name": "Whale Alert", ... }`,
   },
   {
     icon: RiNotification3Line,
     title: 'React',
     description: 'Receive webhooks when conditions trigger. Your agent takes action automatically.',
-    codeLines: [
-      { key: 'webhook_url', value: '"..."' },
-      { arrow: true, value: '{ triggered: true }' },
-    ],
+    code: `→ POST your-webhook-url
+{ "triggered": true,
+  "change_percent": -25 }`,
   },
 ];
 
@@ -82,47 +79,59 @@ export function HowItWorks() {
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
               }}
-              className="relative"
+              className="relative group"
             >
               {/* Step number */}
               <motion.div 
-                className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-7 h-7 md:w-8 md:h-8 bg-gradient-flare rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm shadow-lg shadow-[#ff6b35]/30"
+                className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-7 h-7 md:w-8 md:h-8 bg-gradient-flare rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm shadow-lg shadow-[#ff6b35]/30 z-10"
                 whileHover={{ scale: 1.1 }}
               >
                 {index + 1}
               </motion.div>
 
               {/* Card */}
-              <div className="bg-background rounded-lg p-5 md:p-6 border border-border h-full transition-all duration-300 hover:border-[#ff6b35]/30 hover:shadow-lg hover:shadow-[#ff6b35]/5">
+              <div className="bg-background rounded-lg p-5 md:p-6 border border-border h-full transition-all duration-300 hover:border-[#ff6b35]/30 hover:shadow-lg hover:shadow-[#ff6b35]/5 group-hover:translate-y-[-2px]">
                 <step.icon className="w-8 h-8 md:w-10 md:h-10 text-[#ff6b35] mb-3 md:mb-4" />
                 <h3 className="font-zen text-lg md:text-xl font-bold mb-2">{step.title}</h3>
                 <p className="text-secondary mb-4 text-sm leading-relaxed">{step.description}</p>
                 
-                {/* Mini code block with syntax highlighting */}
-                <div className="text-xs bg-[#011627] dark:bg-[#011627] rounded-md p-3 overflow-x-auto font-mono custom-scrollbar">
-                  {step.codeLines.map((line, i) => (
-                    <div key={i} className="whitespace-nowrap">
-                      {'method' in line && line.method && (
+                {/* Mini code block with Flare syntax colors */}
+                <div className="relative text-xs bg-[#0d1117] rounded-md p-3 overflow-x-auto font-mono custom-scrollbar border border-[#30363d] group-hover:border-[#ff6b35]/20 transition-colors">
+                  {/* Subtle glow */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b35]/0 via-[#ff6b35]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-md pointer-events-none" />
+                  
+                  {step.code.split('\n').map((line, i) => (
+                    <div key={i} className="whitespace-nowrap relative">
+                      {line.startsWith('POST') || line.startsWith('→') ? (
+                        // HTTP method or arrow
                         <>
-                          <span className="text-green-400">{line.method}</span>
-                          <span className="text-gray-300"> {line.path}</span>
+                          <span className="text-[#7ee787]">{line.split(' ')[0]}</span>
+                          <span className="text-[#e6edf3]"> {line.split(' ').slice(1).join(' ')}</span>
                         </>
-                      )}
-                      {'arrow' in line && line.arrow && (
+                      ) : line.startsWith('Authorization') ? (
+                        // Header
                         <>
-                          <span className="text-[#ff6b35]">→</span>
-                          <span className="text-gray-300"> {line.value}</span>
+                          <span className="text-[#ff7b72]">{line.split(':')[0]}</span>
+                          <span className="text-[#8b949e]">:</span>
+                          <span className="text-[#a5d6ff]">{line.split(':').slice(1).join(':')}</span>
                         </>
-                      )}
-                      {'key' in line && line.key && (
+                      ) : line.startsWith('"') ? (
+                        // JSON key-value
                         <>
-                          <span className="text-[#7fdbca]">{line.key}</span>
-                          <span className="text-gray-300">: </span>
-                          <span className="text-[#ecc48d]">{line.value}</span>
+                          <span className="text-[#ff6b35]">{line.split(':')[0]}</span>
+                          {line.includes(':') && (
+                            <>
+                              <span className="text-[#8b949e]">:</span>
+                              <span className="text-[#ff9f1c]">{line.split(':').slice(1).join(':')}</span>
+                            </>
+                          )}
                         </>
-                      )}
-                      {'key' in line && line.key === null && (
-                        <span className="text-gray-300">{line.value}</span>
+                      ) : line.startsWith('{') || line.startsWith('}') ? (
+                        // Brackets
+                        <span className="text-[#8b949e]">{line}</span>
+                      ) : (
+                        // Default
+                        <span className="text-[#e6edf3]">{line}</span>
                       )}
                     </div>
                   ))}

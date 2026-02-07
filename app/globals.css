@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Zen+Kaku+Gothic+Antique&family=Zen+Kaku+Gothic+New&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Zen+Kaku+Gothic+Antique&family=Zen+Kaku+Gothic+New&family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 /* Theme configuration - Flare Design System (based on Monarch) */
@@ -270,8 +270,10 @@ body {
 
 /* Code block styling */
 pre, code {
-  font-family: 'Victor Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+  letter-spacing: -0.01em;
 }
 
 pre {
@@ -284,6 +286,44 @@ pre {
 .dark pre {
   background-color: #1a1d1f;
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Code block enhancements */
+.code-glow {
+  box-shadow: 0 0 40px -15px rgba(255, 107, 53, 0.3);
+}
+
+.code-border-glow {
+  position: relative;
+}
+
+.code-border-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, transparent 50%, rgba(255, 159, 28, 0.2) 100%);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.code-border-glow:hover::before {
+  opacity: 1;
+}
+
+/* Syntax highlight token overrides */
+.token.property {
+  color: #ff6b35 !important;
+}
+
+.token.string {
+  color: #a5d6ff !important;
+}
+
+.token.number,
+.token.boolean {
+  color: #ff9f1c !important;
 }
 
 /* Custom scrollbar */
