@@ -42,7 +42,7 @@ export function Footer() {
 
           {/* Built by Monarch */}
           <a
-            href="https://monarch.xyz"
+            href="https://monarchlend.xyz"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg border border-border hover:border-[#ff6b35]/30 transition-colors no-underline group"

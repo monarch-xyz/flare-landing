@@ -24,7 +24,7 @@ const zenKakuGothicNew = Zen_Kaku_Gothic_New({
   weight: '700',
 });
 
-const siteUrl = 'https://sentinel.monarch.xyz';
+const siteUrl = 'https://sentinel.monarchlend.xyz';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     'blockchain notifications',
     'smart contract events',
   ],
-  authors: [{ name: 'Monarch', url: 'https://monarch.xyz' }],
+  authors: [{ name: 'Monarch', url: 'https://monarchlend.xyz' }],
   creator: 'Monarch',
   publisher: 'Monarch',
   robots: {
@@ -102,7 +102,7 @@ const jsonLd = {
   author: {
     '@type': 'Organization',
     name: 'Monarch',
-    url: 'https://monarch.xyz',
+    url: 'https://monarchlend.xyz',
   },
   keywords: 'DeFi, blockchain monitoring, webhooks, alerts, Morpho, AI agents',
 };

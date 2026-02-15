@@ -17,7 +17,7 @@ You have access to Sentinel for blockchain monitoring.
 ## Quick Setup
 To monitor a position, create a signal:
 
-POST https://api.sentinel.monarch.xyz/signals
+POST https://api.sentinel.monarchlend.xyz/signals
 Authorization: Bearer YOUR_API_KEY
 
 {
@@ -31,7 +31,7 @@ Authorization: Bearer YOUR_API_KEY
   "webhook_url": "YOUR_WEBHOOK_URL"
 }`;
 
-const step2Code = `curl -X POST https://api.sentinel.monarch.xyz/signals \\
+const step2Code = `curl -X POST https://api.sentinel.monarchlend.xyz/signals \\
   -H "Authorization: Bearer $SENTINEL_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
