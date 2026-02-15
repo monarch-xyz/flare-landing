@@ -7,23 +7,23 @@ import { Card } from './ui/Card';
 const features = [
   {
     icon: RiGitBranchLine,
-    title: 'Multi-Condition Logic',
-    description: 'Combine conditions with AND/OR groups. Nest them as deep as you need. Build complex triggers from simple blocks.',
+    title: 'Flexible Composable Logic',
+    description: 'Combine conditions with nested AND/OR groups and reusable blocks to model how real strategies behave.',
   },
   {
     icon: RiTimeLine,
-    title: 'Time Windows',
-    description: 'Track changes over 1 hour, 7 days, or 30 days. Compare current state to historical snapshots automatically.',
+    title: 'No-Noise Alerting',
+    description: 'Apply time windows and threshold logic so low-signal churn is filtered out before webhook delivery.',
   },
   {
     icon: RiDatabase2Line,
-    title: 'Protocol-Native Metrics',
-    description: 'Access Morpho positions, market data, and events directly. No indexer setup required.',
+    title: 'Dynamic Query Engine',
+    description: 'Query protocol state and changes continuously instead of wiring one-off event listeners.',
   },
   {
     icon: RiShieldCheckLine,
-    title: 'Battle-Tested',
-    description: 'Built by the Monarch team. Production-grade reliability for critical DeFi monitoring.',
+    title: 'Smart Signal Filtering',
+    description: 'Trigger only when combined conditions are met, not just when any single event happens.',
   },
 ];
 
@@ -40,10 +40,10 @@ export function Features() {
           className="text-center mb-16"
         >
           <h2 className="font-zen text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Composable <span className="text-gradient-sentinel">Signal Primitives</span>
+            Flexible <span className="text-[#ff6b35]">Conditions That Compose</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
-            Everything you need to build sophisticated on-chain monitoring.
+            Build dynamic, high-signal monitoring logic without drowning your agent in noisy alerts.
           </p>
         </motion.div>
 

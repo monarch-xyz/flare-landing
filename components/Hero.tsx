@@ -7,11 +7,11 @@ import { Button } from './ui/Button';
 import { SectionTag } from './ui/SectionTag';
 
 const typingPhrases = [
-  'Alert when whales move',
-  'Catch liquidation risks early', 
-  'Track position changes in real-time',
-  'Monitor utilization spikes 24/7',
-  'Trigger actions on market events',
+  'Compose multi-condition alerts',
+  'Track state changes, not raw events',
+  'Filter noise before it hits your webhook',
+  'Run dynamic queries across protocol data',
+  'Alert only when conditions truly matter',
 ];
 
 function TypingAnimation() {
@@ -87,9 +87,9 @@ export function Hero() {
 
             {/* Headline - no initial opacity:0 to avoid delaying LCP */}
             <h1 className="font-zen text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Watch the Chain
+              Dynamic Queries for
               <br />
-              <span className="text-gradient-sentinel">While You Sleep</span>
+              <span className="text-[#ff6b35]">High-Signal Alerts</span>
             </h1>
 
             {/* Typing subtitle */}
@@ -109,8 +109,9 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.25 }}
               className="text-secondary text-lg mb-8 max-w-xl"
             >
-              Give your AI agent superpowers. Define conditions in simple JSON, 
-              get webhooks when they trigger. No polling, no indexers, no infrastructure.
+              Compose flexible conditions in JSON, run dynamic queries instead of simple event
+              listeners, and get notified only when alerts actually matter. No polling, no indexers,
+              no alert noise.
             </motion.p>
 
             {/* CTAs */}

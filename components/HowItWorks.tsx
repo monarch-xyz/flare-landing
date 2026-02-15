@@ -7,26 +7,28 @@ const steps = [
   {
     icon: RiCodeSSlashLine,
     title: 'Define',
-    description: 'Write conditions in simple JSON DSL. Thresholds, changes, time windows — all composable.',
-    code: `"type": "change"
-"metric": "Morpho.Position.supplyShares"
-"by": { "percent": 20 }`,
+    description: 'Model conditions as dynamic queries across metrics, thresholds, and windows with composable logic.',
+    code: `"type": "and"
+"all": [
+  { "metric": "Morpho.Position.supplyShares", "change": { "percent": 20 } },
+  { "metric": "Morpho.Market.utilization", "gt": 90 }
+]`,
   },
   {
     icon: RiCloudLine,
     title: 'Deploy',
-    description: 'Register your signal via REST API. Sentinel handles the indexing and evaluation.',
+    description: 'Register your query via API once. Sentinel continuously evaluates state changes and smart filters.',
     code: `POST /api/v1/signals
 Authorization: Bearer sk_...
-{ "name": "Whale Alert", ... }`,
+{ "name": "High-Signal Watch", ... }`,
   },
   {
     icon: RiNotification3Line,
     title: 'React',
-    description: 'Receive webhooks when conditions trigger. Your agent takes action automatically.',
+    description: 'Receive webhooks only when all relevant conditions are met, so your agent acts on signal, not noise.',
     code: `→ POST your-webhook-url
 { "triggered": true,
-  "change_percent": -25 }`,
+  "matched_conditions": 2 }`,
   },
 ];
 
@@ -50,10 +52,10 @@ export function HowItWorks() {
           className="text-center mb-16"
         >
           <h2 className="font-zen text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Three Steps to <span className="text-gradient-sentinel">Automation</span>
+            Three Steps to <span className="text-[#ff6b35]">Signal-First Automation</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
-            From definition to action in minutes, not hours.
+            Compose dynamic queries, deploy once, and react only to alerts that matter.
           </p>
         </motion.div>
 
@@ -83,7 +85,7 @@ export function HowItWorks() {
             >
               {/* Step number */}
               <motion.div 
-                className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-7 h-7 md:w-8 md:h-8 bg-gradient-sentinel rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm shadow-lg shadow-[#ff6b35]/30 z-10"
+                className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-7 h-7 md:w-8 md:h-8 bg-[#ff6b35] rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm shadow-lg shadow-[#ff6b35]/30 z-10"
                 whileHover={{ scale: 1.1 }}
               >
                 {index + 1}
@@ -97,8 +99,7 @@ export function HowItWorks() {
                 
                 {/* Mini code block with Sentinel syntax colors */}
                 <div className="relative text-xs bg-[#0d1117] rounded-md p-3 overflow-x-auto font-mono custom-scrollbar border border-[#30363d] group-hover:border-[#ff6b35]/20 transition-colors">
-                  {/* Subtle glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b35]/0 via-[#ff6b35]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-md pointer-events-none" />
+                  <div className="absolute inset-0 bg-[#ff6b35]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-md pointer-events-none" />
                   
                   {step.code.split('\n').map((line, i) => (
                     <div key={i} className="whitespace-nowrap relative">
@@ -142,9 +143,9 @@ export function HowItWorks() {
               {index < steps.length - 1 && (
                 <>
                   {/* Mobile connector (vertical) */}
-                  <div className="md:hidden absolute -bottom-4 left-1/2 -translate-x-1/2 w-0.5 h-4 bg-gradient-to-b from-[#ff6b35]/50 to-transparent" />
+                  <div className="md:hidden absolute -bottom-4 left-1/2 -translate-x-1/2 w-0.5 h-4 bg-[#ff6b35]/40" />
                   {/* Desktop connector (horizontal) */}
-                  <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-[#ff6b35]/50 to-transparent" />
+                  <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-[#ff6b35]/40" />
                 </>
               )}
             </motion.div>

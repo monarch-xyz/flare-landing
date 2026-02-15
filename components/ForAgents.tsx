@@ -70,7 +70,7 @@ export function ForAgents() {
             </div>
 
             <h2 className="font-zen text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-              Your Agent&apos;s <span className="text-gradient-sentinel">Event Source</span>
+              Your Agent&apos;s <span className="text-[#ff6b35]">Event Source</span>
             </h2>
 
             <p className="text-secondary text-lg mb-8 leading-relaxed">

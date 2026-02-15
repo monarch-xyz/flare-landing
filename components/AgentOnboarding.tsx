@@ -124,7 +124,7 @@ export function AgentOnboarding() {
             <span className="text-sm font-medium text-[#ff6b35]">Agent Integration Guide</span>
           </div>
           <h2 className="font-zen text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Get Your Agent <span className="text-gradient-sentinel">Watching in Minutes</span>
+            Get Your Agent <span className="text-[#ff6b35]">Watching in Minutes</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
             Three steps to give your AI agent eyes on the blockchain. No infrastructure setup, no complex indexers.
@@ -144,7 +144,7 @@ export function AgentOnboarding() {
             >
               {/* Step indicator */}
               <div className="flex items-start gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-sentinel rounded-full flex items-center justify-center text-white font-bold text-lg">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#ff6b35] rounded-full flex items-center justify-center text-white font-bold text-lg">
                   {step.number}
                 </div>
                 <div className="flex-1 pt-2">
@@ -194,7 +194,7 @@ export function AgentOnboarding() {
             href="https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-sentinel text-white font-medium rounded-md hover:opacity-90 transition-opacity no-underline"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#ff6b35] text-white font-medium rounded-md hover:opacity-90 transition-opacity no-underline"
           >
             <RiRobot2Line className="w-5 h-5" />
             Read Full Agent Docs

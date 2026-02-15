@@ -112,7 +112,7 @@ export function CodeExamples() {
           className="text-center mb-12"
         >
           <h2 className="font-zen text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Real <span className="text-gradient-sentinel">Examples</span>
+            Real <span className="text-[#ff6b35]">Examples</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
             Copy, paste, deploy. It&apos;s that simple.
@@ -137,7 +137,7 @@ export function CodeExamples() {
                 className={cn(
                   'flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-all whitespace-nowrap flex-shrink-0',
                   activeIndex === index
-                    ? 'bg-gradient-sentinel text-white shadow-lg shadow-[#ff6b35]/25'
+                    ? 'bg-[#ff6b35] text-white shadow-lg shadow-[#ff6b35]/25'
                     : 'bg-background border border-border text-secondary hover:text-foreground hover:border-[#ff6b35]/30'
                 )}
               >
@@ -166,7 +166,7 @@ export function CodeExamples() {
                   transition={{ duration: 0.2 }}
                   className="flex items-start gap-3"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-sentinel flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#ff6b35]/20">
+                  <div className="w-10 h-10 rounded-lg bg-[#ff6b35] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#ff6b35]/20">
                     <activeExample.icon className="w-5 h-5 text-white" />
                   </div>
                   <div>

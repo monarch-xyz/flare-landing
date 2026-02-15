@@ -88,18 +88,6 @@
     mask-image: linear-gradient(to top, black 0%, transparent 40%);
   }
 
-  /* Flare gradient */
-  .bg-gradient-sentinel {
-    background-image: linear-gradient(135deg, #ff6b35 0%, #ff9f1c 100%);
-  }
-
-  .text-gradient-sentinel {
-    background: linear-gradient(135deg, #ff6b35 0%, #ff9f1c 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   /* Container */
   .container {
     @apply mx-auto;
