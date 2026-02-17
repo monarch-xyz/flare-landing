@@ -36,7 +36,7 @@ export function Header() {
   const navLinks = [
     { href: 'https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md', label: 'Docs', icon: RiBookLine, external: true },
     { href: 'https://github.com/monarch-xyz/sentinel', label: 'GitHub', icon: RiGithubFill, external: true },
-    { href: 'https://discord.gg/monarch', label: 'Discord', icon: RiDiscordFill, external: true },
+    { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
   ];
 
   return (

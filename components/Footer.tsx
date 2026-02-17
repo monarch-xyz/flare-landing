@@ -6,7 +6,7 @@ import { RiGithubFill, RiDiscordFill, RiBookLine, RiExternalLinkLine } from 'rea
 const links = [
   { href: 'https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md', label: 'Docs', icon: RiBookLine },
   { href: 'https://github.com/monarch-xyz/sentinel', label: 'GitHub', icon: RiGithubFill },
-  { href: 'https://discord.gg/monarch', label: 'Discord', icon: RiDiscordFill },
+  { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill },
 ];
 
 export function Footer() {

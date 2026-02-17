@@ -20,6 +20,17 @@ export default function Home() {
         <ForAgents />
         <AgentOnboarding />
         <ApiReference />
+        <div className="text-center py-16">
+          <p className="text-secondary mb-4">Join our Discord for early access</p>
+          <a
+            href="https://discord.gg/Ur4dwN3aPS"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#5865F2] text-white font-medium rounded-lg hover:opacity-90 transition-opacity no-underline"
+          >
+            Join Discord
+          </a>
+        </div>
       </main>
       <Footer />
     </div>
