@@ -20,7 +20,7 @@ export function Footer() {
               <span className="text-2xl">🔥</span>
               <span className="font-serif text-xl font-medium text-foreground">Sentinel</span>
             </Link>
-            <p className="text-secondary text-sm font-serif italic">Awareness for DeFi agents</p>
+            <p className="text-secondary text-sm font-serif italic">DeFi signals that matter</p>
           </div>
 
           {/* Links */}

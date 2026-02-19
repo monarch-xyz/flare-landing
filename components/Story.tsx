@@ -9,41 +9,46 @@ const storyBeats = [
     id: 'problem',
     tag: 'The Problem',
     title: 'Events aren\'t signals.',
-    content: `Your agent subscribes to on-chain events. Supply, withdraw, liquidation. But every time a whale sneezes, your webhook fires. You're drowning in noise.`,
-    code: `// What you're doing now
-onEvent("Supply", (e) => {
-  if (e.amount > threshold) {
-    // Is this important? 🤷
-    notify(e);
-  }
-});`,
+    content: `You're subscribed to on-chain events. Supply, withdraw, liquidation — hundreds per day. But which ones actually matter? You're drowning in noise, missing what counts.`,
+    code: `// Your current setup
+events.on("Supply", notify)    // 47 today
+events.on("Withdraw", notify)  // 89 today  
+events.on("Liquidate", notify) // 12 today
+
+// 148 notifications.
+// How many actually mattered? 🤷`,
   },
   {
     id: 'insight',
     tag: 'The Insight',
-    title: 'Conditions are signals.',
-    content: `What if instead of reacting to events, you described what matters? "Position dropped 20%." "Utilization crossed 90%." These are conditions — meaningful patterns.`,
-    code: `// What you actually want
+    title: 'Aggregate. Combine. Then alert.',
+    content: `Net deposit = deposits − withdrawals. When that drops 20% in a week from top holders? That's a signal. Not "someone withdrew" — but "smart money is leaving." One alert that actually means something.`,
+    code: `// What you actually care about
 {
-  "when": "position drops 20%",
-  "and": "utilization > 90%",
-  "over": "7 days"
-}`,
+  "net_flow": "deposits - withdrawals",
+  "from": "top 10% holders",
+  "window": "7 days",
+  "alert_when": "drops 20%"
+}
+
+// Result: 3 signals last month.
+// All 3 preceded major price moves.`,
   },
   {
     id: 'solution',
     tag: 'The Solution',
-    title: 'Sentinel watches.',
-    content: `Define conditions once. Sentinel continuously evaluates state, compares across time windows, fires webhooks only when met. Signal reaches your agent clean.`,
+    title: 'Sentinel watches. You act.',
+    content: `Define your signal once. We continuously aggregate events, evaluate conditions across time windows, and alert you only when it matters. Follow the liquidity — see what's happening before the announcement.`,
     code: `POST /api/v1/signals
 {
-  "name": "Whale Exit",
-  "conditions": [{
-    "type": "change",
-    "metric": "Position.supplyShares",
-    "direction": "decrease",
-    "by": { "percent": 20 }
-  }]
+  "name": "Smart Money Exit",
+  "signal": {
+    "metric": "net_supply_flow",
+    "holders": "top_10_percent",
+    "window": "7d",
+    "threshold": { "change": "-20%" }
+  },
+  "notify": "telegram"
 }`,
   },
 ];

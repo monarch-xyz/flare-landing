@@ -6,20 +6,20 @@ import { GridDivider } from './ui/GridDivider';
 
 const capabilities = [
   {
-    title: 'Compose conditions',
-    description: 'Combine thresholds, percentage changes, and time windows. AND them, OR them, nest them.',
+    title: 'Aggregate, don\'t react',
+    description: 'Net flows, rolling windows, holder percentiles. Turn hundreds of events into one meaningful signal.',
   },
   {
     title: 'Watch across time',
-    description: '"Position dropped 20% over 7 days." Compare state across windows, not just snapshots.',
+    description: '"Net deposits dropped 20% over 7 days from top holders." Compare trends, not snapshots.',
   },
   {
-    title: 'Filter at source',
-    description: 'Webhooks fire only when all conditions are met. No filtering in your agent.',
+    title: 'Composable conditions',
+    description: 'Combine thresholds with AND/OR logic. Alert on complex patterns, not simple triggers.',
   },
   {
-    title: 'React with context',
-    description: 'Payloads include matched conditions, actual values, and thresholds. Know exactly what triggered.',
+    title: 'Context in every alert',
+    description: 'Know exactly what triggered: actual values, thresholds crossed, addresses that moved.',
   },
 ];
 

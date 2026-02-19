@@ -26,10 +26,10 @@ export function FinalCTA() {
             className="max-w-xl mx-auto text-center"
           >
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mb-4">
-              Ready to give your agent <span className="text-[#ff6b35]">eyes</span>?
+              Stop drowning in <span className="text-[#ff6b35]">noise</span>.
             </h2>
             <p className="text-secondary mb-8">
-              Sentinel is in early access. Join Discord for API keys.
+              Sentinel is in early access. Join Discord for access.
             </p>
 
             {/* CTAs */}
