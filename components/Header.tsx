@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { RiGithubFill, RiDiscordFill, RiBookLine, RiMenuLine, RiCloseLine, RiMoonLine, RiSunLine } from 'react-icons/ri';
+import { RiGithubFill, RiDiscordFill, RiBookLine, RiMenuLine, RiCloseLine, RiMoonLine, RiSunLine, RiLoginCircleLine } from 'react-icons/ri';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/Button';
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -68,6 +69,13 @@ export function Header() {
                 <span className="text-sm">{link.label}</span>
               </Link>
             ))}
+
+            <Link href="/login" className="no-underline">
+              <Button variant="secondary" size="sm" className="gap-2">
+                <RiLoginCircleLine className="w-4 h-4" />
+                Login
+              </Button>
+            </Link>
             
             <button
               onClick={toggleDarkMode}
@@ -87,6 +95,14 @@ export function Header() {
             >
               {darkMode ? <RiSunLine className="w-5 h-5" /> : <RiMoonLine className="w-5 h-5" />}
             </button>
+            <Link href="/login" className="no-underline">
+              <button
+                className="p-2 rounded-md hover:bg-hovered transition-colors"
+                aria-label="Login"
+              >
+                <RiLoginCircleLine className="w-5 h-5" />
+              </button>
+            </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-md hover:bg-hovered transition-colors"
@@ -114,6 +130,14 @@ export function Header() {
                   <span className="text-foreground">{link.label}</span>
                 </Link>
               ))}
+              <Link
+                href="/login"
+                className="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-hovered transition-colors no-underline"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <RiLoginCircleLine className="w-5 h-5 text-secondary" />
+                <span className="text-foreground">Login</span>
+              </Link>
             </div>
           </nav>
         )}

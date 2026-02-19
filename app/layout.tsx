@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono, EB_Garamond } from 'next/font/google';
+import { Inter, JetBrains_Mono, EB_Garamond, Zen_Kaku_Gothic_New } from 'next/font/google';
 import './globals.css';
+import { WagmiProviders } from '@/components/auth/WagmiProviders';
 
 // Self-hosted fonts via next/font (eliminates render-blocking requests)
 const inter = Inter({
@@ -23,6 +24,13 @@ const ebGaramond = EB_Garamond({
   variable: '--font-serif',
   weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
+});
+
+const zenKaku = Zen_Kaku_Gothic_New({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-zen',
+  weight: ['400', '500', '700', '900'],
 });
 
 const siteUrl = 'https://sentinel.monarchlend.xyz';
@@ -123,8 +131,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} ${ebGaramond.variable} font-inter antialiased`} suppressHydrationWarning>
-        {children}
+      <body className={`${inter.variable} ${jetbrainsMono.variable} ${ebGaramond.variable} ${zenKaku.variable} font-inter antialiased`} suppressHydrationWarning>
+        <WagmiProviders>
+          {children}
+        </WagmiProviders>
       </body>
     </html>
   );

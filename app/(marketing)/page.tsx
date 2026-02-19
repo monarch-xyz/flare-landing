@@ -6,10 +6,9 @@ import { ForAgents } from '@/components/ForAgents';
 import { FinalCTA } from '@/components/FinalCTA';
 import { Footer } from '@/components/Footer';
 
-export default function Home() {
+export default function MarketingHome() {
   return (
     <div className="bg-main min-h-screen relative">
-      {/* Full page dot grid background with vertical fade */}
       <div
         className="fixed inset-0 bg-dot-grid pointer-events-none opacity-50"
         style={{

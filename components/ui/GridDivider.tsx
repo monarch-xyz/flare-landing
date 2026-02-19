@@ -48,10 +48,9 @@ export function GridDivider({
     return indices;
   }, [totalCells, activeRatio]);
 
-  const [activeCells, setActiveCells] = useState<Set<number>>(new Set());
+  const [activeCells, setActiveCells] = useState<Set<number>>(() => new Set());
 
   useEffect(() => {
-    setActiveCells(generateActiveCells());
     const interval = setInterval(() => {
       setActiveCells(generateActiveCells());
     }, animationInterval);
