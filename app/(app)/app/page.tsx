@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { RiArrowRightLine, RiWallet3Line } from 'react-icons/ri';
 import { SignalRow } from '@/components/app/SignalRow';
-import { TelegramSetupGuide } from '@/components/app/TelegramSetupGuide';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { getAuthenticatedUser, getWalletAddressFromUser } from '@/lib/auth/session';
 import { requestSentinelForUser } from '@/lib/sentinel/user-server';
+import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import type { SignalRecord } from '@/lib/types/signal';
 
 const byUpdatedAtDesc = (left: SignalRecord, right: SignalRecord) =>
@@ -28,6 +28,7 @@ export default async function AppHome() {
   const walletAddress = user ? getWalletAddressFromUser(user) : null;
   const recentSignals = orderedSignals.slice(0, 5);
   const hasSignals = orderedSignals.length > 0;
+  const telegramStatus = user ? await getTelegramLinkStatus(user) : { linked: false, linkedAt: null };
   const primaryAction = hasSignals
     ? {
         href: '/signals',
@@ -67,7 +68,6 @@ export default async function AppHome() {
                 <RiArrowRightLine className="h-4 w-4" />
               </Link>
             ) : null}
-            <TelegramSetupGuide triggerLabel="Telegram setup guide" />
           </div>
         </div>
 
@@ -82,12 +82,17 @@ export default async function AppHome() {
             <span>{orderedSignals.length}</span>
             <span>signal{orderedSignals.length === 1 ? '' : 's'} registered</span>
           </div>
+          {telegramStatus.linked ? (
+            <div className="inline-flex items-center gap-2 rounded-sm border border-emerald-500/30 bg-emerald-500/5 px-3 py-1.5 text-emerald-700">
+              <span>Telegram ready</span>
+            </div>
+          ) : null}
         </div>
       </section>
 
       {signalsError ? (
         <Card className="border-amber-500/30 bg-amber-500/5">
-          <p className="font-medium text-foreground">The overview loaded, but Sentinel signal data is unavailable.</p>
+          <p className="text-foreground">The overview loaded, but Sentinel signal data is unavailable.</p>
           <p className="mt-2 text-sm text-secondary">{signalsError}</p>
         </Card>
       ) : null}
@@ -111,7 +116,7 @@ export default async function AppHome() {
           </div>
         </Card>
       ) : !signalsError ? (
-        <Card className="rounded-[28px] border-dashed text-center">
+        <Card className="rounded-[16px] border-dashed text-center">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-secondary">Getting Started</p>
             <h2 className="mt-2 font-zen text-2xl">No signals yet</h2>

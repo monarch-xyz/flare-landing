@@ -1,6 +1,7 @@
 import { SignalBuilderForm } from '@/components/app/SignalBuilderForm';
-import { TelegramSetupGuide } from '@/components/app/TelegramSetupGuide';
+import { getAuthenticatedUser } from '@/lib/auth/session';
 import { SIGNAL_TEMPLATE_PRESETS, type SignalTemplateId } from '@/lib/signals/templates';
+import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 
 interface NewSignalPageProps {
   searchParams?: Promise<{ preset?: string }> | { preset?: string };
@@ -9,6 +10,8 @@ interface NewSignalPageProps {
 export default async function NewSignalPage({ searchParams }: NewSignalPageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const presetParam = resolvedSearchParams?.preset;
+  const user = await getAuthenticatedUser();
+  const telegramStatus = user ? await getTelegramLinkStatus(user) : { linked: false, linkedAt: null };
   const hasPreset = (value: string): value is SignalTemplateId =>
     SIGNAL_TEMPLATE_PRESETS.some((preset) => preset.id === value);
   const initialPreset =
@@ -22,10 +25,9 @@ export default async function NewSignalPage({ searchParams }: NewSignalPageProps
         <p className="text-secondary mt-2 max-w-2xl">
           Start with a Morpho whale movement template, paste the supplier wallets you care about, and let Sentinel register the full JSON definition for you.
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-secondary">
-          <p>Telegram delivery is optional and lives in its own workspace when you need it.</p>
-          <TelegramSetupGuide triggerLabel="How Telegram linking works" />
-        </div>
+        <p className="mt-3 text-sm text-secondary">
+          {telegramStatus.linked ? 'Telegram is connected.' : 'Telegram can be connected later in settings.'}
+        </p>
       </div>
 
       <SignalBuilderForm initialPreset={initialPreset} />

@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedContext } from '@/lib/auth/session';
 import { connectDeliveryLink, DeliveryError } from '@/lib/delivery/server';
 import { ensureProfileWithSentinelApiKey } from '@/lib/supabase/profiles';
+import {
+  buildTelegramLinkCookieValue,
+  getTelegramLinkCookieOptions,
+  TELEGRAM_LINK_COOKIE,
+} from '@/lib/telegram/link-state';
 
 interface TelegramConnectPayload {
   token: string;
@@ -23,12 +28,20 @@ const handleConnect = async (payload: TelegramConnectPayload) => {
       token: payload.token,
       appUserId: provisioning.sentinelUserId,
     });
-
-    return NextResponse.json({
+    const linkedAt = new Date().toISOString();
+    const response = NextResponse.json({
       ok: true,
       app_user_id: provisioning.sentinelUserId,
+      linked_at: linkedAt,
       delivery: deliveryResponse,
     });
+    response.cookies.set(
+      TELEGRAM_LINK_COOKIE,
+      buildTelegramLinkCookieValue(auth.user, linkedAt),
+      getTelegramLinkCookieOptions()
+    );
+
+    return response;
   } catch (error) {
     if (error instanceof DeliveryError) {
       return NextResponse.json(

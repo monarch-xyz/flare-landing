@@ -51,7 +51,7 @@ export default async function SignalsPage() {
 
       {signalsError ? (
         <Card className="border-amber-500/30 bg-amber-500/5">
-          <p className="font-medium text-foreground">Signal inventory is unavailable.</p>
+          <p className="text-foreground">Signal inventory is unavailable.</p>
           <p className="mt-2 text-sm text-secondary">{signalsError}</p>
         </Card>
       ) : hasSignals ? (
