@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { RiArrowDownLine } from 'react-icons/ri';
 import { GridAccent } from './ui/GridAccent';
 import { SectionTag } from './ui/SectionTag';
-import { SENTINEL_ARCHITECTURE_DOCS_URL } from '@/lib/sentinel-links';
+import { SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
 
 export function Hero() {
   const scrollToSection = () => {
@@ -87,14 +88,12 @@ export function Hero() {
                 Learn More
                 <RiArrowDownLine className="w-4 h-4" />
               </button>
-              <a
-                href={SENTINEL_ARCHITECTURE_DOCS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={SENTINEL_SITE_DOCS_PATH}
                 className="inline-flex items-center justify-center px-6 py-3 border border-border text-secondary text-sm font-medium rounded-md hover:border-[#ff6b35]/30 hover:text-foreground transition-colors no-underline"
               >
                 Read Docs
-              </a>
+              </Link>
             </motion.div>
           </div>
         </div>

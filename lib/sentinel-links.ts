@@ -1,7 +1,10 @@
-export const SENTINEL_GITHUB_URL = 'https://github.com/monarch-xyz/flare';
+export const SENTINEL_SITE_DOCS_PATH = '/docs';
+export const SENTINEL_GITHUB_URL = 'https://github.com/monarch-xyz/sentinel';
 
 const SENTINEL_DOCS_BASE_URL = `${SENTINEL_GITHUB_URL}/blob/main/docs`;
 
 export const SENTINEL_ARCHITECTURE_DOCS_URL = `${SENTINEL_DOCS_BASE_URL}/ARCHITECTURE.md`;
 export const SENTINEL_API_DOCS_URL = `${SENTINEL_DOCS_BASE_URL}/API.md`;
+export const SENTINEL_AUTH_DOCS_URL = `${SENTINEL_DOCS_BASE_URL}/AUTH.md`;
 export const SENTINEL_DSL_DOCS_URL = `${SENTINEL_DOCS_BASE_URL}/DSL.md`;
+export const SENTINEL_SOURCES_DOCS_URL = `${SENTINEL_DOCS_BASE_URL}/SOURCES.md`;

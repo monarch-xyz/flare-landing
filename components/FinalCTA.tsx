@@ -1,9 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { RiGithubLine, RiDiscordLine, RiBookOpenLine } from 'react-icons/ri';
 import { GridDivider } from './ui/GridDivider';
-import { SENTINEL_ARCHITECTURE_DOCS_URL, SENTINEL_GITHUB_URL } from '@/lib/sentinel-links';
+import { SENTINEL_GITHUB_URL, SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
 
 export function FinalCTA() {
   return (
@@ -56,15 +57,13 @@ export function FinalCTA() {
             </div>
 
             {/* Docs link */}
-            <a
-              href={SENTINEL_ARCHITECTURE_DOCS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={SENTINEL_SITE_DOCS_PATH}
               className="inline-flex items-center gap-2 text-sm text-secondary hover:text-[#ff6b35] transition-colors"
             >
               <RiBookOpenLine className="w-4 h-4" />
               Read the docs
-            </a>
+            </Link>
           </motion.div>
         </div>
       </div>

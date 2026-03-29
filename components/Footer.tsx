@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { RiGithubFill, RiDiscordFill, RiBookLine, RiExternalLinkLine } from 'react-icons/ri';
-import { SENTINEL_ARCHITECTURE_DOCS_URL, SENTINEL_GITHUB_URL } from '@/lib/sentinel-links';
+import { SENTINEL_GITHUB_URL, SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
 
 const links = [
-  { href: SENTINEL_ARCHITECTURE_DOCS_URL, label: 'Docs', icon: RiBookLine },
-  { href: SENTINEL_GITHUB_URL, label: 'GitHub', icon: RiGithubFill },
-  { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill },
+  { href: SENTINEL_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
+  { href: SENTINEL_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
+  { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
 ];
 
 export function Footer() {
@@ -27,17 +27,29 @@ export function Footer() {
           {/* Links */}
           <div className="flex items-center gap-6">
             {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors no-underline"
-              >
-                <link.icon className="w-5 h-5" aria-hidden="true" />
-                <span className="text-sm hidden sm:inline">{link.label}</span>
-              </a>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors no-underline"
+                >
+                  <link.icon className="w-5 h-5" aria-hidden="true" />
+                  <span className="text-sm hidden sm:inline">{link.label}</span>
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  aria-label={link.label}
+                  className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors no-underline"
+                >
+                  <link.icon className="w-5 h-5" aria-hidden="true" />
+                  <span className="text-sm hidden sm:inline">{link.label}</span>
+                </Link>
+              )
             ))}
           </div>
 
