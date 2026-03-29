@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 
 interface FamilyExampleItem {
   id: string;
-  eyebrow: string;
   title: string;
   description: string;
   code: string;
@@ -27,27 +26,23 @@ export function FamilyExamplesAccordion({
   const [openId, setOpenId] = useState<string>(defaultOpenId ?? items[0]?.id ?? '');
 
   return (
-    <div className="space-y-3">
+    <div className="mt-3 divide-y divide-border border-y border-border">
       {items.map((item) => {
         const isOpen = item.id === openId;
 
         return (
-          <div
-            key={item.id}
-            className={cn(
-              'rounded-md border bg-background/60 transition-colors',
-              isOpen ? 'border-[#1f2328]' : 'border-border/80'
-            )}
-          >
+          <div key={item.id}>
             <button
               type="button"
               onClick={() => setOpenId(isOpen ? '' : item.id)}
-              className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left"
+              className={cn(
+                'flex w-full items-start justify-between gap-4 py-4 text-left transition-colors',
+                isOpen ? 'text-foreground' : 'text-foreground hover:text-foreground'
+              )}
             >
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-secondary">{item.eyebrow}</p>
-                <p className="mt-2 text-base text-foreground">{item.title}</p>
-                <p className="mt-2 text-sm text-secondary leading-relaxed">{item.description}</p>
+                <p className="text-base text-foreground">{item.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-secondary">{item.description}</p>
               </div>
               <RiArrowRightSLine
                 className={cn(
@@ -58,8 +53,14 @@ export function FamilyExamplesAccordion({
             </button>
 
             {isOpen ? (
-              <div className="border-t border-border/80 px-5 py-5">
-                <CodeBlock code={item.code} language={item.language} filename={item.filename} />
+              <div className="pb-4">
+                <CodeBlock
+                  code={item.code}
+                  language={item.language}
+                  filename={item.filename}
+                  tone="light"
+                  showHeader={false}
+                />
               </div>
             ) : null}
           </div>
