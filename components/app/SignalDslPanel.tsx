@@ -2,11 +2,9 @@ import { Card } from '@/components/ui/Card';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { cn } from '@/lib/utils';
 import {
-  countTrackedWallets,
   describeSignalDefinition,
-  getSignalMarketHref,
-  getSignalMarketId,
-  getSignalPrimaryChainId,
+  getSignalFocusDetails,
+  getSignalTrackingSummary,
 } from '@/lib/signals/templates';
 import type { SignalRecord } from '@/lib/types/signal';
 
@@ -37,15 +35,13 @@ export function SignalDslPanel({
   className,
   showTimestamps = true,
 }: SignalDslPanelProps) {
-  const trackedWallets = countTrackedWallets(signal.definition);
-  const marketId = getSignalMarketId(signal.definition);
   const summary = describeSignalDefinition(signal.definition);
   const conditionCount = signal.definition.conditions.length;
   const logic = signal.definition.logic ?? 'AND';
   const protocol = signal.definition.scope.protocol ?? 'all';
   const chainList = signal.definition.scope.chains.join(', ');
-  const primaryChainId = getSignalPrimaryChainId(signal.definition);
-  const marketHref = getSignalMarketHref(signal.definition);
+  const focus = getSignalFocusDetails(signal.definition);
+  const trackingSummary = getSignalTrackingSummary(signal.definition);
 
   return (
     <Card className={cn('space-y-5', className)}>
@@ -67,17 +63,19 @@ export function SignalDslPanel({
           <p className="mt-1 text-xs text-secondary">Chains {chainList || '—'}</p>
         </div>
         <div className="rounded-md border border-border/80 bg-background/50 p-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-secondary">Market</p>
-          <p className="mt-2 break-all font-mono text-xs text-foreground">{marketId}</p>
-          {marketHref && primaryChainId ? (
+          <p className="text-xs uppercase tracking-[0.25em] text-secondary">{focus.label}</p>
+          <p className="mt-2 break-all font-mono text-xs text-foreground">{focus.value}</p>
+          {focus.href ? (
             <a
-              href={marketHref}
+              href={focus.href}
               target="_blank"
               rel="noreferrer"
               className="mt-3 inline-flex text-xs text-foreground no-underline transition-colors hover:text-[#ff6b35]"
             >
-              Market on Chain {primaryChainId}
+              Open monitored market
             </a>
+          ) : focus.hint ? (
+            <p className="mt-3 text-xs text-secondary">{focus.hint}</p>
           ) : null}
         </div>
         <div className="rounded-md border border-border/80 bg-background/50 p-4">
@@ -87,7 +85,7 @@ export function SignalDslPanel({
         </div>
         <div className="rounded-md border border-border/80 bg-background/50 p-4">
           <p className="text-xs uppercase tracking-[0.25em] text-secondary">Tracking</p>
-          <p className="mt-2 text-sm text-foreground">{trackedWallets} wallet{trackedWallets === 1 ? '' : 's'}</p>
+          <p className="mt-2 text-sm text-foreground">{trackingSummary}</p>
           <p className="mt-1 text-xs text-secondary">
             Window {signal.definition.window.duration} · Cooldown {signal.cooldown_minutes}m
           </p>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { SignalRowMenu } from '@/components/app/SignalRowMenu';
-import { countTrackedWallets, describeSignalDefinition, getSignalMarketId } from '@/lib/signals/templates';
+import { describeSignalDefinition, getSignalScopeSummary } from '@/lib/signals/templates';
 import { SignalRecord } from '@/lib/types/signal';
 
 interface SignalRowProps {
@@ -8,9 +8,8 @@ interface SignalRowProps {
 }
 
 export function SignalRow({ signal }: SignalRowProps) {
-  const trackedWallets = countTrackedWallets(signal.definition);
-  const marketId = getSignalMarketId(signal.definition);
   const summary = describeSignalDefinition(signal.definition);
+  const scopeSummary = getSignalScopeSummary(signal.definition);
   const updatedAt = new Date(signal.updated_at).toLocaleString();
   const lastTriggeredAt = signal.last_triggered_at ? new Date(signal.last_triggered_at).toLocaleString() : '—';
 
@@ -24,9 +23,7 @@ export function SignalRow({ signal }: SignalRowProps) {
           {signal.name}
         </Link>
         <p className="text-sm text-secondary mt-1">{summary}</p>
-        <p className="text-xs text-secondary mt-2">
-          Market: <span className="font-mono">{marketId}</span> {trackedWallets > 0 ? `· ${trackedWallets} wallets` : ''}
-        </p>
+        <p className="text-xs text-secondary mt-2">{scopeSummary}</p>
       </div>
       <div>
         <p className="text-xs uppercase tracking-[0.3em] text-secondary">Status</p>

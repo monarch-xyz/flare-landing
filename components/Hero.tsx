@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { RiArrowDownLine } from 'react-icons/ri';
 import { GridAccent } from './ui/GridAccent';
 import { SectionTag } from './ui/SectionTag';
+import { SENTINEL_ARCHITECTURE_DOCS_URL } from '@/lib/sentinel-links';
 
 export function Hero() {
   const scrollToSection = () => {
@@ -87,7 +88,7 @@ export function Hero() {
                 <RiArrowDownLine className="w-4 h-4" />
               </button>
               <a
-                href="https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md"
+                href={SENTINEL_ARCHITECTURE_DOCS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 py-3 border border-border text-secondary text-sm font-medium rounded-md hover:border-[#ff6b35]/30 hover:text-foreground transition-colors no-underline"

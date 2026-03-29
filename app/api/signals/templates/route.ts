@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/session';
-import { getDeliveryWebhookUrl } from '@/lib/delivery/server';
-import { buildWhaleMovementTemplate, SignalTemplateError, type WhaleTemplateRequest } from '@/lib/signals/templates';
+import { buildSignalTemplate, SignalTemplateError, type SignalTemplateRequest } from '@/lib/signals/templates';
 import { requestSentinel, SentinelRequestError } from '@/lib/sentinel/user-server';
 import type { CreateSignalRequest, SignalRecord } from '@/lib/types/signal';
 
@@ -11,19 +10,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
 
-  let payload: WhaleTemplateRequest;
+  let payload: SignalTemplateRequest;
   try {
-    payload = (await request.json()) as WhaleTemplateRequest;
+    payload = (await request.json()) as SignalTemplateRequest;
   } catch {
     return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
   }
 
   try {
-    const templatePayload = buildWhaleMovementTemplate(payload);
-    const createSignalPayload: CreateSignalRequest = {
-      ...templatePayload,
-      webhook_url: getDeliveryWebhookUrl(),
-    };
+    const templatePayload = buildSignalTemplate(payload);
+    const createSignalPayload: CreateSignalRequest = templatePayload;
 
     const signal = await requestSentinel<SignalRecord>('/signals', {
       method: 'POST',

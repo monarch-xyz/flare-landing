@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { RiGithubFill, RiDiscordFill, RiBookLine, RiExternalLinkLine } from 'react-icons/ri';
+import { SENTINEL_ARCHITECTURE_DOCS_URL, SENTINEL_GITHUB_URL } from '@/lib/sentinel-links';
 
 const links = [
-  { href: 'https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md', label: 'Docs', icon: RiBookLine },
-  { href: 'https://github.com/monarch-xyz/sentinel', label: 'GitHub', icon: RiGithubFill },
+  { href: SENTINEL_ARCHITECTURE_DOCS_URL, label: 'Docs', icon: RiBookLine },
+  { href: SENTINEL_GITHUB_URL, label: 'GitHub', icon: RiGithubFill },
   { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill },
 ];
 

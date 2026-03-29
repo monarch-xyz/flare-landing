@@ -8,10 +8,10 @@ const steps = [
     icon: RiCodeSSlashLine,
     title: 'Define',
     description: 'Model conditions as dynamic queries across metrics, thresholds, and windows with composable logic.',
-    code: `"type": "and"
-"all": [
-  { "metric": "Morpho.Position.supplyShares", "change": { "percent": 20 } },
-  { "metric": "Morpho.Market.utilization", "gt": 90 }
+    code: `"window": { "duration": "7d" }
+"conditions": [
+  { "type": "change", "metric": "Morpho.Position.supplyShares", "by": { "percent": 20 } },
+  { "type": "threshold", "metric": "Morpho.Market.utilization", "operator": ">", "value": 0.9 }
 ]`,
   },
   {
@@ -19,7 +19,7 @@ const steps = [
     title: 'Deploy',
     description: 'Register your query via API once. Sentinel continuously evaluates state changes and smart filters.',
     code: `POST /api/v1/signals
-Authorization: Bearer sk_...
+X-API-Key: sentinel_...
 { "name": "High-Signal Watch", ... }`,
   },
   {
@@ -111,6 +111,12 @@ export function HowItWorks() {
                         </>
                       ) : line.startsWith('Authorization') ? (
                         // Header
+                        <>
+                          <span className="text-[#ff7b72]">{line.split(':')[0]}</span>
+                          <span className="text-[#8b949e]">:</span>
+                          <span className="text-[#a5d6ff]">{line.split(':').slice(1).join(':')}</span>
+                        </>
+                      ) : line.startsWith('X-API-Key') ? (
                         <>
                           <span className="text-[#ff7b72]">{line.split(':')[0]}</span>
                           <span className="text-[#8b949e]">:</span>

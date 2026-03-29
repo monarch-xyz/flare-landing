@@ -11,76 +11,99 @@ const examples = [
     id: 'whale-exit',
     icon: RiFlashlightLine,
     title: 'Whale Exit Alert',
-    description: 'Detect when a large position decreases by 20% over 7 days',
+    description: 'Create a real signal payload for a coordinated supplier exit over 7 days',
     filename: 'whale-alert.json',
-    highlightLines: [4, 5, 6, 7],
+    highlightLines: [3, 11, 18, 30],
     code: `{
   "name": "Whale Exit Alert",
-  "window": { "duration": "7d" },
-  "conditions": [{
-    "type": "change",
-    "metric": "Morpho.Position.supplyShares",
-    "direction": "decrease",
-    "by": { "percent": 20 },
-    "chain_id": 1,
-    "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41",
-    "address": "0x9eb7f..."
-  }],
-  "webhook_url": "https://your-agent.com/alerts"
+  "definition": {
+    "scope": {
+      "chains": [1],
+      "markets": ["0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"],
+      "protocol": "morpho"
+    },
+    "window": { "duration": "7d" },
+    "logic": "AND",
+    "conditions": [{
+      "type": "group",
+      "addresses": ["0x9eb7f...", "0x51aa3...", "0x7cc19..."],
+      "requirement": { "count": 2, "of": 3 },
+      "logic": "AND",
+      "window": { "duration": "7d" },
+      "conditions": [{
+        "type": "change",
+        "metric": "Morpho.Position.supplyShares",
+        "direction": "decrease",
+        "by": { "percent": 20 },
+        "chain_id": 1,
+        "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41",
+        "window": { "duration": "7d" }
+      }]
+    }]
+  },
+  "webhook_url": "https://your-agent.com/alerts",
+  "cooldown_minutes": 60
 }`,
   },
   {
     id: 'utilization',
     icon: RiShieldLine,
     title: 'Utilization Spike',
-    description: 'Alert when market utilization exceeds 95%',
+    description: 'Use the canonical threshold syntax for market state metrics',
     filename: 'utilization-alert.json',
-    highlightLines: [4, 5, 6],
+    highlightLines: [3, 10, 11],
     code: `{
   "name": "High Utilization Warning",
-  "conditions": [{
-    "type": "threshold",
-    "metric": "Morpho.Market.utilization",
-    "operator": "gt",
-    "value": 0.95,
-    "chain_id": 1,
-    "market_id": "0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"
-  }],
+  "definition": {
+    "scope": {
+      "chains": [1],
+      "markets": ["0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"],
+      "protocol": "morpho"
+    },
+    "window": { "duration": "1h" },
+    "conditions": [{
+      "type": "threshold",
+      "metric": "Morpho.Market.utilization",
+      "operator": ">",
+      "value": 0.95,
+      "chain_id": 1,
+      "market_id": "0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"
+    }]
+  },
   "webhook_url": "https://your-agent.com/alerts",
-  "cooldown": "1h"
+  "cooldown_minutes": 15
 }`,
   },
   {
-    id: 'multi-condition',
+    id: 'raw-events',
     icon: RiStackLine,
-    title: 'Multi-Condition',
-    description: 'Combine conditions with AND/OR logic',
-    filename: 'complex-signal.json',
-    highlightLines: [4, 5],
+    title: 'Raw Event Scan',
+    description: 'Use the new raw-events DSL to count decoded ERC-20 transfers in a window',
+    filename: 'raw-events-alert.json',
+    highlightLines: [3, 11, 14, 20],
     code: `{
-  "name": "Complex Signal",
-  "conditions": [{
-    "type": "group",
-    "operator": "AND",
-    "conditions": [
-      {
-        "type": "threshold",
-        "metric": "Morpho.Market.utilization",
-        "operator": "gt",
-        "value": 0.90,
-        "chain_id": 1,
-        "market_id": "0x..."
+  "name": "Stablecoin Transfer Burst",
+  "definition": {
+    "scope": {
+      "chains": [1],
+      "protocol": "all"
+    },
+    "window": { "duration": "30m" },
+    "conditions": [{
+      "type": "raw-events",
+      "aggregation": "count",
+      "operator": ">",
+      "value": 25,
+      "chain_id": 1,
+      "event": {
+        "kind": "erc20_transfer",
+        "contract_addresses": ["0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"]
       },
-      {
-        "type": "change",
-        "metric": "Morpho.Market.totalBorrowAssets",
-        "direction": "increase",
-        "by": { "percent": 10 },
-        "window": { "duration": "24h" }
-      }
-    ]
-  }],
-  "webhook_url": "https://your-agent.com/alerts"
+      "filters": [{ "field": "to", "op": "eq", "value": "0xReceiver" }]
+    }]
+  },
+  "webhook_url": "https://your-agent.com/raw-events",
+  "cooldown_minutes": 10
 }`,
   },
 ];
@@ -115,7 +138,7 @@ export function CodeExamples() {
             Real <span className="text-[#ff6b35]">Examples</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
-            Copy, paste, deploy. It&apos;s that simple.
+            Current create-signal payloads, including the new `raw-events` condition family.
           </p>
         </motion.div>
 

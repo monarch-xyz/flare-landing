@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { RiRobot2Line, RiCheckLine, RiFileCopyLine } from 'react-icons/ri';
 import { useState } from 'react';
 import { CodeBlock } from './ui/CodeBlock';
+import { SENTINEL_ARCHITECTURE_DOCS_URL } from '@/lib/sentinel-links';
 
 const step1Code = `# sentinel-skill.md
 
@@ -12,40 +13,54 @@ You have access to Sentinel for blockchain monitoring.
 ## Capabilities
 - Monitor DeFi positions for changes
 - Track market conditions (utilization, rates)
+- Query raw event streams with "type": "raw-events"
 - Receive webhooks when conditions trigger
 
 ## Quick Setup
 To monitor a position, create a signal:
 
-POST https://api.sentinel.monarchlend.xyz/signals
-Authorization: Bearer YOUR_API_KEY
+POST https://your-sentinel-host/api/v1/signals
+X-API-Key: YOUR_API_KEY
 
 {
   "name": "Position Health Alert",
-  "conditions": [{
-    "type": "change",
-    "metric": "Morpho.Position.supplyShares",
-    "direction": "decrease",
-    "by": { "percent": 10 }
-  }],
-  "webhook_url": "YOUR_WEBHOOK_URL"
+  "definition": {
+    "scope": { "chains": [1], "protocol": "morpho" },
+    "window": { "duration": "1h" },
+    "conditions": [{
+      "type": "change",
+      "metric": "Morpho.Position.supplyShares",
+      "direction": "decrease",
+      "by": { "percent": 10 },
+      "chain_id": 1
+    }]
+  },
+  "webhook_url": "YOUR_WEBHOOK_URL",
+  "cooldown_minutes": 5
 }`;
 
-const step2Code = `curl -X POST https://api.sentinel.monarchlend.xyz/signals \\
-  -H "Authorization: Bearer $SENTINEL_API_KEY" \\
+const step2Code = `curl -X POST https://your-sentinel-host/api/v1/signals \\
+  -H "X-API-Key: $SENTINEL_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "name": "Whale Movement Alert",
-    "conditions": [{
-      "type": "threshold",
-      "metric": "Morpho.Position.supplyShares",
-      "operator": "lt",
-      "value": 1000000,
-      "chain_id": 1,
-      "market_id": "0xc54d7acf...",
-      "address": "0x9eb7f2c4..."
-    }],
-    "webhook_url": "https://your-agent.com/webhook"
+    "name": "USDC Transfer Burst",
+    "definition": {
+      "scope": { "chains": [1], "protocol": "all" },
+      "window": { "duration": "30m" },
+      "conditions": [{
+        "type": "raw-events",
+        "aggregation": "count",
+        "operator": ">",
+        "value": 25,
+        "chain_id": 1,
+        "event": {
+          "kind": "erc20_transfer",
+          "contract_addresses": ["0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"]
+        }
+      }]
+    },
+    "webhook_url": "https://your-agent.com/webhook",
+    "cooldown_minutes": 10
   }'`;
 
 const step3Code = `# When Sentinel triggers, you receive:
@@ -191,7 +206,7 @@ export function AgentOnboarding() {
         >
           <p className="text-secondary mb-4">Ready to give your agent superpowers?</p>
           <a
-            href="https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md"
+            href={SENTINEL_ARCHITECTURE_DOCS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#ff6b35] text-white font-medium rounded-md hover:opacity-90 transition-opacity no-underline"

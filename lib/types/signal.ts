@@ -15,10 +15,11 @@ export interface SignalScope {
 
 export interface TimeWindow {
   duration: string;
-  lookback_blocks?: number;
 }
 
 export type ComparisonOperator = '>' | '<' | '>=' | '<=' | '==' | '!=';
+export type RawEventKind = 'erc20_transfer' | 'contract_event' | 'swap';
+export type RawEventProtocol = 'uniswap_v2' | 'uniswap_v3';
 
 export interface ThresholdCondition {
   type: 'threshold';
@@ -67,13 +68,41 @@ export interface AggregateCondition {
   market_id?: string;
 }
 
-export type SignalCondition = ThresholdCondition | ChangeCondition | GroupCondition | AggregateCondition;
+export interface RawEventSpec {
+  kind: RawEventKind;
+  contract_addresses?: string[];
+  signature?: string;
+  protocols?: RawEventProtocol[];
+}
+
+export interface RawEventsCondition {
+  type: 'raw-events';
+  aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count';
+  operator: ComparisonOperator;
+  value: number;
+  field?: string;
+  window?: TimeWindow;
+  filters?: SignalFilter[];
+  chain_id?: number;
+  event: RawEventSpec;
+}
+
+export type SignalCondition =
+  | ThresholdCondition
+  | ChangeCondition
+  | GroupCondition
+  | AggregateCondition
+  | RawEventsCondition;
 
 export interface SignalDefinition {
   scope: SignalScope;
   conditions: SignalCondition[];
   logic?: 'AND' | 'OR';
   window: TimeWindow;
+}
+
+export interface ManagedSignalDelivery {
+  provider: 'telegram';
 }
 
 export interface SignalRecord {
@@ -83,6 +112,7 @@ export interface SignalRecord {
   description?: string | null;
   definition: SignalDefinition;
   webhook_url: string;
+  delivery?: ManagedSignalDelivery;
   cooldown_minutes: number;
   is_active: boolean;
   created_at: string;
@@ -95,7 +125,8 @@ export interface CreateSignalRequest {
   name: string;
   description?: string;
   definition: SignalDefinition;
-  webhook_url: string;
+  webhook_url?: string;
+  delivery?: ManagedSignalDelivery;
   cooldown_minutes?: number;
 }
 
@@ -104,6 +135,7 @@ export interface UpdateSignalRequest {
   description?: string;
   definition?: SignalDefinition;
   webhook_url?: string;
+  delivery?: ManagedSignalDelivery;
   cooldown_minutes?: number;
   is_active?: boolean;
 }

@@ -3,29 +3,43 @@
 import { motion } from 'framer-motion';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { Button } from './ui/Button';
+import { SENTINEL_API_DOCS_URL } from '@/lib/sentinel-links';
 
 const endpoints = [
   {
-    method: 'POST',
-    path: '/signals',
-    description: 'Create a new signal with conditions and webhook URL',
-  },
-  {
     method: 'GET',
-    path: '/signals/:id',
-    description: 'Get signal status, last evaluation, and history',
+    path: '/health',
+    description: 'Check source-family capability status for state, indexed, and raw.',
   },
   {
     method: 'POST',
-    path: '/simulate',
-    description: 'Test your signal definition without deploying',
+    path: '/api/v1/signals',
+    description: 'Create a signal from the current DSL, including raw-events definitions.',
   },
   {
-    method: 'DELETE',
-    path: '/signals/:id',
-    description: 'Remove a signal and stop monitoring',
+    method: 'PATCH',
+    path: '/api/v1/signals/:id/toggle',
+    description: 'Pause or resume a signal. Toggle-on returns 409 if a required source family is disabled.',
+  },
+  {
+    method: 'POST',
+    path: '/api/v1/simulate/:id/simulate',
+    description: 'Run a time-range simulation for an existing signal before turning it on.',
   },
 ];
+
+const getMethodClassName = (method: string) => {
+  switch (method) {
+    case 'GET':
+      return 'bg-green-500/10 text-green-500';
+    case 'POST':
+      return 'bg-blue-500/10 text-blue-500';
+    case 'PATCH':
+      return 'bg-amber-500/10 text-amber-600';
+    default:
+      return 'bg-red-500/10 text-red-500';
+  }
+};
 
 export function ApiReference() {
   return (
@@ -47,7 +61,7 @@ export function ApiReference() {
               Simple <span className="text-[#ff6b35]">REST API</span>
             </h2>
             <p className="text-secondary text-lg max-w-2xl mx-auto">
-              Everything you need in four endpoints.
+              Core routes for capability checks, signal lifecycle, and simulation.
             </p>
           </motion.div>
 
@@ -79,11 +93,7 @@ export function ApiReference() {
                       transition={{ duration: 0.3, delay: index * 0.05 }}
                     >
                       <td className="px-6 py-4">
-                        <span className={`inline-block px-2 py-1 rounded text-xs font-mono font-medium ${
-                          endpoint.method === 'GET' ? 'bg-green-500/10 text-green-500' :
-                          endpoint.method === 'POST' ? 'bg-blue-500/10 text-blue-500' :
-                          'bg-red-500/10 text-red-500'
-                        }`}>
+                        <span className={`inline-block px-2 py-1 rounded text-xs font-mono font-medium ${getMethodClassName(endpoint.method)}`}>
                           {endpoint.method}
                         </span>
                       </td>
@@ -112,11 +122,7 @@ export function ApiReference() {
                 className="bg-background rounded-lg border border-border p-4"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <span className={`inline-block px-2 py-1 rounded text-xs font-mono font-medium ${
-                    endpoint.method === 'GET' ? 'bg-green-500/10 text-green-500' :
-                    endpoint.method === 'POST' ? 'bg-blue-500/10 text-blue-500' :
-                    'bg-red-500/10 text-red-500'
-                  }`}>
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-mono font-medium ${getMethodClassName(endpoint.method)}`}>
                     {endpoint.method}
                   </span>
                   <code className="text-sm font-mono text-[#ff6b35]">{endpoint.path}</code>
@@ -135,7 +141,7 @@ export function ApiReference() {
             className="text-center"
           >
             <a
-              href="https://github.com/monarch-xyz/sentinel/blob/main/docs/API.md"
+              href={SENTINEL_API_DOCS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="no-underline inline-block"

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { RiGithubFill, RiDiscordFill, RiBookLine, RiMenuLine, RiCloseLine, RiMoonLine, RiSunLine, RiLoginCircleLine } from 'react-icons/ri';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
+import { SENTINEL_ARCHITECTURE_DOCS_URL, SENTINEL_GITHUB_URL } from '@/lib/sentinel-links';
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,8 +36,8 @@ export function Header() {
   };
 
   const navLinks = [
-    { href: 'https://github.com/monarch-xyz/sentinel/blob/main/docs/ARCHITECTURE.md', label: 'Docs', icon: RiBookLine, external: true },
-    { href: 'https://github.com/monarch-xyz/sentinel', label: 'GitHub', icon: RiGithubFill, external: true },
+    { href: SENTINEL_ARCHITECTURE_DOCS_URL, label: 'Docs', icon: RiBookLine, external: true },
+    { href: SENTINEL_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
     { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
   ];
 
