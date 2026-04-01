@@ -49,7 +49,7 @@ const examples = [
     id: 'utilization',
     icon: RiShieldLine,
     title: 'Utilization Spike',
-    description: 'Use the canonical threshold syntax for market state metrics',
+    description: 'Use a selected common state alias backed by generic RPC state reads',
     filename: 'utilization-alert.json',
     highlightLines: [3, 10, 11],
     code: `{
@@ -77,12 +77,12 @@ const examples = [
   {
     id: 'raw-events',
     icon: RiStackLine,
-    title: 'Raw Event Scan',
-    description: 'Use the new raw-events DSL to count decoded ERC-20 transfers in a window',
+    title: 'Raw Swap Scan',
+    description: 'Use the raw-events swap preset to sum normalized DEX activity in a window',
     filename: 'raw-events-alert.json',
-    highlightLines: [3, 11, 14, 20],
+    highlightLines: [3, 11, 15, 22],
     code: `{
-  "name": "Stablecoin Transfer Burst",
+  "name": "Swap Volume Burst",
   "definition": {
     "scope": {
       "chains": [1],
@@ -91,18 +91,20 @@ const examples = [
     "window": { "duration": "30m" },
     "conditions": [{
       "type": "raw-events",
-      "aggregation": "count",
+      "aggregation": "sum",
+      "field": "amount0_abs",
       "operator": ">",
-      "value": 25,
+      "value": 500000,
       "chain_id": 1,
       "event": {
-        "kind": "erc20_transfer",
-        "contract_addresses": ["0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"]
+        "kind": "swap",
+        "protocols": ["uniswap_v2", "uniswap_v3"],
+        "contract_addresses": ["0xPoolA", "0xPoolB"]
       },
-      "filters": [{ "field": "to", "op": "eq", "value": "0xReceiver" }]
+      "filters": [{ "field": "recipient", "op": "eq", "value": "0xReceiver" }]
     }]
   },
-  "webhook_url": "https://your-agent.com/raw-events",
+  "webhook_url": "https://your-agent.com/swap-events",
   "cooldown_minutes": 10
 }`,
   },
@@ -138,7 +140,7 @@ export function CodeExamples() {
             Real <span className="text-[#ff6b35]">Examples</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
-            Current create-signal payloads, including the new `raw-events` condition family.
+            Current create-signal payloads, including canonical state aliases and the broader `raw-events` catalog.
           </p>
         </motion.div>
 

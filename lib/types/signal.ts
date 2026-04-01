@@ -18,7 +18,16 @@ export interface TimeWindow {
 }
 
 export type ComparisonOperator = '>' | '<' | '>=' | '<=' | '==' | '!=';
-export type RawEventKind = 'erc20_transfer' | 'contract_event' | 'swap';
+export type RawEventKind =
+  | 'erc20_transfer'
+  | 'erc20_approval'
+  | 'erc721_transfer'
+  | 'erc721_approval'
+  | 'erc721_approval_for_all'
+  | 'erc4626_deposit'
+  | 'erc4626_withdraw'
+  | 'contract_event'
+  | 'swap';
 export type RawEventProtocol = 'uniswap_v2' | 'uniswap_v3';
 
 export interface ThresholdCondition {

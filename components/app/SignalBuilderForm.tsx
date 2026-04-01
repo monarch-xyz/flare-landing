@@ -190,10 +190,10 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
     }
   };
 
-  const previewTitle = isWhalePreset ? 'Morpho whale movement signal' : 'ERC-20 transfer flow signal';
+  const previewTitle = isWhalePreset ? 'Morpho whale movement signal' : 'ERC-20 transfer raw-event signal';
   const previewDescription = isWhalePreset
-    ? 'Enter a market plus the supplier wallets you want to watch. This UI creates a Sentinel group-change signal behind the scenes.'
-    : 'Track gross raw ERC-20 Transfer volume into or out of one address. This is flow monitoring, not true net balance change.';
+    ? 'Enter a market plus the supplier wallets you want to watch. This UI creates a Sentinel `group` + `change` signal on the canonical `Morpho.Position.supplyShares` state alias.'
+    : 'Track gross ERC-20 Transfer volume into or out of one address with Sentinel’s `raw-events` preset. This is flow monitoring, not true net balance change.';
 
   const previewStats = isWhalePreset
     ? [
@@ -386,7 +386,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
             </label>
           ) : (
             <div className="mt-4 rounded-sm border border-border/80 bg-background/50 p-4 text-sm text-secondary">
-              This template uses raw ERC-20 `Transfer` logs. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. Raw-event templates also require raw-event support in Sentinel.
+              This template uses Sentinel’s `raw-events` ERC-20 transfer preset. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. The broader raw-event catalog also includes approvals, ERC-721 events, ERC-4626 deposits and withdrawals, swap presets, and `contract_event` for custom ABI signatures.
             </div>
           )}
 

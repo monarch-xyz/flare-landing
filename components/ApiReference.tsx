@@ -12,14 +12,19 @@ const endpoints = [
     description: 'Check source-family capability status for state, indexed, and raw.',
   },
   {
-    method: 'POST',
-    path: '/api/v1/signals',
-    description: 'Create a signal from the current DSL, including raw-events definitions.',
+    method: 'GET',
+    path: '/chains',
+    description: 'Inspect the configured runtime chain allowlist and archive RPC setup.',
   },
   {
-    method: 'PATCH',
-    path: '/api/v1/signals/:id/toggle',
-    description: 'Pause or resume a signal. Toggle-on returns 409 if a required source family is disabled.',
+    method: 'GET',
+    path: '/api/v1/catalog',
+    description: 'Read the backend-supported raw-event template catalog for builder UX.',
+  },
+  {
+    method: 'POST',
+    path: '/api/v1/signals',
+    description: 'Create a signal from the current DSL, including state aliases and raw-events definitions.',
   },
   {
     method: 'POST',
@@ -60,9 +65,9 @@ export function ApiReference() {
             <h2 className="font-zen text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
               Simple <span className="text-[#ff6b35]">REST API</span>
             </h2>
-            <p className="text-secondary text-lg max-w-2xl mx-auto">
-              Core routes for capability checks, signal lifecycle, and simulation.
-            </p>
+          <p className="text-secondary text-lg max-w-2xl mx-auto">
+              Core routes for capability checks, raw-event catalog discovery, signal lifecycle, and simulation.
+          </p>
           </motion.div>
 
           {/* API table - desktop */}

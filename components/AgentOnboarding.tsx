@@ -12,27 +12,28 @@ You have access to Sentinel for blockchain monitoring.
 
 ## Capabilities
 - Monitor DeFi positions for changes
-- Track market conditions (utilization, rates)
-- Query raw event streams with "type": "raw-events"
+- Track market state aliases and computed refs (utilization, borrow, supply)
+- Query raw event presets or custom ABI events with "type": "raw-events"
 - Receive webhooks when conditions trigger
 
 ## Quick Setup
-To monitor a position, create a signal:
+To monitor a market, create a signal:
 
 POST https://your-sentinel-host/api/v1/signals
 X-API-Key: YOUR_API_KEY
 
 {
-  "name": "Position Health Alert",
+  "name": "High Utilization",
   "definition": {
-    "scope": { "chains": [1], "protocol": "morpho" },
+    "scope": { "chains": [1], "markets": ["0xMarket"], "protocol": "morpho" },
     "window": { "duration": "1h" },
     "conditions": [{
-      "type": "change",
-      "metric": "Morpho.Position.supplyShares",
-      "direction": "decrease",
-      "by": { "percent": 10 },
-      "chain_id": 1
+      "type": "threshold",
+      "metric": "Morpho.Market.utilization",
+      "operator": ">",
+      "value": 0.9,
+      "chain_id": 1,
+      "market_id": "0xMarket"
     }]
   },
   "webhook_url": "YOUR_WEBHOOK_URL",
@@ -43,20 +44,23 @@ const step2Code = `curl -X POST https://your-sentinel-host/api/v1/signals \\
   -H "X-API-Key: $SENTINEL_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "name": "USDC Transfer Burst",
+    "name": "Swap Volume Burst",
     "definition": {
       "scope": { "chains": [1], "protocol": "all" },
       "window": { "duration": "30m" },
       "conditions": [{
         "type": "raw-events",
-        "aggregation": "count",
+        "aggregation": "sum",
+        "field": "amount0_abs",
         "operator": ">",
-        "value": 25,
+        "value": 500000,
         "chain_id": 1,
         "event": {
-          "kind": "erc20_transfer",
-          "contract_addresses": ["0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"]
-        }
+          "kind": "swap",
+          "protocols": ["uniswap_v2", "uniswap_v3"],
+          "contract_addresses": ["0xPoolA", "0xPoolB"]
+        },
+        "filters": [{ "field": "recipient", "op": "eq", "value": "0xReceiver" }]
       }]
     },
     "webhook_url": "https://your-agent.com/webhook",
@@ -101,7 +105,7 @@ export function AgentOnboarding() {
     {
       number: 2,
       title: 'Create your first signal',
-      description: 'Your agent calls the Sentinel API to register a monitoring condition. One API call, and Sentinel handles the rest.',
+      description: 'Your agent calls the Sentinel API to register a monitoring condition. Use state aliases for common reads or raw-event presets when you need direct decoded logs.',
       code: step2Code,
       language: 'bash',
       filename: 'create-signal.sh',

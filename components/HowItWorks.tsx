@@ -10,8 +10,8 @@ const steps = [
     description: 'Model conditions as dynamic queries across metrics, thresholds, and windows with composable logic.',
     code: `"window": { "duration": "7d" }
 "conditions": [
-  { "type": "change", "metric": "Morpho.Position.supplyShares", "by": { "percent": 20 } },
-  { "type": "threshold", "metric": "Morpho.Market.utilization", "operator": ">", "value": 0.9 }
+  { "type": "change", "metric": "Morpho.Position.supplyShares", "direction": "decrease", "by": { "percent": 20 }, "chain_id": 1, "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41" },
+  { "type": "threshold", "metric": "Morpho.Market.utilization", "operator": ">", "value": 0.9, "chain_id": 1, "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41" }
 ]`,
   },
   {
@@ -28,7 +28,8 @@ X-API-Key: sentinel_...
     description: 'Receive webhooks only when all relevant conditions are met, so your agent acts on signal, not noise.',
     code: `→ POST your-webhook-url
 { "triggered": true,
-  "matched_conditions": 2 }`,
+  "conditions_met": [],
+  "context": { "chain_id": 1 } }`,
   },
 ];
 
@@ -55,7 +56,7 @@ export function HowItWorks() {
             Three Steps to <span className="text-[#ff6b35]">Signal-First Automation</span>
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">
-            Compose dynamic queries, deploy once, and react only to alerts that matter.
+            Compose valid DSL conditions, deploy once, and react only to alerts that matter.
           </p>
         </motion.div>
 

@@ -25,10 +25,28 @@ events.on("Redeem", notify)
     title: 'Use DSL to state what you mean.',
     content: `The useful abstraction is a DSL that describes the actual state change you care about: specific scope, exact thresholds, time windows, and logic gates. That gives your agent a signal instead of a feed.`,
     code: `{
-  "scope": { "chains": [1], "protocol": "all" },
+  "scope": {
+    "chains": [1],
+    "markets": ["0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"],
+    "protocol": "morpho"
+  },
   "conditions": [
-    { "metric": "Price.deviationBps", "operator": "<=", "value": -10 },
-    { "metric": "Liquidity.availableUsd", "operator": "<", "value": 5000000 }
+    {
+      "type": "threshold",
+      "metric": "Morpho.Market.utilization",
+      "operator": ">",
+      "value": 0.9,
+      "chain_id": 1,
+      "market_id": "0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"
+    },
+    {
+      "type": "change",
+      "metric": "Morpho.Market.totalBorrowAssets",
+      "direction": "increase",
+      "by": { "percent": 15 },
+      "chain_id": 1,
+      "market_id": "0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"
+    }
   ],
   "logic": "AND",
   "window": { "duration": "2h" }
@@ -45,29 +63,40 @@ events.on("Redeem", notify)
   "definition": {
     "scope": {
       "chains": [1],
-      "markets": ["0x..."],
+      "markets": ["0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"],
       "protocol": "morpho"
     },
     "conditions": [
       {
         "type": "group",
-        "addresses": ["0x1...", "0x2...", "0x3...", "0x4...", "0x5..."],
+        "addresses": [
+          "0x1111111111111111111111111111111111111111",
+          "0x2222222222222222222222222222222222222222",
+          "0x3333333333333333333333333333333333333333",
+          "0x4444444444444444444444444444444444444444",
+          "0x5555555555555555555555555555555555555555"
+        ],
         "requirement": { "count": 3, "of": 5 },
+        "logic": "AND",
         "conditions": [
           {
             "type": "change",
             "metric": "Morpho.Position.supplyShares",
             "direction": "decrease",
             "by": { "percent": 20 },
-            "window": { "duration": "1d" }
+            "window": { "duration": "1d" },
+            "chain_id": 1,
+            "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"
           }
-        ]
+        ],
+        "window": { "duration": "1d" }
       }
     ],
     "logic": "AND",
     "window": { "duration": "7d" }
   },
-  "notify": ["telegram", "webhook"]
+  "delivery": { "provider": "telegram" },
+  "cooldown_minutes": 60
 }`,
   },
 ];

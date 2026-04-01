@@ -94,7 +94,7 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'whale-exit-trio',
     kind: 'morpho-whale',
     title: 'Whale Exit Trio',
-    description: 'Trigger when 3 tracked Morpho suppliers each cut their position by at least 20% over 7 days.',
+    description: 'Trigger when 3 tracked Morpho suppliers each cut `Morpho.Position.supplyShares` by at least 20% over 7 days.',
     accent: '3 of N suppliers, -20%, 7d',
     defaults: {
       chainId: 1,
@@ -108,7 +108,7 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'whale-exit-pair',
     kind: 'morpho-whale',
     title: 'Pair Exit Watch',
-    description: 'Catch two large suppliers leaving together before the whole market feels the move.',
+    description: 'Catch two large suppliers leaving together by watching the canonical `Morpho.Position.supplyShares` state alias.',
     accent: '2 of N suppliers, -15%, 3d',
     defaults: {
       chainId: 1,
@@ -122,7 +122,7 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'single-whale-exit',
     kind: 'morpho-whale',
     title: 'Single Whale Exit',
-    description: 'Track one major wallet and fire as soon as it meaningfully unwinds a supply position.',
+    description: 'Track one major wallet and fire as soon as the canonical Morpho supply-share state read meaningfully unwinds.',
     accent: '1 supplier, -25%, 24h',
     defaults: {
       chainId: 1,
@@ -136,8 +136,8 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'erc20-inflow-watch',
     kind: 'erc20-transfer',
     title: 'ERC-20 Inflow Watch',
-    description: 'Sum gross inbound ERC-20 transfers to one address and trigger when that inflow exceeds a threshold.',
-    accent: 'sum(value) to address',
+    description: 'Use Sentinel’s `raw-events` ERC-20 transfer preset to sum gross inbound value to one address.',
+    accent: 'raw-events · sum(value) to address',
     direction: 'inflow',
     defaults: {
       chainId: 1,
@@ -150,8 +150,8 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'erc20-outflow-watch',
     kind: 'erc20-transfer',
     title: 'ERC-20 Outflow Watch',
-    description: 'Sum gross outbound ERC-20 transfers from one address and trigger when that outflow exceeds a threshold.',
-    accent: 'sum(value) from address',
+    description: 'Use Sentinel’s `raw-events` ERC-20 transfer preset to sum gross outbound value from one address.',
+    accent: 'raw-events · sum(value) from address',
     direction: 'outflow',
     defaults: {
       chainId: 1,
@@ -260,16 +260,19 @@ const getWhaleChangeCondition = (definition: SignalDefinition) => {
 const getRawEventsCondition = (definition: SignalDefinition) =>
   definition.conditions.find((condition): condition is RawEventsCondition => condition.type === 'raw-events');
 
-const getRawEventLabel = (kind: RawEventKind) => {
-  switch (kind) {
-    case 'erc20_transfer':
-      return 'ERC-20 transfers';
-    case 'contract_event':
-      return 'contract events';
-    case 'swap':
-      return 'swap events';
-  }
+const RAW_EVENT_LABELS: Record<RawEventKind, string> = {
+  erc20_transfer: 'ERC-20 transfers',
+  erc20_approval: 'ERC-20 approvals',
+  erc721_transfer: 'ERC-721 transfers',
+  erc721_approval: 'ERC-721 approvals',
+  erc721_approval_for_all: 'ERC-721 approval-for-all events',
+  erc4626_deposit: 'ERC-4626 deposits',
+  erc4626_withdraw: 'ERC-4626 withdrawals',
+  contract_event: 'contract events',
+  swap: 'swap events',
 };
+
+const getRawEventLabel = (kind: RawEventKind) => RAW_EVENT_LABELS[kind];
 
 const getConditionMarketId = (condition: SignalCondition): string | null => {
   if ('market_id' in condition && typeof condition.market_id === 'string' && condition.market_id) {
@@ -616,7 +619,7 @@ export const buildWhaleMovementTemplate = (input: WhaleTemplateRequest): CreateS
   return buildManagedTelegramSignal(
     input.name?.trim() || generatedName,
     input.description?.trim() ||
-      `Watches ${whaleAddresses.length} Morpho supplier wallets and triggers when ${requiredCount} of them reduce supply shares by at least ${dropPercent}% over ${windowDuration}.`,
+      `Watches ${whaleAddresses.length} Morpho supplier wallets and triggers when ${requiredCount} of them reduce the canonical Morpho supply-share state by at least ${dropPercent}% over ${windowDuration}.`,
     definition,
     cooldownMinutes
   );
@@ -686,7 +689,7 @@ export const buildErc20TransferTemplate = (input: Erc20TransferTemplateRequest):
   return buildManagedTelegramSignal(
     input.name?.trim() || generatedName,
     input.description?.trim() ||
-      `Watches ERC-20 Transfer logs for ${tokenContract} and triggers when gross ${directionLabel} for ${watchedAddress} exceeds ${amountThreshold} base units over ${windowDuration}.`,
+      `Uses the Sentinel raw-events ERC-20 transfer preset for ${tokenContract} and triggers when gross ${directionLabel} for ${watchedAddress} exceeds ${amountThreshold} base units over ${windowDuration}.`,
     definition,
     cooldownMinutes
   );

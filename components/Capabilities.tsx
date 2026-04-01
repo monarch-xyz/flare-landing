@@ -19,10 +19,10 @@ const useCases: UseCase[] = [
   {
     id: 'liquidity-crisis',
     title: 'Liquidity crisis',
-    summary: 'Morpho market stress with coordinated vault exits and rising borrow pressure.',
+    summary: 'Morpho market stress with coordinated vault exits and elevated market utilization.',
     details: [
       '3 of 5 tracked vaults reduce supply by more than 20% over 1 day.',
-      'Borrow APY increases more than 20% over 2 days.',
+      'Market utilization rises above 90% in the same market.',
       'Both conditions must hold together through an AND gate.',
     ],
     code: `{
@@ -30,15 +30,22 @@ const useCases: UseCase[] = [
   "definition": {
     "scope": {
       "chains": [1],
-      "markets": ["0x..."],
+      "markets": ["0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"],
       "protocol": "morpho"
     },
     "conditions": [
       {
         "type": "group",
-        "addresses": ["0xvault1...", "0xvault2...", "0xvault3...", "0xvault4...", "0xvault5..."],
+        "addresses": [
+          "0x1111111111111111111111111111111111111111",
+          "0x2222222222222222222222222222222222222222",
+          "0x3333333333333333333333333333333333333333",
+          "0x4444444444444444444444444444444444444444",
+          "0x5555555555555555555555555555555555555555"
+        ],
         "requirement": { "count": 3, "of": 5 },
         "window": { "duration": "1d" },
+        "logic": "AND",
         "conditions": [
           {
             "type": "change",
@@ -47,18 +54,17 @@ const useCases: UseCase[] = [
             "by": { "percent": 20 },
             "window": { "duration": "1d" },
             "chain_id": 1,
-            "market_id": "0x..."
+            "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"
           }
         ]
       },
       {
-        "type": "change",
-        "metric": "Morpho.Market.borrowAPY",
-        "direction": "increase",
-        "by": { "percent": 20 },
-        "window": { "duration": "2d" },
+        "type": "threshold",
+        "metric": "Morpho.Market.utilization",
+        "operator": ">",
+        "value": 0.9,
         "chain_id": 1,
-        "market_id": "0x..."
+        "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"
       }
     ],
     "logic": "AND",
@@ -67,46 +73,42 @@ const useCases: UseCase[] = [
 }`,
   },
   {
-    id: 'susd-depeg',
-    title: 'SUSD depeg',
-    summary: 'A stablecoin stress pattern that combines price, liquidity, and whale flow.',
+    id: 'treasury-outflow',
+    title: 'Treasury outflow',
+    summary: 'A raw-event monitor for large ERC-20 outflows from one treasury or vault.',
     details: [
-      'Price stays at least 10 bps below average for more than 1 hour.',
-      'Onchain liquidity shrinks more than 20% over 2 hours.',
-      'A single whale transfer crosses a large USD threshold.',
+      'Scan decoded ERC-20 `Transfer` logs directly instead of relying on a derived metric.',
+      'Filter to one sender address and one token contract.',
+      'Trigger when gross outflow over the window exceeds a fixed threshold.',
     ],
     code: `{
-  "name": "SUSD depeg",
+  "name": "Treasury outflow",
   "definition": {
     "scope": {
       "chains": [1],
-      "addresses": ["0xsusd..."],
+      "addresses": ["0x1111111111111111111111111111111111111111"],
       "protocol": "all"
     },
     "conditions": [
       {
-        "type": "threshold",
-        "metric": "Price.deviationFromAverageBps",
-        "operator": "<=",
-        "value": -10,
-        "window": { "duration": "1h" },
-        "address": "0xsusd..."
-      },
-      {
-        "type": "change",
-        "metric": "Liquidity.availableUsd",
-        "direction": "decrease",
-        "by": { "percent": 20 },
-        "window": { "duration": "2h" },
-        "address": "0xsusd..."
-      },
-      {
-        "type": "threshold",
-        "metric": "Transfer.valueUsd",
+        "type": "raw-events",
+        "aggregation": "sum",
+        "field": "value",
         "operator": ">=",
         "value": 5000000,
         "window": { "duration": "2h" },
-        "address": "0xsusd..."
+        "chain_id": 1,
+        "event": {
+          "kind": "erc20_transfer",
+          "contract_addresses": ["0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"]
+        },
+        "filters": [
+          {
+            "field": "from",
+            "op": "eq",
+            "value": "0x1111111111111111111111111111111111111111"
+          }
+        ]
       }
     ],
     "logic": "AND",

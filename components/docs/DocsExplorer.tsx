@@ -34,7 +34,7 @@ const sections = [
     id: 'sources',
     label: 'Source Families',
     description:
-      'Sentinel exposes three source families: `state`, `indexed`, and `raw`. Providers are runtime details, not the product abstraction.',
+      'Sentinel exposes three source families: `state`, `indexed`, and `raw`. The public contract stays family-first while the engine chooses RPC, Envio, HyperSync, or a future provider.',
   },
   {
     id: 'logic',
@@ -58,7 +58,7 @@ const sections = [
     id: 'routes',
     label: 'Routes',
     description:
-      'Health, CRUD, history, and simulation make up the operational API surface customers use day to day.',
+      'Health, chains, catalog, CRUD, history, and simulation make up the operational API surface customers use day to day.',
   },
 ] as const satisfies ReadonlyArray<{
   id: SectionId;
@@ -80,7 +80,7 @@ const sourceFamilies = [
   {
     name: 'State',
     dsl: '`metric` on `threshold`, `change`, or `aggregate`',
-    note: 'RPC / archive-node backed state snapshots and computed state metrics.',
+    note: 'Generic RPC-backed current and historical state reads. The public DSL exposes selected stable metric aliases plus computed refs such as utilization.',
     refs: ['Morpho.Position.supplyShares', 'Morpho.Market.totalBorrowAssets', 'Morpho.Market.utilization'],
   },
   {
@@ -92,18 +92,18 @@ const sourceFamilies = [
   {
     name: 'Raw',
     dsl: '`type: "raw-events"`',
-    note: 'Decoded log scans, currently served by HyperSync.',
-    refs: ['erc20_transfer', 'swap', 'contract_event'],
+    note: 'Decoded event scans with a shared well-known catalog. Today that includes transfer, approval, ERC-4626, swap, and custom ABI event patterns.',
+    refs: ['erc20_transfer', 'erc4626_deposit', 'swap', 'contract_event'],
   },
 ] as const;
 
 const logicRows = [
   ['`logic`', 'Top-level boolean composition with `AND` or `OR`.'],
-  ['`threshold`', 'Compare one state or indexed metric to a fixed value.'],
-  ['`change`', 'Compare current state to historical state. Publicly supported for state metrics.'],
+  ['`threshold`', 'Compare one selected state alias, computed state ref, or indexed metric to a fixed value.'],
+  ['`change`', 'Compare current state to historical state. Publicly supported for state-family metrics.'],
   ['`aggregate`', 'Aggregate one state or indexed metric across the current scope.'],
   ['`group`', 'Evaluate inner conditions per address, then apply an N-of-M requirement.'],
-  ['`raw-events`', 'Scan decoded logs directly instead of resolving a metric.'],
+  ['`raw-events`', 'Scan decoded logs directly using a preset catalog or `contract_event` escape hatch.'],
 ] as const;
 
 const authRows = [
@@ -119,7 +119,9 @@ const deliveryRows = [
 
 const routes = [
   ['GET', '/health', 'Fast liveness plus source-family capability status.'],
+  ['GET', '/chains', 'Configured chain allowlist and archive RPC runtime config.'],
   ['GET', '/ready', 'Readiness across DB, Redis, RPC, and configured providers.'],
+  ['GET', '/api/v1/catalog', 'Backend-supported raw-event template catalog for builder UX.'],
   ['POST', '/api/v1/signals', 'Create one stored signal.'],
   ['PATCH', '/api/v1/signals/:id', 'Update definition, delivery, cooldown, or metadata.'],
   ['GET', '/api/v1/signals/:id/history', 'Read evaluations and notification attempts.'],
@@ -127,11 +129,16 @@ const routes = [
   ['POST', '/api/v1/simulate/:id/first-trigger', 'Find the earliest trigger in a time range.'],
 ] as const;
 
+const rawTemplateRows = [
+  ['Basic', '`erc20_transfer`, `erc20_approval`, `erc721_transfer`, `erc721_approval`, `erc721_approval_for_all`, `erc4626_deposit`, `erc4626_withdraw`, `swap`'],
+  ['Advanced', '`contract_event` for arbitrary ABI event signatures'],
+] as const;
+
 const familyExamples = [
   {
     id: 'state',
-    title: 'State example',
-    description: 'Threshold on a state metric.',
+    title: 'State alias example',
+    description: 'Threshold on a selected common state alias.',
     code: `POST /api/v1/signals
 Content-Type: application/json
 X-API-Key: sentinel_...
@@ -165,7 +172,7 @@ X-API-Key: sentinel_...
   {
     id: 'indexed',
     title: 'Indexed example',
-    description: 'Threshold on a protocol-aware flow metric.',
+    description: 'Threshold on a protocol-aware indexed flow metric.',
     code: `{
   "name": "Net Supply Falls",
   "definition": {
@@ -193,9 +200,9 @@ X-API-Key: sentinel_...
     filename: 'indexed.json',
   },
   {
-    id: 'raw',
-    title: 'Raw example',
-    description: 'Decoded ERC-20 transfer scan with filters.',
+    id: 'raw-transfer',
+    title: 'Raw transfer example',
+    description: 'Decoded ERC-20 transfer scan with the preset catalog.',
     code: `{
   "name": "USDC Transfer Burst",
   "definition": {
@@ -230,7 +237,82 @@ X-API-Key: sentinel_...
   "cooldown_minutes": 10
 }`,
     language: 'json',
-    filename: 'raw.json',
+    filename: 'raw-transfer.json',
+  },
+  {
+    id: 'raw-swap',
+    title: 'Raw swap preset example',
+    description: 'Normalized swap scan across supported Uniswap presets.',
+    code: `{
+  "name": "Swap Volume Burst",
+  "definition": {
+    "scope": {
+      "chains": [1],
+      "protocol": "all"
+    },
+    "window": { "duration": "30m" },
+    "conditions": [
+      {
+        "type": "raw-events",
+        "aggregation": "sum",
+        "field": "amount0_abs",
+        "operator": ">",
+        "value": 500000,
+        "chain_id": 1,
+        "event": {
+          "kind": "swap",
+          "protocols": ["uniswap_v2", "uniswap_v3"],
+          "contract_addresses": ["0xPoolA", "0xPoolB"]
+        },
+        "filters": [
+          {
+            "field": "recipient",
+            "op": "eq",
+            "value": "0xRecipient"
+          }
+        ]
+      }
+    ]
+  },
+  "webhook_url": "https://your-webhook.example/swap-events",
+  "cooldown_minutes": 10
+}`,
+    language: 'json',
+    filename: 'raw-swap.json',
+  },
+  {
+    id: 'raw-contract-event',
+    title: 'Custom contract event example',
+    description: 'Advanced ABI-signature escape hatch via `contract_event`.',
+    code: `{
+  "name": "Pool Swap Inflow",
+  "definition": {
+    "scope": {
+      "chains": [1],
+      "protocol": "all"
+    },
+    "window": { "duration": "30m" },
+    "conditions": [
+      {
+        "type": "raw-events",
+        "aggregation": "sum",
+        "field": "amount0In",
+        "operator": ">",
+        "value": 500000,
+        "chain_id": 1,
+        "event": {
+          "kind": "contract_event",
+          "contract_addresses": ["0xPool"],
+          "signature": "Swap(address indexed sender, uint amount0In, uint amount1In, uint amount0Out, uint amount1Out, address indexed to)"
+        }
+      }
+    ]
+  },
+  "webhook_url": "https://your-webhook.example/contract-events",
+  "cooldown_minutes": 10
+}`,
+    language: 'json',
+    filename: 'raw-contract-event.json',
   },
 ] as const;
 
@@ -480,6 +562,17 @@ export function DocsExplorer() {
             </div>
 
             <p className="mt-6 text-sm leading-relaxed text-secondary">
+              State-family reads are implemented as generic RPC-backed reads under the hood, then bound
+              to protocol-specific rules. The public DSL deliberately stays on stable metric names like
+              `Morpho.Position.supplyShares` instead of exposing provider-specific RPC descriptors.
+            </p>
+
+            <div className="mt-6">
+              <SubsectionTitle>Raw Event Catalog</SubsectionTitle>
+              <RowList rows={rawTemplateRows} />
+            </div>
+
+            <p className="mt-6 text-sm leading-relaxed text-secondary">
               `GET /health` reports which families are enabled. If a signal depends on a disabled
               family, create, update, activation, and simulation routes return `409 Conflict`.
             </p>
@@ -540,7 +633,7 @@ export function DocsExplorer() {
           <>
             <RowList rows={authRows} />
             <p className="mt-6 text-sm leading-relaxed text-secondary">
-              Public routes are `GET /health`, `GET /ready`, `POST /api/v1/auth/register`,
+              Public routes are `GET /health`, `GET /chains`, `GET /ready`, `POST /api/v1/auth/register`,
               `POST /api/v1/auth/siwe/nonce`, and `POST /api/v1/auth/siwe/verify`.
             </p>
             <SourceLinks
@@ -590,15 +683,16 @@ export function DocsExplorer() {
           <>
             <RowList rows={routes} columns="method" />
             <p className="mt-6 text-sm leading-relaxed text-secondary">
-              `GET /health` is liveness. `GET /ready` checks live dependencies. Simulation returns
-              `409 Conflict` when the stored signal depends on a disabled source family.
+              `GET /health` is liveness. `GET /ready` checks live dependencies. `GET /api/v1/catalog`
+              exposes the backend raw-event template catalog. Simulation returns `409 Conflict` when
+              the stored signal depends on a disabled source family.
             </p>
             <SourceLinks
               links={[
                 {
                   label: 'API.md',
                   href: SENTINEL_API_DOCS_URL,
-                  note: 'Health, readiness, signal CRUD, history, and simulation endpoints.',
+                  note: 'Health, chains, catalog, signal CRUD, history, and simulation endpoints.',
                 },
                 {
                   label: 'SOURCES.md',
@@ -618,7 +712,7 @@ export function DocsExplorer() {
       <header className="max-w-3xl">
         <h1 className="text-4xl tracking-tight text-foreground sm:text-5xl">Sentinel Docs</h1>
         <p className="mt-4 text-base leading-relaxed text-secondary sm:text-lg">
-          Simple reference for sources, logic, auth, delivery, and routes.
+          Reference for signal contents, state aliases, raw-event presets, auth, delivery, and routes.
         </p>
       </header>
 
