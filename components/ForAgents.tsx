@@ -15,18 +15,14 @@ const agentCode = `app.post('/sentinel-webhook', async (req, res) => {
     context,
   } = req.body;
 
-  // The documented webhook payload does not currently include
-  // signal.description, so route off the fields Sentinel sends.
-  if (signal_name !== 'Morpho Whale Exit') {
-    return res.status(200).send('Ignored');
-  }
-
-  await handleMorphoExit({
+  await routeSignal({
     signalId: signal_id,
+    signalName: signal_name,
     triggeredAt: triggered_at,
     chainId: context?.chain_id,
     marketId: context?.market_id,
-    watchedAddresses: scope?.addresses ?? [],
+    address: context?.address,
+    scope,
     matchedConditions: conditions_met,
   });
 
@@ -56,18 +52,18 @@ export function ForAgents() {
               
               <p className="text-secondary leading-relaxed mb-6">
                 Sentinel works naturally with agents because the DSL is structured enough for them to understand,
-                create, update, or cancel signals directly from human intent. Agents can also run adaptive monitoring
-                flows, subscribing to follow-up signals when one event fires and retiring them when the situation changes.
+                create, update, or cancel signals directly from human intent. Agents can mix metric sugar, raw state refs,
+                indexed metrics, and raw event scans, then route webhook payloads off the structured context Sentinel returns.
               </p>
 
               <ul className="space-y-3 text-secondary">
                 <li className="flex items-center gap-3">
                   <RiRobot2Line className="w-5 h-5 text-[#ff6b35]" />
-                  <span>DSL that agents can read and modify directly</span>
+                  <span>Metric sugar plus raw state refs when agents need lower-level reads</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <RiRobot2Line className="w-5 h-5 text-[#ff6b35]" />
-                  <span>Webhook delivery with structured context</span>
+                  <span>Webhook delivery with structured scope and context</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <RiRobot2Line className="w-5 h-5 text-[#ff6b35]" />

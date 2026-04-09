@@ -28,19 +28,19 @@ const sections = [
     id: 'contents',
     label: 'Contents',
     description:
-      'A signal request is an HTTP wrapper around one `definition` object. Keep delivery, cooldown, and metadata outside the DSL itself.',
+      'A signal request is an HTTP wrapper around one `definition` object. Keep delivery, cooldown, and metadata outside the DSL itself, and author conditions through state, indexed, or raw references.',
   },
   {
     id: 'sources',
     label: 'Source Families',
     description:
-      'Sentinel exposes three source families: `state`, `indexed`, and `raw`. The public contract stays family-first while the engine chooses RPC, Envio, HyperSync, or a future provider.',
+      'Sentinel exposes three source families: `state`, `indexed`, and `raw`. State now has both a raw public surface, `state_ref`, and a sugared metric layer on top.',
   },
   {
     id: 'logic',
     label: 'Logic',
     description:
-      'The public DSL supports boolean composition plus fixed condition types. Internal engine math is not a customer-authored DSL surface.',
+      'The public DSL supports boolean composition across metric sugar, raw state refs, indexed metrics, and raw event scans. Internal engine math is not a customer-authored DSL surface.',
   },
   {
     id: 'auth',
@@ -71,7 +71,8 @@ const signalFields = [
   ['definition.scope', 'Chains, markets, addresses, and protocol.'],
   ['definition.window', 'Evaluation lookback window.'],
   ['definition.logic', 'Top-level `AND` or `OR` across conditions.'],
-  ['definition.conditions[]', 'The actual checks Sentinel evaluates.'],
+  ['definition.conditions[]', 'The actual checks Sentinel evaluates across state, indexed, and raw families.'],
+  ['condition.metric | condition.state_ref', 'State conditions can use metric sugar or the raw public `state_ref` surface.'],
   ['delivery | webhook_url', 'Managed delivery or explicit override.'],
   ['cooldown_minutes', 'Minimum gap between repeat notifications.'],
 ] as const;
@@ -79,9 +80,9 @@ const signalFields = [
 const sourceFamilies = [
   {
     name: 'State',
-    dsl: '`metric` on `threshold`, `change`, or `aggregate`',
-    note: 'Generic RPC-backed current and historical state reads. The public DSL exposes selected stable metric aliases plus computed refs such as utilization.',
-    refs: ['Morpho.Position.supplyShares', 'Morpho.Market.totalBorrowAssets', 'Morpho.Market.utilization'],
+    dsl: '`state_ref` or `metric` on `threshold` / `change`; `metric` on `aggregate`',
+    note: 'Generic RPC-backed current and historical state reads. `state_ref` is the raw public state surface and `metric` is sugar over it for stable common reads.',
+    refs: ['state_ref(protocol/entity_type/field/filters)', 'ERC4626.Position.shares', 'Morpho.Position.supplyShares'],
   },
   {
     name: 'Indexed',
@@ -99,11 +100,20 @@ const sourceFamilies = [
 
 const logicRows = [
   ['`logic`', 'Top-level boolean composition with `AND` or `OR`.'],
-  ['`threshold`', 'Compare one selected state alias, computed state ref, or indexed metric to a fixed value.'],
-  ['`change`', 'Compare current state to historical state. Publicly supported for state-family metrics.'],
-  ['`aggregate`', 'Aggregate one state or indexed metric across the current scope.'],
+  ['`metric`', 'Sugared stable references for common state and indexed reads.'],
+  ['`state_ref`', 'Raw public state surface for protocol/entity/field/filter reads.'],
+  ['`threshold`', 'Compare one indexed metric, state alias, or raw state ref to a fixed value.'],
+  ['`change`', 'Compare current state to historical state for state aliases or raw state refs.'],
+  ['`aggregate`', 'Aggregate one metric across the current scope. Contract-scoped state metrics also work here.'],
   ['`group`', 'Evaluate inner conditions per address, then apply an N-of-M requirement.'],
   ['`raw-events`', 'Scan decoded logs directly using a preset catalog or `contract_event` escape hatch.'],
+] as const;
+
+const stateAuthoringRows = [
+  ['`metric`', 'Use stable sugar when the backend already exposes a named state metric such as `ERC4626.Position.shares` or `Morpho.Position.supplyShares`.'],
+  ['`state_ref`', 'Use the raw public state surface when you need a bound state read that is not yet registered as metric sugar.'],
+  ['`contract_address`', 'Metric-mode convenience field for contract-scoped state metrics such as ERC-4626 positions.'],
+  ['Numeric strings', 'Use decimal strings for large integer state thresholds and absolute deltas.'],
 ] as const;
 
 const authRows = [
@@ -136,42 +146,74 @@ const rawTemplateRows = [
 
 const familyExamples = [
   {
-    id: 'state',
-    title: 'State alias example',
-    description: 'Threshold on a selected common state alias.',
-    code: `POST /api/v1/signals
-Content-Type: application/json
-X-API-Key: sentinel_...
-
-{
-  "name": "High Utilization",
+    id: 'state-ref',
+    title: 'Raw state example',
+    description: 'Direct `state_ref` authoring for a contract-backed state read.',
+    code: `{
+  "name": "Vault Shares Drop",
   "definition": {
     "scope": {
       "chains": [1],
-      "markets": ["0xM"],
-      "protocol": "morpho"
+      "protocol": "all"
+    },
+    "window": { "duration": "7d" },
+    "conditions": [
+      {
+        "type": "change",
+        "state_ref": {
+          "protocol": "erc4626",
+          "entity_type": "Position",
+          "field": "shares",
+          "filters": [
+            { "field": "chainId", "op": "eq", "value": 1 },
+            { "field": "contractAddress", "op": "eq", "value": "0xVaultAddress" },
+            { "field": "owner", "op": "eq", "value": "0xOwnerAddress" }
+          ]
+        },
+        "direction": "decrease",
+        "by": { "percent": 20 }
+      }
+    ]
+  },
+  "delivery": { "provider": "telegram" },
+  "cooldown_minutes": 30
+}`,
+    language: 'json',
+    filename: 'state-ref.json',
+  },
+  {
+    id: 'state',
+    title: 'State metric example',
+    description: 'Threshold on a sugared state alias.',
+    code: `{
+  "name": "Large Vault Share Balance",
+  "definition": {
+    "scope": {
+      "chains": [1],
+      "protocol": "all"
     },
     "window": { "duration": "1h" },
     "conditions": [
       {
         "type": "threshold",
-        "metric": "Morpho.Market.utilization",
+        "metric": "ERC4626.Position.shares",
         "operator": ">",
-        "value": 0.9,
+        "value": "1000000000000000000",
         "chain_id": 1,
-        "market_id": "0xM"
+        "contract_address": "0xVaultAddress",
+        "address": "0xOwnerAddress"
       }
     ]
   },
   "delivery": { "provider": "telegram" },
   "cooldown_minutes": 5
 }`,
-    language: 'shell',
-    filename: 'state.http',
+    language: 'json',
+    filename: 'state-metric.json',
   },
   {
     id: 'indexed',
-    title: 'Indexed example',
+    title: 'Indexed metric example',
     description: 'Threshold on a protocol-aware indexed flow metric.',
     code: `{
   "name": "Net Supply Falls",
@@ -321,23 +363,29 @@ Content-Type: application/json
 X-API-Key: sentinel_...
 
 {
-  "name": "High Utilization",
+  "name": "Vault Shares Drop",
   "definition": {
     "scope": {
       "chains": [1],
-      "markets": ["0xM"],
-      "protocol": "morpho"
+      "protocol": "all"
     },
-    "window": { "duration": "1h" },
+    "window": { "duration": "7d" },
     "logic": "AND",
     "conditions": [
       {
-        "type": "threshold",
-        "metric": "Morpho.Market.utilization",
-        "operator": ">",
-        "value": 0.9,
-        "chain_id": 1,
-        "market_id": "0xM"
+        "type": "change",
+        "state_ref": {
+          "protocol": "erc4626",
+          "entity_type": "Position",
+          "field": "shares",
+          "filters": [
+            { "field": "chainId", "op": "eq", "value": 1 },
+            { "field": "contractAddress", "op": "eq", "value": "0xVaultAddress" },
+            { "field": "owner", "op": "eq", "value": "0xOwnerAddress" }
+          ]
+        },
+        "direction": "decrease",
+        "by": { "absolute": "1000000000000000000" }
       }
     ]
   },
@@ -348,37 +396,40 @@ X-API-Key: sentinel_...
 const logicExample = `{
   "scope": {
     "chains": [1],
-    "markets": ["0x..."],
     "addresses": ["0xA", "0xB", "0xC"],
-    "protocol": "morpho"
+    "protocol": "all"
   },
-  "window": { "duration": "1h" },
+  "window": { "duration": "7d" },
   "logic": "OR",
   "conditions": [
-    {
-      "type": "change",
-      "metric": "Morpho.Position.supplyShares",
-      "direction": "decrease",
-      "by": { "percent": 20 },
-      "chain_id": 1,
-      "market_id": "0x...",
-      "address": "0xA"
-    },
     {
       "type": "group",
       "addresses": ["0xA", "0xB", "0xC"],
       "requirement": { "count": 2, "of": 3 },
       "logic": "AND",
+      "window": { "duration": "7d" },
       "conditions": [
         {
-          "type": "threshold",
-          "metric": "Morpho.Position.collateral",
-          "operator": "<",
-          "value": 100,
+          "type": "change",
+          "metric": "ERC4626.Position.shares",
+          "direction": "decrease",
+          "by": { "absolute": "1000000000000000000" },
           "chain_id": 1,
-          "market_id": "0x..."
+          "contract_address": "0xVaultAddress"
         }
       ]
+    },
+    {
+      "type": "raw-events",
+      "aggregation": "count",
+      "operator": ">",
+      "value": 10,
+      "chain_id": 1,
+      "event": {
+        "kind": "erc4626_withdraw",
+        "contract_addresses": ["0xVaultAddress"]
+      },
+      "filters": [{ "field": "owner", "op": "eq", "value": "0xA" }]
     }
   ]
 }`;
@@ -562,10 +613,15 @@ export function DocsExplorer() {
             </div>
 
             <p className="mt-6 text-sm leading-relaxed text-secondary">
-              State-family reads are implemented as generic RPC-backed reads under the hood, then bound
-              to protocol-specific rules. The public DSL deliberately stays on stable metric names like
-              `Morpho.Position.supplyShares` instead of exposing provider-specific RPC descriptors.
+              State-family reads are public in two layers. `state_ref` is the raw authoring surface for
+              protocol, entity, field, and filters; `metric` is sugar that compiles into that same state
+              path when the backend already exposes a stable alias.
             </p>
+
+            <div className="mt-6">
+              <SubsectionTitle>State Authoring</SubsectionTitle>
+              <RowList rows={stateAuthoringRows} />
+            </div>
 
             <div className="mt-6">
               <SubsectionTitle>Raw Event Catalog</SubsectionTitle>
@@ -579,7 +635,7 @@ export function DocsExplorer() {
 
             <div className="mt-6">
               <SubsectionTitle>Examples</SubsectionTitle>
-              <FamilyExamplesAccordion items={[...familyExamples]} defaultOpenId="state" />
+              <FamilyExamplesAccordion items={[...familyExamples]} defaultOpenId="state-ref" />
             </div>
 
             <SourceLinks
@@ -592,7 +648,7 @@ export function DocsExplorer() {
                 {
                   label: 'DSL.md',
                   href: SENTINEL_DSL_DOCS_URL,
-                  note: 'Which condition types belong to state, indexed, and raw.',
+                  note: 'Which condition types belong to raw state, metric sugar, indexed, and raw events.',
                 },
               ]}
             />
@@ -604,7 +660,8 @@ export function DocsExplorer() {
             <RowList rows={logicRows} />
             <p className="mt-6 text-sm leading-relaxed text-secondary">
               Sentinel has internal arithmetic in the engine AST, but customers do not author free-form
-              `add` or `sub` expressions in the public DSL today.
+              `add` or `sub` expressions in the public DSL today. The public surface stays declarative:
+              metric sugar, raw state refs, indexed metrics, and raw event scans.
             </p>
             <SourceLinks
               links={[
@@ -684,8 +741,9 @@ export function DocsExplorer() {
             <RowList rows={routes} columns="method" />
             <p className="mt-6 text-sm leading-relaxed text-secondary">
               `GET /health` is liveness. `GET /ready` checks live dependencies. `GET /api/v1/catalog`
-              exposes the backend raw-event template catalog. Simulation returns `409 Conflict` when
-              the stored signal depends on a disabled source family.
+              exposes the backend raw-event template catalog. Raw state and metric sugar are authored
+              directly in the DSL. Simulation returns `409 Conflict` when the stored signal depends on
+              a disabled source family.
             </p>
             <SourceLinks
               links={[
@@ -712,7 +770,7 @@ export function DocsExplorer() {
       <header className="max-w-3xl">
         <h1 className="text-4xl tracking-tight text-foreground sm:text-5xl">Sentinel Docs</h1>
         <p className="mt-4 text-base leading-relaxed text-secondary sm:text-lg">
-          Reference for signal contents, state aliases, raw-event presets, auth, delivery, and routes.
+          Reference for `state_ref`, metric sugar, indexed metrics, raw events, auth, delivery, and routes.
         </p>
       </header>
 

@@ -8,16 +8,15 @@ import { GridDivider } from './ui/GridDivider';
 const storyBeats = [
   {
     id: 'problem',
-    tag: 'Events In',
-    title: 'Raw feeds are too literal.',
-    content: `Subscribing to raw events is easy. Deciding which combinations actually matter is the hard part. Agents still end up reading noisy feeds and rebuilding the same logic again and again.`,
-    code: `events.on("Transfer", notify)
-events.on("Borrow", notify)
-events.on("Liquidate", notify)
-events.on("Redeem", notify)
+    tag: 'Reads In',
+    title: 'Raw reads are too literal.',
+    content: `Polling state, querying indexed history, and subscribing to raw events are all easy in isolation. The hard part is turning those separate reads into one durable signal your agent can actually trust.`,
+    code: `rpc.read("balanceOf", owner)
+index.query("ProtocolEvent", window)
+events.on("Transfer", notify)
 
-// Raw event streams.
-// Too much activity, not enough intent.`,
+// State, indexed, and raw reads.
+// Too much plumbing, not enough intent.`,
   },
   {
     id: 'insight',
@@ -27,25 +26,30 @@ events.on("Redeem", notify)
     code: `{
   "scope": {
     "chains": [1],
-    "markets": ["0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"],
-    "protocol": "morpho"
+    "protocol": "all"
   },
   "conditions": [
     {
-      "type": "threshold",
-      "metric": "Morpho.Market.utilization",
-      "operator": ">",
-      "value": 0.9,
+      "type": "change",
+      "metric": "ERC4626.Position.shares",
+      "direction": "decrease",
+      "by": { "percent": 20 },
       "chain_id": 1,
-      "market_id": "0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"
+      "contract_address": "0xVault",
+      "address": "0xOwner"
     },
     {
-      "type": "change",
-      "metric": "Morpho.Market.totalBorrowAssets",
-      "direction": "increase",
-      "by": { "percent": 15 },
+      "type": "raw-events",
+      "aggregation": "sum",
+      "field": "value",
+      "operator": ">",
+      "value": 1000000,
       "chain_id": 1,
-      "market_id": "0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc"
+      "event": {
+        "kind": "erc20_transfer",
+        "contract_addresses": ["0xToken"]
+      },
+      "filters": [{ "field": "to", "op": "eq", "value": "0xOwner" }]
     }
   ],
   "logic": "AND",
@@ -59,12 +63,18 @@ events.on("Redeem", notify)
     content: `Your agent can use DSL to describe exactly what it wants, while Sentinel handles the hard part: continuous evaluation, stateful windows, logic composition, and reliable delivery. That keeps the signal definition precise without making the production path fragile.`,
     code: `POST /api/v1/signals
 {
-  "name": "3 of 5 Morpho vault exits",
+  "name": "3 of 5 vault owners withdrew >1e18 shares",
   "definition": {
     "scope": {
       "chains": [1],
-      "markets": ["0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"],
-      "protocol": "morpho"
+      "addresses": [
+        "0x1111111111111111111111111111111111111111",
+        "0x2222222222222222222222222222222222222222",
+        "0x3333333333333333333333333333333333333333",
+        "0x4444444444444444444444444444444444444444",
+        "0x5555555555555555555555555555555555555555"
+      ],
+      "protocol": "all"
     },
     "conditions": [
       {
@@ -81,12 +91,19 @@ events.on("Redeem", notify)
         "conditions": [
           {
             "type": "change",
-            "metric": "Morpho.Position.supplyShares",
+            "state_ref": {
+              "protocol": "erc4626",
+              "entity_type": "Position",
+              "field": "shares",
+              "filters": [
+                { "field": "chainId", "op": "eq", "value": 1 },
+                { "field": "contractAddress", "op": "eq", "value": "0xVault" }
+              ]
+            },
             "direction": "decrease",
-            "by": { "percent": 20 },
+            "by": { "absolute": "1000000000000000000" },
             "window": { "duration": "1d" },
-            "chain_id": 1,
-            "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"
+            "chain_id": 1
           }
         ],
         "window": { "duration": "1d" }

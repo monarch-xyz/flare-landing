@@ -9,11 +9,12 @@ import type {
   SignalRecord,
 } from '@/lib/types/signal';
 
-export type SignalTemplateKind = 'morpho-whale' | 'erc20-transfer';
+export type SignalTemplateKind = 'morpho-whale' | 'erc20-transfer' | 'erc4626-withdraw';
 
 export type WhaleTemplateId = 'whale-exit-trio' | 'whale-exit-pair' | 'single-whale-exit';
 export type Erc20TransferTemplateId = 'erc20-inflow-watch' | 'erc20-outflow-watch';
-export type SignalTemplateId = WhaleTemplateId | Erc20TransferTemplateId;
+export type Erc4626WithdrawTemplateId = 'erc4626-withdraw-percent-watch';
+export type SignalTemplateId = WhaleTemplateId | Erc20TransferTemplateId | Erc4626WithdrawTemplateId;
 
 interface BaseSignalTemplatePreset<TId extends SignalTemplateId, TKind extends SignalTemplateKind, TDefaults> {
   id: TId;
@@ -49,7 +50,22 @@ export type Erc20TransferTemplatePreset = BaseSignalTemplatePreset<
   direction: 'inflow' | 'outflow';
 };
 
-export type SignalTemplatePreset = WhaleSignalTemplatePreset | Erc20TransferTemplatePreset;
+export type Erc4626WithdrawTemplatePreset = BaseSignalTemplatePreset<
+  Erc4626WithdrawTemplateId,
+  'erc4626-withdraw',
+  {
+    chainId: number;
+    requiredCount: number;
+    windowDuration: string;
+    cooldownMinutes: number;
+    dropPercent: number;
+  }
+>;
+
+export type SignalTemplatePreset =
+  | WhaleSignalTemplatePreset
+  | Erc20TransferTemplatePreset
+  | Erc4626WithdrawTemplatePreset;
 
 interface BaseTemplateRequest<TId extends SignalTemplateId> {
   templateId: TId;
@@ -73,10 +89,20 @@ export interface Erc20TransferTemplateRequest extends BaseTemplateRequest<Erc20T
   amountThreshold?: number;
 }
 
-export type SignalTemplateRequest = WhaleTemplateRequest | Erc20TransferTemplateRequest;
+export interface Erc4626WithdrawTemplateRequest extends BaseTemplateRequest<Erc4626WithdrawTemplateId> {
+  vaultContract: string;
+  ownerAddresses: string[] | string;
+  requiredCount?: number;
+  dropPercent?: number;
+}
+
+export type SignalTemplateRequest =
+  | WhaleTemplateRequest
+  | Erc20TransferTemplateRequest
+  | Erc4626WithdrawTemplateRequest;
 
 export interface SignalFocusDetails {
-  label: 'Market' | 'Asset' | 'Address' | 'Scope';
+  label: 'Market' | 'Vault' | 'Asset' | 'Address' | 'Scope';
   value: string;
   hint?: string;
   href?: string;
@@ -160,6 +186,21 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
       cooldownMinutes: 15,
     },
   },
+  {
+    id: 'erc4626-withdraw-percent-watch',
+    kind: 'erc4626-withdraw',
+    title: 'ERC-4626 Owner Withdraw %',
+    description:
+      'Track archive-RPC share balance changes for one ERC-4626 vault and trigger when N tracked owners each reduce shares by at least a percentage.',
+    accent: 'state metric · N of N owners · % shares',
+    defaults: {
+      chainId: 1,
+      requiredCount: 3,
+      dropPercent: 20,
+      windowDuration: '7d',
+      cooldownMinutes: 60,
+    },
+  },
 ];
 
 const ETH_ADDRESS_PATTERN = /^0x[a-fA-F0-9]{40}$/;
@@ -236,6 +277,8 @@ export const parseWhaleAddresses = (value: string[] | string) => {
   return unique;
 };
 
+export const parseTrackedAddresses = parseWhaleAddresses;
+
 const getPreset = (templateId: SignalTemplateId) => {
   const preset = SIGNAL_TEMPLATE_PRESETS.find((item) => item.id === templateId);
   if (!preset) {
@@ -244,11 +287,11 @@ const getPreset = (templateId: SignalTemplateId) => {
   return preset;
 };
 
-const getWhaleChangeCondition = (definition: SignalDefinition) => {
+const getGroupChangeCondition = (definition: SignalDefinition, metric: string) => {
   const group = definition.conditions.find((condition): condition is GroupCondition => condition.type === 'group');
   const change = group?.conditions.find(
     (condition): condition is ChangeCondition =>
-      condition.type === 'change' && condition.metric === 'Morpho.Position.supplyShares'
+      condition.type === 'change' && condition.metric === metric
   );
 
   return {
@@ -256,6 +299,12 @@ const getWhaleChangeCondition = (definition: SignalDefinition) => {
     change,
   };
 };
+
+const getWhaleChangeCondition = (definition: SignalDefinition) =>
+  getGroupChangeCondition(definition, 'Morpho.Position.supplyShares');
+
+const getErc4626WithdrawCondition = (definition: SignalDefinition) =>
+  getGroupChangeCondition(definition, 'ERC4626.Position.shares');
 
 const getRawEventsCondition = (definition: SignalDefinition) =>
   definition.conditions.find((condition): condition is RawEventsCondition => condition.type === 'raw-events');
@@ -284,6 +333,27 @@ const getConditionMarketId = (condition: SignalCondition): string | null => {
       const nestedMarketId = getConditionMarketId(nestedCondition);
       if (nestedMarketId) {
         return nestedMarketId;
+      }
+    }
+  }
+
+  return null;
+};
+
+const getConditionContractAddress = (condition: SignalCondition): string | null => {
+  if (
+    'contract_address' in condition &&
+    typeof condition.contract_address === 'string' &&
+    condition.contract_address
+  ) {
+    return normalizeAddress(condition.contract_address);
+  }
+
+  if (condition.type === 'group') {
+    for (const nestedCondition of condition.conditions) {
+      const nestedContractAddress = getConditionContractAddress(nestedCondition);
+      if (nestedContractAddress) {
+        return nestedContractAddress;
       }
     }
   }
@@ -324,6 +394,13 @@ export const describeSignalDefinition = (definition: SignalDefinition) => {
   if (group && change && 'percent' in change.by) {
     const duration = group.window?.duration ?? change.window?.duration ?? definition.window.duration;
     return `${group.requirement.count} of ${group.addresses.length} tracked wallets drop supply by ${change.by.percent}% within ${duration}.`;
+  }
+
+  const erc4626Withdraw = getErc4626WithdrawCondition(definition);
+  if (erc4626Withdraw.group && erc4626Withdraw.change && 'percent' in erc4626Withdraw.change.by) {
+    const duration =
+      erc4626Withdraw.group.window?.duration ?? erc4626Withdraw.change.window?.duration ?? definition.window.duration;
+    return `${erc4626Withdraw.group.requirement.count} of ${erc4626Withdraw.group.addresses.length} tracked owners reduce vault shares by at least ${erc4626Withdraw.change.by.percent}% within ${duration}.`;
   }
 
   const rawEvents = getRawEventsCondition(definition);
@@ -377,9 +454,14 @@ export const describeSignalDefinition = (definition: SignalDefinition) => {
 };
 
 export const countTrackedWallets = (definition: SignalDefinition) => {
-  const { group } = getWhaleChangeCondition(definition);
-  if (group) {
-    return group.addresses.length;
+  const morphoGroup = getWhaleChangeCondition(definition).group;
+  if (morphoGroup) {
+    return morphoGroup.addresses.length;
+  }
+
+  const erc4626Group = getErc4626WithdrawCondition(definition).group;
+  if (erc4626Group) {
+    return erc4626Group.addresses.length;
   }
 
   return definition.scope.addresses?.length ?? 0;
@@ -484,6 +566,15 @@ export const getSignalFocusDetails = (definition: SignalDefinition): SignalFocus
       value: marketId,
       hint: primaryChainId !== null ? `Chain ${primaryChainId}` : undefined,
       href: marketHref ?? undefined,
+    };
+  }
+
+  const contractAddress = definition.conditions.map(getConditionContractAddress).find(Boolean);
+  if (contractAddress) {
+    return {
+      label: 'Vault',
+      value: contractAddress,
+      hint: primaryChainId !== null ? `Chain ${primaryChainId}` : undefined,
     };
   }
 
@@ -695,6 +786,88 @@ export const buildErc20TransferTemplate = (input: Erc20TransferTemplateRequest):
   );
 };
 
+export const buildErc4626WithdrawTemplate = (input: Erc4626WithdrawTemplateRequest): CreateSignalRequest => {
+  const preset = getPreset(input.templateId);
+  if (preset.kind !== 'erc4626-withdraw') {
+    throw new SignalTemplateError(`Template ${input.templateId} is not an ERC-4626 withdrawal template.`);
+  }
+
+  const ownerAddresses = parseTrackedAddresses(input.ownerAddresses);
+  const chainId = input.chainId ?? preset.defaults.chainId;
+  const requiredCount = input.requiredCount ?? preset.defaults.requiredCount;
+  const windowDuration = input.windowDuration?.trim() || preset.defaults.windowDuration;
+  const cooldownMinutes = input.cooldownMinutes ?? preset.defaults.cooldownMinutes;
+  const dropPercent = input.dropPercent ?? preset.defaults.dropPercent;
+  const vaultContract = parseRequiredAddress(input.vaultContract, 'Vault contract address');
+
+  assertPositiveChainId(chainId);
+
+  if (!Number.isInteger(requiredCount) || requiredCount < 1) {
+    throw new SignalTemplateError('Required owner count must be at least 1.');
+  }
+
+  if (requiredCount > ownerAddresses.length) {
+    throw new SignalTemplateError('Required owner count cannot exceed the number of tracked addresses.');
+  }
+
+  if (!Number.isFinite(dropPercent) || dropPercent <= 0) {
+    throw new SignalTemplateError('Share drop percent must be greater than 0.');
+  }
+
+  assertNonNegativeCooldown(cooldownMinutes);
+
+  const definition: SignalDefinition = {
+    scope: {
+      chains: [chainId],
+      addresses: ownerAddresses,
+      protocol: 'all',
+    },
+    window: {
+      duration: windowDuration,
+    },
+    logic: 'AND',
+    conditions: [
+      {
+        type: 'group',
+        addresses: ownerAddresses,
+        requirement: {
+          count: requiredCount,
+          of: ownerAddresses.length,
+        },
+        logic: 'AND',
+        window: {
+          duration: windowDuration,
+        },
+        conditions: [
+          {
+            type: 'change',
+            metric: 'ERC4626.Position.shares',
+            direction: 'decrease',
+            by: {
+              percent: dropPercent,
+            },
+            window: {
+              duration: windowDuration,
+            },
+            chain_id: chainId,
+            contract_address: vaultContract,
+          },
+        ],
+      },
+    ],
+  };
+
+  const generatedName = `ERC-4626 withdraw watch: ${requiredCount}/${ownerAddresses.length} owners -${dropPercent}% in ${windowDuration}`;
+
+  return buildManagedTelegramSignal(
+    input.name?.trim() || generatedName,
+    input.description?.trim() ||
+      `Watches archive-RPC ERC-4626 share balances for ${ownerAddresses.length} owners in vault ${vaultContract} and triggers when ${requiredCount} of them reduce shares by at least ${dropPercent}% over ${windowDuration}.`,
+    definition,
+    cooldownMinutes
+  );
+};
+
 export const buildSignalTemplate = (input: SignalTemplateRequest): CreateSignalRequest => {
   switch (input.templateId) {
     case 'whale-exit-trio':
@@ -704,6 +877,8 @@ export const buildSignalTemplate = (input: SignalTemplateRequest): CreateSignalR
     case 'erc20-inflow-watch':
     case 'erc20-outflow-watch':
       return buildErc20TransferTemplate(input);
+    case 'erc4626-withdraw-percent-watch':
+      return buildErc4626WithdrawTemplate(input);
   }
 };
 

@@ -31,7 +31,7 @@ export function FinalCTA() {
               Stop drowning in <span className="text-[#ff6b35]">noise</span>.
             </h2>
             <p className="text-secondary mb-8">
-              Set up opinionated onchain signals once, then let agents and operators work from the same source of truth.
+              Set up state, indexed, and raw conditions once, then let agents and operators work from the same source of truth.
             </p>
 
             {/* CTAs */}

@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-export const alt = 'Sentinel - Event Triggers for DeFi Agents';
+export const alt = 'Sentinel - State, Indexed, and Raw Signals for Agents';
 export const size = {
   width: 1200,
   height: 630,
@@ -74,7 +74,7 @@ export default async function Image() {
                 lineHeight: 1.2,
               }}
             >
-              Watch the Chain
+              Author Signal Logic
             </div>
             <div
               style={{
@@ -87,7 +87,7 @@ export default async function Image() {
                 lineHeight: 1.2,
               }}
             >
-              While You Sleep
+              Across Every Source
             </div>
           </div>
 
@@ -99,7 +99,7 @@ export default async function Image() {
               fontFamily: 'sans-serif',
             }}
           >
-            Event Triggers for DeFi Agents • Built by Monarch
+            State, Indexed, and Raw Signals • Built by Monarch
           </div>
         </div>
 
@@ -160,7 +160,7 @@ export default async function Image() {
                 <span style={{ color: '#ff9f1c' }}>{'"type"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"threshold"'}</span><span style={{ color: '#6e6e6e' }}>,</span>
               </span>
               <span style={{ paddingLeft: '20px' }}>
-                <span style={{ color: '#ff9f1c' }}>{'"metric"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"Morpho.Market.utilization"'}</span><span style={{ color: '#6e6e6e' }}>,</span>
+                <span style={{ color: '#ff9f1c' }}>{'"metric"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'"ERC4626.Position.shares"'}</span><span style={{ color: '#6e6e6e' }}>,</span>
               </span>
               <span style={{ paddingLeft: '20px' }}>
                 <span style={{ color: '#ff9f1c' }}>{'"operator"'}</span><span style={{ color: '#6e6e6e' }}>:</span> <span style={{ color: '#a5d6ff' }}>{'">"'}</span><span style={{ color: '#6e6e6e' }}>,</span>

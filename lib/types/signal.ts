@@ -18,6 +18,7 @@ export interface TimeWindow {
 }
 
 export type ComparisonOperator = '>' | '<' | '>=' | '<=' | '==' | '!=';
+export type NumericInput = number | string;
 export type RawEventKind =
   | 'erc20_transfer'
   | 'erc20_approval'
@@ -30,26 +31,37 @@ export type RawEventKind =
   | 'swap';
 export type RawEventProtocol = 'uniswap_v2' | 'uniswap_v3';
 
+export interface PublicStateRef {
+  protocol: string;
+  entity_type: string;
+  field: string;
+  filters: SignalFilter[];
+}
+
 export interface ThresholdCondition {
   type: 'threshold';
-  metric: string;
+  metric?: string;
+  state_ref?: PublicStateRef;
   operator: ComparisonOperator;
-  value: number;
+  value: NumericInput;
   window?: TimeWindow;
   filters?: SignalFilter[];
   chain_id?: number;
   market_id?: string;
+  contract_address?: string;
   address?: string;
 }
 
 export interface ChangeCondition {
   type: 'change';
-  metric: string;
+  metric?: string;
+  state_ref?: PublicStateRef;
   direction: 'increase' | 'decrease' | 'any';
-  by: { percent: number } | { absolute: number };
+  by: { percent: number } | { absolute: NumericInput };
   window?: TimeWindow;
   chain_id?: number;
   market_id?: string;
+  contract_address?: string;
   address?: string;
 }
 
@@ -70,11 +82,12 @@ export interface AggregateCondition {
   aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count';
   metric: string;
   operator: ComparisonOperator;
-  value: number;
+  value: NumericInput;
   window?: TimeWindow;
   filters?: SignalFilter[];
   chain_id?: number;
   market_id?: string;
+  contract_address?: string;
 }
 
 export interface RawEventSpec {

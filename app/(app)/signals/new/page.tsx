@@ -37,7 +37,7 @@ export default async function NewSignalPage({ searchParams }: NewSignalPageProps
         <p className="text-xs uppercase tracking-[0.3em] text-secondary mb-2">Create</p>
         <h1 className="font-zen text-3xl sm:text-4xl">New signal template</h1>
         <p className="text-secondary mt-2 max-w-2xl">
-          Choose a template, fill in the market or address inputs, and let Sentinel register the full JSON definition for you.
+          Choose a template, fill in the market, vault, or address inputs, and let Sentinel register the full JSON definition for you.
         </p>
       </div>
 

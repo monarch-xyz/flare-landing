@@ -39,7 +39,7 @@ export function Hero() {
               transition={{ duration: 0.5 }}
               className="mb-6"
             >
-              <SectionTag>Agent-First DSL</SectionTag>
+              <SectionTag>State • Indexed • Raw</SectionTag>
             </motion.div>
 
             {/* Opening line */}
@@ -49,7 +49,7 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="font-serif text-lg text-secondary mb-4 italic"
             >
-              Subscribe once. Receive live updates.
+              Define once. Evaluate continuously.
             </motion.p>
 
             {/* Main headline */}
@@ -71,7 +71,7 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg sm:text-xl text-secondary max-w-xl mb-10 leading-relaxed"
             >
-              Sentinel is agent-first infrastructure for subscribing to dynamic onchain information through a precise DSL. You describe the exact condition you care about, and Sentinel evaluates it continuously and delivers the signal.
+              Sentinel is agent-first infrastructure for authoring state, indexed, and raw event conditions through a precise DSL. You describe the condition you care about, and Sentinel evaluates it continuously and delivers the signal.
             </motion.p>
 
             {/* CTAs */}

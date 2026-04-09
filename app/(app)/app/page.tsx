@@ -46,7 +46,7 @@ export default async function AppHome() {
       ? {
           href: createSignalHref,
           label: 'Create your first signal',
-          description: 'Start with a template, update the market and wallets, then let Sentinel register the JSON definition for you.',
+          description: 'Start with a template, update the market, vault, or wallet inputs, then let Sentinel register the JSON definition for you.',
         }
       : {
           href: createSignalHref,

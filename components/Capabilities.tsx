@@ -17,21 +17,27 @@ type UseCase = {
 
 const useCases: UseCase[] = [
   {
-    id: 'liquidity-crisis',
-    title: 'Liquidity crisis',
-    summary: 'Morpho market stress with coordinated vault exits and elevated market utilization.',
+    id: 'vault-withdrawal-cluster',
+    title: 'Vault withdrawal cluster',
+    summary: 'Contract-scoped state monitoring for coordinated ERC-4626 share withdrawals.',
     details: [
-      '3 of 5 tracked vaults reduce supply by more than 20% over 1 day.',
-      'Market utilization rises above 90% in the same market.',
-      'Both conditions must hold together through an AND gate.',
+      '3 of 5 tracked owners reduce vault shares by at least 1e18 over 7 days.',
+      'Uses the `ERC4626.Position.shares` state alias instead of raw events.',
+      'Large integer thresholds can be authored as decimal strings.',
     ],
     code: `{
-  "name": "Liquidity crisis",
+  "name": "Vault withdrawal cluster",
   "definition": {
     "scope": {
       "chains": [1],
-      "markets": ["0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"],
-      "protocol": "morpho"
+      "addresses": [
+        "0x1111111111111111111111111111111111111111",
+        "0x2222222222222222222222222222222222222222",
+        "0x3333333333333333333333333333333333333333",
+        "0x4444444444444444444444444444444444444444",
+        "0x5555555555555555555555555555555555555555"
+      ],
+      "protocol": "all"
     },
     "conditions": [
       {
@@ -49,26 +55,18 @@ const useCases: UseCase[] = [
         "conditions": [
           {
             "type": "change",
-            "metric": "Morpho.Position.supplyShares",
+            "metric": "ERC4626.Position.shares",
             "direction": "decrease",
-            "by": { "percent": 20 },
-            "window": { "duration": "1d" },
+            "by": { "absolute": "1000000000000000000" },
+            "window": { "duration": "7d" },
             "chain_id": 1,
-            "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"
+            "contract_address": "0xVaultAddress"
           }
         ]
-      },
-      {
-        "type": "threshold",
-        "metric": "Morpho.Market.utilization",
-        "operator": ">",
-        "value": 0.9,
-        "chain_id": 1,
-        "market_id": "0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41"
       }
     ],
     "logic": "AND",
-    "window": { "duration": "2d" }
+    "window": { "duration": "7d" }
   }
 }`,
   },

@@ -26,6 +26,8 @@ interface BuilderFormState {
   description: string;
   marketId: string;
   whaleAddresses: string;
+  vaultContract: string;
+  ownerAddresses: string;
   tokenContract: string;
   watchedAddress: string;
   chainId: string;
@@ -47,6 +49,7 @@ const presetIcons: Record<SignalTemplateId, ReactNode> = {
   'single-whale-exit': <RiUserSearchLine className="w-5 h-5" />,
   'erc20-inflow-watch': <RiArrowDownLine className="w-5 h-5" />,
   'erc20-outflow-watch': <RiArrowUpLine className="w-5 h-5" />,
+  'erc4626-withdraw-percent-watch': <RiExchangeDollarLine className="w-5 h-5" />,
 };
 
 const formatCompactAddress = (value: string) => {
@@ -70,11 +73,21 @@ const buildDefaultState = (templateId: SignalTemplateId): BuilderFormState => {
     description: '',
     marketId: '',
     whaleAddresses: '',
+    vaultContract: '',
+    ownerAddresses: '',
     tokenContract: '',
     watchedAddress: '',
     chainId: String(preset.defaults.chainId),
-    requiredCount: preset.kind === 'morpho-whale' ? String(preset.defaults.requiredCount) : '1',
-    dropPercent: preset.kind === 'morpho-whale' ? String(preset.defaults.dropPercent) : '20',
+    requiredCount:
+      preset.kind === 'morpho-whale' || preset.kind === 'erc4626-withdraw'
+        ? String(preset.defaults.requiredCount)
+        : '1',
+    dropPercent:
+      preset.kind === 'morpho-whale'
+        ? String(preset.defaults.dropPercent)
+        : preset.kind === 'erc4626-withdraw' && typeof preset.defaults.dropPercent === 'number'
+          ? String(preset.defaults.dropPercent)
+          : '20',
     amountThreshold: preset.kind === 'erc20-transfer' ? String(preset.defaults.amountThreshold) : '1000000',
     windowDuration: preset.defaults.windowDuration,
     cooldownMinutes: String(preset.defaults.cooldownMinutes),
@@ -94,7 +107,9 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
   }, [selectedPreset]);
 
   const selectedPresetConfig = getTemplatePreset(selectedPreset);
-  const isWhalePreset = selectedPresetConfig.kind === 'morpho-whale';
+  const isMorphoWhalePreset = selectedPresetConfig.kind === 'morpho-whale';
+  const isErc20TransferPreset = selectedPresetConfig.kind === 'erc20-transfer';
+  const isErc4626WithdrawPreset = selectedPresetConfig.kind === 'erc4626-withdraw';
 
   const updateField = (field: keyof BuilderFormState, value: string) => {
     setFormState((current) => ({
@@ -117,17 +132,30 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
           name: formState.name,
           description: formState.description,
         }
-      : {
-          templateId: selectedPresetConfig.id,
-          tokenContract: formState.tokenContract,
-          watchedAddress: formState.watchedAddress,
-          chainId: Number(formState.chainId),
-          amountThreshold: Number(formState.amountThreshold),
-          windowDuration: formState.windowDuration,
-          cooldownMinutes: Number(formState.cooldownMinutes),
-          name: formState.name,
-          description: formState.description,
-        };
+      : selectedPresetConfig.kind === 'erc20-transfer'
+        ? {
+            templateId: selectedPresetConfig.id,
+            tokenContract: formState.tokenContract,
+            watchedAddress: formState.watchedAddress,
+            chainId: Number(formState.chainId),
+            amountThreshold: Number(formState.amountThreshold),
+            windowDuration: formState.windowDuration,
+            cooldownMinutes: Number(formState.cooldownMinutes),
+            name: formState.name,
+            description: formState.description,
+          }
+        : {
+            templateId: selectedPresetConfig.id,
+            vaultContract: formState.vaultContract,
+            ownerAddresses: formState.ownerAddresses,
+            chainId: Number(formState.chainId),
+            requiredCount: Number(formState.requiredCount),
+            dropPercent: Number(formState.dropPercent),
+            windowDuration: formState.windowDuration,
+            cooldownMinutes: Number(formState.cooldownMinutes),
+            name: formState.name,
+            description: formState.description,
+          };
 
   let previewError: string | null = null;
   let previewDefinition: string | null = null;
@@ -137,6 +165,8 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
   try {
     if (selectedPresetConfig.kind === 'morpho-whale') {
       parsedAddressCount = parseWhaleAddresses(formState.whaleAddresses).length;
+    } else if (selectedPresetConfig.kind === 'erc4626-withdraw') {
+      parsedAddressCount = parseWhaleAddresses(formState.ownerAddresses).length;
     }
 
     previewPayload = buildSignalTemplate(previewInput);
@@ -190,24 +220,37 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
     }
   };
 
-  const previewTitle = isWhalePreset ? 'Morpho whale movement signal' : 'ERC-20 transfer raw-event signal';
-  const previewDescription = isWhalePreset
+  const previewTitle = isMorphoWhalePreset
+    ? 'Morpho whale movement signal'
+    : isErc4626WithdrawPreset
+      ? 'ERC-4626 owner withdrawal % signal'
+      : 'ERC-20 transfer raw-event signal';
+  const previewDescription = isMorphoWhalePreset
     ? 'Enter a market plus the supplier wallets you want to watch. This UI creates a Sentinel `group` + `change` signal on the canonical `Morpho.Position.supplyShares` state alias.'
-    : 'Track gross ERC-20 Transfer volume into or out of one address with Sentinel’s `raw-events` preset. This is flow monitoring, not true net balance change.';
+    : isErc4626WithdrawPreset
+      ? 'Enter one vault plus the owner wallets you want to watch. This UI creates a Sentinel `group` + `change` signal on `ERC4626.Position.shares` using percentage decrease.'
+      : 'Track gross ERC-20 Transfer volume into or out of one address with Sentinel’s `raw-events` preset. This is flow monitoring, not true net balance change.';
 
-  const previewStats = isWhalePreset
+  const previewStats = isMorphoWhalePreset
     ? [
         { label: 'Tracked wallets', value: String(parsedAddressCount) },
         { label: 'Required movers', value: formState.requiredCount || '0' },
         { label: 'Drop %', value: formState.dropPercent ? `${formState.dropPercent}%` : '—' },
         { label: 'Window', value: formState.windowDuration || '—' },
       ]
-    : [
-        { label: 'Asset', value: formatCompactAddress(formState.tokenContract) },
-        { label: 'Address', value: formatCompactAddress(formState.watchedAddress) },
-        { label: 'Direction', value: selectedPresetConfig.kind === 'erc20-transfer' && selectedPresetConfig.direction === 'inflow' ? 'Inflow' : 'Outflow' },
-        { label: 'Threshold', value: formState.amountThreshold ? `${formState.amountThreshold} base` : '0' },
-      ];
+    : isErc4626WithdrawPreset
+      ? [
+          { label: 'Vault', value: formatCompactAddress(formState.vaultContract) },
+          { label: 'Tracked owners', value: String(parsedAddressCount) },
+          { label: 'Required owners', value: formState.requiredCount || '0' },
+          { label: 'Drop %', value: formState.dropPercent ? `${formState.dropPercent}%` : '—' },
+        ]
+      : [
+          { label: 'Asset', value: formatCompactAddress(formState.tokenContract) },
+          { label: 'Address', value: formatCompactAddress(formState.watchedAddress) },
+          { label: 'Direction', value: isErc20TransferPreset && selectedPresetConfig.direction === 'inflow' ? 'Inflow' : 'Outflow' },
+          { label: 'Threshold', value: formState.amountThreshold ? `${formState.amountThreshold} base` : '0' },
+        ];
 
   return (
     <div className="space-y-6">
@@ -258,7 +301,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
               />
             </label>
 
-            {isWhalePreset ? (
+            {isMorphoWhalePreset ? (
               <>
                 <label className="flex flex-col gap-2 text-sm text-secondary">
                   Morpho market ID
@@ -294,6 +337,47 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                     onChange={(event) => updateField('dropPercent', event.target.value)}
                     className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
                   />
+                </label>
+              </>
+            ) : isErc4626WithdrawPreset ? (
+              <>
+                <label className="flex flex-col gap-2 text-sm text-secondary">
+                  Vault contract
+                  <input
+                    type="text"
+                    value={formState.vaultContract}
+                    onChange={(event) => updateField('vaultContract', event.target.value)}
+                    placeholder="0x1111111111111111111111111111111111111111"
+                    className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground font-mono"
+                  />
+                  <span className="text-xs text-secondary">
+                    Sentinel reads `balanceOf(owner)` on this ERC-4626 vault through archive RPC.
+                  </span>
+                </label>
+
+                <label className="flex flex-col gap-2 text-sm text-secondary">
+                  Owners required
+                  <input
+                    type="number"
+                    min="1"
+                    value={formState.requiredCount}
+                    onChange={(event) => updateField('requiredCount', event.target.value)}
+                    className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
+                  />
+                </label>
+
+                <label className="flex flex-col gap-2 text-sm text-secondary">
+                  Share drop (%)
+                  <input
+                    type="number"
+                    min="1"
+                    value={formState.dropPercent}
+                    onChange={(event) => updateField('dropPercent', event.target.value)}
+                    className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
+                  />
+                  <span className="text-xs text-secondary">
+                    Triggers when each tracked owner reduces shares by at least this percentage over the window.
+                  </span>
                 </label>
               </>
             ) : (
@@ -370,7 +454,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
             </label>
           </div>
 
-          {isWhalePreset ? (
+          {isMorphoWhalePreset ? (
             <label className="mt-4 flex flex-col gap-2 text-sm text-secondary">
               Wallet addresses
               <textarea
@@ -382,6 +466,20 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
               />
               <span className="text-xs text-secondary">
                 One address per line or comma-separated. Use the suppliers you care about most.
+              </span>
+            </label>
+          ) : isErc4626WithdrawPreset ? (
+            <label className="mt-4 flex flex-col gap-2 text-sm text-secondary">
+              Owner addresses
+              <textarea
+                value={formState.ownerAddresses}
+                onChange={(event) => updateField('ownerAddresses', event.target.value)}
+                placeholder={`0x1111111111111111111111111111111111111111\n0x2222222222222222222222222222222222222222\n0x3333333333333333333333333333333333333333`}
+                rows={7}
+                className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground font-mono"
+              />
+              <span className="text-xs text-secondary">
+                One owner per line or comma-separated. Sentinel injects each owner into the group condition at evaluation time.
               </span>
             </label>
           ) : (
