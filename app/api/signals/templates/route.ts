@@ -5,6 +5,31 @@ import { requestSentinel, SentinelRequestError } from '@/lib/sentinel/user-serve
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import type { CreateSignalRequest, SignalRecord } from '@/lib/types/signal';
 
+const extractNestedDetails = (payload: unknown): string | null => {
+  if (!payload || typeof payload !== 'object') {
+    return null;
+  }
+
+  const record = payload as Record<string, unknown>;
+  const direct =
+    (typeof record.details === 'string' ? record.details : undefined) ??
+    (typeof record.message === 'string' ? record.message : undefined) ??
+    (typeof record.error === 'string' ? record.error : undefined);
+
+  if (direct && !direct.startsWith('Sentinel request failed')) {
+    return direct;
+  }
+
+  for (const value of Object.values(record)) {
+    const nested = extractNestedDetails(value);
+    if (nested) {
+      return nested;
+    }
+  }
+
+  return direct ?? null;
+};
+
 export async function POST(request: Request) {
   const user = await getAuthenticatedUser();
   if (!user) {
@@ -54,7 +79,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error: 'sentinel_create_failed',
-          details: error.message,
+          details: extractNestedDetails(error.payload) ?? error.message,
           payload: error.payload,
         },
         { status: error.status }

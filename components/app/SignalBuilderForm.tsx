@@ -20,6 +20,7 @@ import {
   type SignalTemplateId,
   type SignalTemplateRequest,
 } from '@/lib/signals/templates';
+import { CodeBlock } from '@/components/ui/CodeBlock';
 
 interface BuilderFormState {
   name: string;
@@ -525,9 +526,13 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
               <div className="rounded-sm border border-border/80 bg-background/50 p-4">
                 <p className="text-sm text-secondary">{describeSignalDefinition(previewPayload.definition)}</p>
               </div>
-              <pre className="overflow-x-auto rounded-md bg-[#0d1117] p-4 text-xs leading-relaxed text-[#e6edf3]">
-                {previewDefinition}
-              </pre>
+              <CodeBlock
+                code={previewDefinition}
+                language="json"
+                filename="signal-preview.json"
+                tone="dark"
+                showLineNumbers
+              />
             </>
           ) : (
             <div className="rounded-sm border border-red-500/30 bg-red-500/5 p-4 text-sm text-red-400">

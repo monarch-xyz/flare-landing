@@ -4,6 +4,8 @@ export const TELEGRAM_STATUS_PARAM = 'telegram';
 export const TELEGRAM_RETURN_TO_PARAM = 'returnTo';
 export const TELEGRAM_RETURN_TO_COOKIE = 'sentinel_telegram_return_to';
 export const DEFAULT_TEMPLATE_PATH = '/signals/new';
+export const ADVANCED_TEMPLATE_PATH = '/signals/new/advanced';
+export const SIMPLE_TEMPLATE_PATH = '/signals/new/simple';
 
 export type TelegramFlowStatus = 'linked' | 'expired' | 'missing-token' | 'failed' | 'required';
 
@@ -48,14 +50,14 @@ export const buildTelegramStartPath = (returnTo?: string | null) => {
 export const buildTemplatePath = (preset?: string | null) => {
   const trimmedPreset = preset?.trim();
   if (!trimmedPreset) {
-    return DEFAULT_TEMPLATE_PATH;
+    return ADVANCED_TEMPLATE_PATH;
   }
 
   const params = new URLSearchParams({
     preset: trimmedPreset,
   });
 
-  return `${DEFAULT_TEMPLATE_PATH}?${params.toString()}`;
+  return `${ADVANCED_TEMPLATE_PATH}?${params.toString()}`;
 };
 
 export const buildTemplateEntryPath = (telegramLinked: boolean, returnTo: string = DEFAULT_TEMPLATE_PATH) => {
