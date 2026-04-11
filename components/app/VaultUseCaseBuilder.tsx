@@ -38,6 +38,7 @@ const getProtocolSearchPlaceholder = (protocol: SupportedVaultProtocolId) =>
 
 export function VaultUseCaseBuilder({ protocol }: VaultUseCaseBuilderProps) {
   const router = useRouter();
+  const [isVaultPickerExpanded, setIsVaultPickerExpanded] = useState(true);
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
   const [vaults, setVaults] = useState<VaultSummary[]>([]);
@@ -64,6 +65,7 @@ export function VaultUseCaseBuilder({ protocol }: VaultUseCaseBuilderProps) {
     setSelectedAddresses([]);
     setLoadError(null);
     setSubmitError(null);
+    setIsVaultPickerExpanded(true);
   }, [protocol]);
 
   useEffect(() => {
@@ -240,68 +242,98 @@ export function VaultUseCaseBuilder({ protocol }: VaultUseCaseBuilderProps) {
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
       <div className="space-y-6">
         <Card className="space-y-5">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-secondary">Vault source</p>
-            <h2 className="mt-2 font-zen text-2xl">{getProtocolHeading(protocol)}</h2>
-            <p className="mt-2 text-sm text-secondary">{getProtocolDescription(protocol)}</p>
-          </div>
-
-          <label className="flex flex-col gap-2 text-sm text-secondary">
-            Search vaults
-            <div className="relative">
-              <RiSearchLine className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-secondary" />
-              <input
-                type="text"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder={getProtocolSearchPlaceholder(protocol)}
-                className="w-full rounded-sm border border-border bg-transparent py-2 pl-9 pr-3 text-sm text-foreground"
-              />
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-secondary">Vault source</p>
+              <h2 className="mt-2 font-zen text-2xl">{getProtocolHeading(protocol)}</h2>
+              <p className="mt-2 text-sm text-secondary">{getProtocolDescription(protocol)}</p>
             </div>
-          </label>
-
-          {resultsLoading ? <p className="text-sm text-secondary">Loading vault data...</p> : null}
-          {loadError ? <p className="text-sm text-red-500">{loadError}</p> : null}
-
-          <div className="grid gap-3">
-            {vaults.map((vault) => {
-              const active = selectedVault?.address === vault.address;
-              const vaultAssetLabel =
-                vault.assetSymbol ?? (vault.assetAddress ? formatCompactAddress(vault.assetAddress) : 'Unknown asset');
-              const secondary = [vault.symbol, vaultAssetLabel, formatCompactAddress(vault.address)]
-                .filter(Boolean)
-                .join(' · ');
-
-              return (
-                <button
-                  key={vault.address}
-                  type="button"
-                  onClick={() => setSelectedVault(vault)}
-                  className={`rounded-sm border px-4 py-3 text-left transition-colors ${
-                    active
-                      ? 'border-[#1f2328] bg-background text-foreground'
-                      : 'border-border bg-background/70 text-secondary hover:bg-hovered hover:text-foreground'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm text-foreground">{vault.name}</p>
-                      <p className="mt-1 text-xs text-secondary">{secondary}</p>
-                    </div>
-                    <p className="text-xs text-secondary">
-                      {typeof vault.totalAssetsUsd === 'number' ? formatUsdCompact(vault.totalAssetsUsd) : vault.sourceLabel}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
-
-            {!resultsLoading && vaults.length === 0 ? (
-              <div className="rounded-sm border border-dashed border-border px-4 py-3 text-sm text-secondary">
-                No vaults matched this search yet.
-              </div>
+            {selectedVault ? (
+              <Button
+                variant="secondary"
+                size="sm"
+                type="button"
+                onClick={() => setIsVaultPickerExpanded((current) => !current)}
+              >
+                {isVaultPickerExpanded ? 'Hide list' : 'Change vault'}
+              </Button>
             ) : null}
           </div>
+
+          {selectedVault && !isVaultPickerExpanded ? (
+            <div className="rounded-sm border border-border/80 bg-background/50 p-4">
+              <p className="text-sm text-foreground">{selectedVault.name}</p>
+              <p className="mt-1 text-xs text-secondary">
+                {[selectedVault.symbol, assetLabel, formatCompactAddress(selectedVault.address)].filter(Boolean).join(' · ')}
+              </p>
+            </div>
+          ) : (
+            <>
+              <label className="flex flex-col gap-2 text-sm text-secondary">
+                Search vaults
+                <div className="relative">
+                  <RiSearchLine className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-secondary" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder={getProtocolSearchPlaceholder(protocol)}
+                    className="w-full rounded-sm border border-border bg-transparent py-2 pl-9 pr-3 text-sm text-foreground"
+                  />
+                </div>
+              </label>
+
+              {resultsLoading ? <p className="text-sm text-secondary">Loading vault data...</p> : null}
+              {loadError ? <p className="text-sm text-red-500">{loadError}</p> : null}
+
+              <div className="grid gap-3">
+                {vaults.map((vault) => {
+                  const active = selectedVault?.address === vault.address;
+                  const vaultAssetLabel =
+                    vault.assetSymbol ?? (vault.assetAddress ? formatCompactAddress(vault.assetAddress) : 'Unknown asset');
+                  const secondary = [vault.symbol, vaultAssetLabel, formatCompactAddress(vault.address)]
+                    .filter(Boolean)
+                    .join(' · ');
+
+                  return (
+                    <button
+                      key={vault.address}
+                      type="button"
+                      onClick={() => {
+                        setSelectedVault(vault);
+                        setIsVaultPickerExpanded(false);
+                      }}
+                      className={`rounded-sm border px-4 py-3 text-left transition-colors ${
+                        active
+                          ? 'border-[#1f2328] bg-background text-foreground'
+                          : 'border-border bg-background/70 text-secondary hover:bg-hovered hover:text-foreground'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm text-foreground" title={vault.name}>
+                            {vault.name}
+                          </p>
+                          <p className="mt-1 truncate text-xs text-secondary" title={secondary}>
+                            {secondary}
+                          </p>
+                        </div>
+                        {typeof vault.totalAssetsUsd === 'number' ? (
+                          <p className="shrink-0 text-xs text-secondary">{formatUsdCompact(vault.totalAssetsUsd)}</p>
+                        ) : null}
+                      </div>
+                    </button>
+                  );
+                })}
+
+                {!resultsLoading && vaults.length === 0 ? (
+                  <div className="rounded-sm border border-dashed border-border px-4 py-3 text-sm text-secondary">
+                    No vaults matched this search yet.
+                  </div>
+                ) : null}
+              </div>
+            </>
+          )}
         </Card>
 
         <Card className="space-y-5">
@@ -332,7 +364,9 @@ export function VaultUseCaseBuilder({ protocol }: VaultUseCaseBuilderProps) {
                       className="h-4 w-4 rounded-sm border-border"
                     />
                     <div>
-                      <p className="font-mono text-sm">{item.address}</p>
+                      <p className="font-mono text-sm" title={item.address}>
+                        {formatCompactAddress(item.address)}
+                      </p>
                       <p className="text-xs text-secondary">{item.shares} shares</p>
                     </div>
                   </div>

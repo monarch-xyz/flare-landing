@@ -9,6 +9,8 @@ import { CodeBlock } from '@/components/ui/CodeBlock';
 import { buildSignalTemplate, describeSignalDefinition, type SignalTemplateRequest } from '@/lib/signals/templates';
 import type { MorphoMarketSupplier, MorphoMarketSummary } from '@/lib/morpho-discovery/types';
 
+const formatCompactAddress = (value: string) => `${value.slice(0, 6)}...${value.slice(-4)}`;
+
 const formatUsdCompact = (value: number) =>
   new Intl.NumberFormat('en-US', {
     notation: 'compact',
@@ -271,13 +273,15 @@ export function MorphoMarketSignalBuilder() {
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm text-foreground">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm text-foreground">
                         {market.loanAssetSymbol}/{market.collateralAssetSymbol}
                       </p>
-                      <p className="mt-1 font-mono text-xs text-secondary">{market.marketId}</p>
+                      <p className="mt-1 truncate font-mono text-xs text-secondary" title={market.marketId}>
+                        {formatCompactAddress(market.marketId)}
+                      </p>
                     </div>
-                    <div className="text-right text-xs text-secondary">
+                    <div className="shrink-0 text-right text-xs text-secondary">
                       <p>{formatUsdCompact(market.supplyAssetsUsd)}</p>
                       <p>{formatPercent(market.utilization)}</p>
                     </div>
@@ -299,6 +303,11 @@ export function MorphoMarketSignalBuilder() {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-secondary">Selection</p>
               <h2 className="mt-2 font-zen text-2xl">{selectedEntitySummary}</h2>
+              {selectedMarket ? (
+                <p className="mt-1 font-mono text-xs text-secondary" title={selectedMarket.marketId}>
+                  {formatCompactAddress(selectedMarket.marketId)}
+                </p>
+              ) : null}
             </div>
             {suppliersLoading ? <p className="text-sm text-secondary">Loading suppliers...</p> : null}
           </div>
@@ -322,7 +331,9 @@ export function MorphoMarketSignalBuilder() {
                       className="h-4 w-4 rounded-sm border-border"
                     />
                     <div>
-                      <p className="font-mono text-sm">{item.address}</p>
+                      <p className="font-mono text-sm" title={item.address}>
+                        {formatCompactAddress(item.address)}
+                      </p>
                       <p className="text-xs text-secondary">{formatUsdCompact(item.supplyAssetsUsd)} supplied</p>
                     </div>
                   </div>
