@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { RiGithubFill, RiDiscordFill, RiBookLine, RiExternalLinkLine } from 'react-icons/ri';
-import { SENTINEL_GITHUB_URL, SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
+import { MEGABAT_GITHUB_URL, MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
 
 const links = [
-  { href: SENTINEL_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
-  { href: SENTINEL_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
+  { href: MEGABAT_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
+  { href: MEGABAT_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
   { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
 ];
 
@@ -19,7 +19,7 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start gap-2">
             <Link href="/" className="flex items-center gap-2 no-underline">
               <span className="text-2xl">🔥</span>
-              <span className="font-serif text-xl font-medium text-foreground">Sentinel</span>
+              <span className="font-serif text-xl font-medium text-foreground">Megabat</span>
             </Link>
             <p className="text-secondary text-sm font-serif italic">DeFi signals that matter</p>
           </div>

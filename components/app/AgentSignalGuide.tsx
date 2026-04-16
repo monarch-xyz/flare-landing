@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { HelpHint } from '@/components/ui/HelpHint';
-import { AGENT_GUIDE_RESOURCES, SENTINEL_ONE_LINER } from '@/lib/signals/create-flow-catalog';
+import { AGENT_GUIDE_RESOURCES, MEGABAT_ONE_LINER } from '@/lib/signals/create-flow-catalog';
 
-const agentPrompt = `Read the Sentinel docs and create a signal for me.
+const agentPrompt = `Read the Megabat docs and create a signal for me.
 
 Goal:
 - Watch ERC4626.Position.shares for a vault I specify
@@ -24,7 +24,7 @@ export function AgentSignalGuide() {
       <CreateFlowHeader
         eyebrow="Agent guide"
         title="Point your agent at the docs"
-        summary={`${SENTINEL_ONE_LINER} Use docs and a starter prompt.`}
+        summary={`${MEGABAT_ONE_LINER} Use docs and a starter prompt.`}
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">

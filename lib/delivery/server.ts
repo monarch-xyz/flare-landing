@@ -6,8 +6,8 @@ const normalizeBaseUrl = (value: string) => {
 };
 
 const inferDeliveryBaseUrl = () => {
-  const sentinelApiBase = process.env.SENTINEL_API_BASE_URL ?? 'http://localhost:3000/api/v1';
-  return normalizeBaseUrl(sentinelApiBase).replace(/\/api\/v1$/, '');
+  const megabatApiBase = process.env.MEGABAT_API_BASE_URL ?? 'http://localhost:3000/api/v1';
+  return normalizeBaseUrl(megabatApiBase).replace(/\/api\/v1$/, '');
 };
 
 export const getDeliveryBaseUrl = () =>

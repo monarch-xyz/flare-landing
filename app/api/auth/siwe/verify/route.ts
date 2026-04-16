@@ -1,5 +1,5 @@
-import { proxyRequestToSentinel } from '@/lib/sentinel/server';
+import { proxyRequestToMegabat } from '@/lib/megabat/server';
 
 export async function POST(request: Request) {
-  return proxyRequestToSentinel(request, '/auth/siwe/verify');
+  return proxyRequestToMegabat(request, '/auth/siwe/verify');
 }

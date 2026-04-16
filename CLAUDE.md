@@ -1,15 +1,15 @@
-# CLAUDE.md - Sentinel Landing Page
+# CLAUDE.md - Megabat Landing Page
 
 ## Project Context
-Static landing page for **Sentinel** — "Event Triggers for DeFi Agents"
+Static landing page for **Megabat** — "Event Triggers for DeFi Agents"
 
-**Narrative:** AI agents need reliable blockchain event sources. Sentinel provides composable signal monitoring that watches the chain while you sleep. Built by the Monarch team.
+**Narrative:** AI agents need reliable blockchain event sources. Megabat provides composable signal monitoring that watches the chain while you sleep. Built by the Monarch team.
 
 ## Design System
 **MUST match Monarch's style** (see `/Users/anton/projects/monarch/` for reference)
 
 ### Colors
-- Primary: `#ff6b35` (sentinel orange)
+- Primary: `#ff6b35` (megabat orange)
 - Accent: `#ff9f1c` (ember yellow)
 - Dark BG: `#16181a`, Secondary: `#202426`
 - Light BG: `#f0f2f7`
@@ -22,8 +22,8 @@ Static landing page for **Sentinel** — "Event Triggers for DeFi Agents"
 ### Key Classes (from globals.css)
 - `bg-dot-grid` - dot texture background
 - `bg-line-grid` - line texture background
-- `bg-gradient-sentinel` - orange-yellow gradient
-- `text-gradient-sentinel` - gradient text
+- `bg-gradient-megabat` - orange-yellow gradient
+- `text-gradient-megabat` - gradient text
 - `bg-surface` - card background
 - `bg-main` - page background
 - `font-zen` - heading font
@@ -36,7 +36,7 @@ Static landing page for **Sentinel** — "Event Triggers for DeFi Agents"
 ## Page Sections
 
 ### 1. Header
-- Logo: "🔥 Sentinel" (left)
+- Logo: "🔥 Megabat" (left)
 - Nav: Docs | GitHub | Discord (right)
 - Dark mode toggle
 - Sticky, transparent initially, solid on scroll
@@ -143,5 +143,5 @@ pnpm lint     # Check linting
 ## Reference Files
 - Monarch global.css: `/Users/anton/projects/monarch/app/global.css`
 - Monarch home: `/Users/anton/projects/monarch/src/features/home/home-view.tsx`
-- Sentinel docs: `/Users/anton/projects/sentinel/docs/ARCHITECTURE.md`
-- Sentinel API: `/Users/anton/projects/sentinel/docs/API.md`
+- Megabat docs: `/Users/anton/projects/megabat/docs/ARCHITECTURE.md`
+- Megabat API: `/Users/anton/projects/megabat/docs/API.md`

@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import { RiRobot2Line, RiCheckLine, RiFileCopyLine } from 'react-icons/ri';
 import { useState } from 'react';
 import { CodeBlock } from './ui/CodeBlock';
-import { SENTINEL_ARCHITECTURE_DOCS_URL } from '@/lib/sentinel-links';
+import { MEGABAT_ARCHITECTURE_DOCS_URL } from '@/lib/megabat-links';
 
-const step1Code = `# sentinel-skill.md
+const step1Code = `# megabat-skill.md
 
-You have access to Sentinel for blockchain monitoring.
+You have access to Megabat for blockchain monitoring.
 
 ## Capabilities
 - Monitor DeFi positions for changes
@@ -19,7 +19,7 @@ You have access to Sentinel for blockchain monitoring.
 ## Quick Setup
 To monitor a market, create a signal:
 
-POST https://your-sentinel-host/api/v1/signals
+POST https://your-megabat-host/api/v1/signals
 X-API-Key: YOUR_API_KEY
 
 {
@@ -41,8 +41,8 @@ X-API-Key: YOUR_API_KEY
   "repeat_policy": { "mode": "cooldown" }
 }`;
 
-const step2Code = `curl -X POST https://your-sentinel-host/api/v1/signals \\
-  -H "X-API-Key: $SENTINEL_API_KEY" \\
+const step2Code = `curl -X POST https://your-megabat-host/api/v1/signals \\
+  -H "X-API-Key: $MEGABAT_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
     "name": "Swap Volume Burst",
@@ -69,7 +69,7 @@ const step2Code = `curl -X POST https://your-sentinel-host/api/v1/signals \\
     "repeat_policy": { "mode": "post_first_alert_snooze", "snooze_minutes": 1440 }
   }'`;
 
-const step3Code = `# When Sentinel triggers, you receive:
+const step3Code = `# When Megabat triggers, you receive:
 {
   "signal_id": "sig_abc123",
   "signal_name": "Swap Volume Burst",
@@ -111,16 +111,16 @@ export function AgentOnboarding() {
   const steps = [
     {
       number: 1,
-      title: 'Add Sentinel to your agent skills',
-      description: 'Include the Sentinel skill in your agent\'s capabilities. This teaches your agent how to create and manage blockchain monitors.',
+      title: 'Add Megabat to your agent skills',
+      description: 'Include the Megabat skill in your agent\'s capabilities. This teaches your agent how to create and manage blockchain monitors.',
       code: step1Code,
       language: 'markdown',
-      filename: 'sentinel-skill.md',
+      filename: 'megabat-skill.md',
     },
     {
       number: 2,
       title: 'Create your first signal',
-      description: 'Your agent calls the Sentinel API to register a monitoring condition. Use state aliases for common reads or raw-event presets when you need direct decoded logs.',
+      description: 'Your agent calls the Megabat API to register a monitoring condition. Use state aliases for common reads or raw-event presets when you need direct decoded logs.',
       code: step2Code,
       language: 'bash',
       filename: 'create-signal.sh',
@@ -128,7 +128,7 @@ export function AgentOnboarding() {
     {
       number: 3,
       title: 'React to events',
-      description: 'When conditions trigger, Sentinel sends a webhook to your agent. Take action automatically—no polling required.',
+      description: 'When conditions trigger, Megabat sends a webhook to your agent. Take action automatically—no polling required.',
       code: step3Code,
       language: 'json',
       filename: 'webhook-response.md',
@@ -225,7 +225,7 @@ export function AgentOnboarding() {
         >
           <p className="text-secondary mb-4">Ready to give your agent superpowers?</p>
           <a
-            href={SENTINEL_ARCHITECTURE_DOCS_URL}
+            href={MEGABAT_ARCHITECTURE_DOCS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#ff6b35] text-white font-medium rounded-md hover:opacity-90 transition-opacity no-underline"

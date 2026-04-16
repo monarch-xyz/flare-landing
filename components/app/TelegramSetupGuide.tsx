@@ -26,7 +26,7 @@ const guideSteps = [
   },
   {
     title: 'Tap Connect Account',
-    body: 'Sentinel will attach Telegram to the signed-in account automatically.',
+    body: 'Megabat will attach Telegram to the signed-in account automatically.',
   },
 ];
 
@@ -122,7 +122,7 @@ export function TelegramSetupGuide({
                   <div>
                     <p className="text-foreground">After setup</p>
                     <p className="mt-1 text-sm leading-relaxed text-secondary">
-                      If Sentinel asks you to sign in, do that once and the Telegram link will finish automatically.
+                      If Megabat asks you to sign in, do that once and the Telegram link will finish automatically.
                     </p>
                   </div>
                 </div>

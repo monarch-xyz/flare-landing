@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/auth/constants';
 import { buildLoginHref } from '@/lib/auth/redirect';
 import { buildRequestUrl } from '@/lib/http/origin';
-import { fetchSentinel } from '@/lib/sentinel/server';
+import { fetchMegabat } from '@/lib/megabat/server';
 import { buildTelegramPath, resolveTelegramReturnTo, TELEGRAM_RETURN_TO_COOKIE } from '@/lib/telegram/setup-flow';
 
 const redirectTo = (request: NextRequest, location: string) =>
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     return redirectTo(request, buildLoginPath(request));
   }
 
-  const response = await fetchSentinel('/me/integrations/telegram/link', {
+  const response = await fetchMegabat('/me/integrations/telegram/link', {
     method: 'POST',
     body: JSON.stringify({ token }),
   });

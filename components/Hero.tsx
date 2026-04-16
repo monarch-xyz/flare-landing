@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { RiArrowDownLine } from 'react-icons/ri';
 import { GridAccent } from './ui/GridAccent';
 import { SectionTag } from './ui/SectionTag';
-import { SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
+import { MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
 
 export function Hero() {
   const scrollToSection = () => {
@@ -71,7 +71,7 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg sm:text-xl text-secondary max-w-xl mb-10 leading-relaxed"
             >
-              Sentinel is agent-first infrastructure for authoring state, indexed, and raw event conditions through a precise DSL. You describe the condition you care about, and Sentinel evaluates it continuously and delivers the signal.
+              Megabat is agent-first infrastructure for authoring state, indexed, and raw event conditions through a precise DSL. You describe the condition you care about, and Megabat evaluates it continuously and delivers the signal.
             </motion.p>
 
             {/* CTAs */}
@@ -89,7 +89,7 @@ export function Hero() {
                 <RiArrowDownLine className="w-4 h-4" />
               </button>
               <Link
-                href={SENTINEL_SITE_DOCS_PATH}
+                href={MEGABAT_SITE_DOCS_PATH}
                 className="inline-flex items-center justify-center px-6 py-3 border border-border text-secondary text-sm font-medium rounded-md hover:border-[#ff6b35]/30 hover:text-foreground transition-colors no-underline"
               >
                 Read Docs

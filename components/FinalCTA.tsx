@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { RiGithubLine, RiDiscordLine, RiBookOpenLine } from 'react-icons/ri';
 import { GridDivider } from './ui/GridDivider';
-import { SENTINEL_GITHUB_URL, SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
+import { MEGABAT_GITHUB_URL, MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
 
 export function FinalCTA() {
   return (
@@ -46,7 +46,7 @@ export function FinalCTA() {
                 Join Discord
               </a>
               <a
-                href={SENTINEL_GITHUB_URL}
+                href={MEGABAT_GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border text-secondary text-sm font-medium rounded-md hover:border-[#ff6b35]/30 hover:text-foreground transition-colors no-underline"
@@ -58,7 +58,7 @@ export function FinalCTA() {
 
             {/* Docs link */}
             <Link
-              href={SENTINEL_SITE_DOCS_PATH}
+              href={MEGABAT_SITE_DOCS_PATH}
               className="inline-flex items-center gap-2 text-sm text-secondary hover:text-[#ff6b35] transition-colors"
             >
               <RiBookOpenLine className="w-4 h-4" />

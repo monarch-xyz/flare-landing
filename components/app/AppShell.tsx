@@ -69,7 +69,7 @@ export function AppShell({ children, telegramLinked }: AppShellProps) {
                 <div className="flex items-center gap-4">
                   <Link href="/app" className="flex items-center gap-2 no-underline">
                     <span className="text-xl">🔥</span>
-                    <span className="font-zen text-lg text-foreground">Sentinel</span>
+                    <span className="font-zen text-lg text-foreground">Megabat</span>
                   </Link>
                   <span className="hidden text-xs uppercase tracking-[0.3em] text-secondary sm:block">Console</span>
                 </div>

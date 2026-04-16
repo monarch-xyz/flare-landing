@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { CreateFlowHeader } from '@/components/app/CreateFlowHeader';
 import { SignalBuilderForm } from '@/components/app/SignalBuilderForm';
 import { getAuthenticatedUser } from '@/lib/auth/session';
-import { SENTINEL_ONE_LINER } from '@/lib/signals/create-flow-catalog';
+import { MEGABAT_ONE_LINER } from '@/lib/signals/create-flow-catalog';
 import { SIGNAL_TEMPLATE_PRESETS, type SignalTemplateId } from '@/lib/signals/templates';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import { buildTelegramPath, buildTemplatePath } from '@/lib/telegram/setup-flow';
@@ -38,7 +38,7 @@ export default async function CustomSignalPage({ searchParams }: CustomSignalPag
       <CreateFlowHeader
         eyebrow="Custom builder"
         title="Customize your own signal inputs"
-        summary={`${SENTINEL_ONE_LINER} Enter the exact inputs you want it to watch.`}
+        summary={`${MEGABAT_ONE_LINER} Enter the exact inputs you want it to watch.`}
       />
 
       <SignalBuilderForm initialPreset={initialPreset} telegramLinked={telegramStatus.linked} />

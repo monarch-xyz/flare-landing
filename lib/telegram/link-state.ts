@@ -1,7 +1,7 @@
 import 'server-only';
 
 import type { TelegramStatusResponse } from '@/lib/auth/types';
-import { fetchSentinel } from '@/lib/sentinel/server';
+import { fetchMegabat } from '@/lib/megabat/server';
 
 export interface TelegramLinkStatus {
   linked: boolean;
@@ -11,7 +11,7 @@ export interface TelegramLinkStatus {
 }
 
 export const getTelegramLinkStatus = async (): Promise<TelegramLinkStatus> => {
-  const response = await fetchSentinel('/me/integrations/telegram');
+  const response = await fetchMegabat('/me/integrations/telegram');
   if (!response.ok) {
     throw new Error(`Telegram status request failed (${response.status})`);
   }

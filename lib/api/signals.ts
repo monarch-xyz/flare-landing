@@ -8,27 +8,27 @@ import {
 
 const client = createApiClient({ baseUrl: '' });
 
-export const listSignals = () => client.get<SignalRecord[]>('/api/sentinel/signals');
+export const listSignals = () => client.get<SignalRecord[]>('/api/megabat/signals');
 
-export const getSignal = (id: string) => client.get<SignalRecord>(`/api/sentinel/signals/${id}`);
+export const getSignal = (id: string) => client.get<SignalRecord>(`/api/megabat/signals/${id}`);
 
 export const createSignal = (payload: CreateSignalRequest) =>
-  client.post<SignalRecord, CreateSignalRequest>('/api/sentinel/signals', payload);
+  client.post<SignalRecord, CreateSignalRequest>('/api/megabat/signals', payload);
 
 export const updateSignal = (id: string, payload: UpdateSignalRequest) =>
-  client.patch<SignalRecord, UpdateSignalRequest>(`/api/sentinel/signals/${id}`, payload);
+  client.patch<SignalRecord, UpdateSignalRequest>(`/api/megabat/signals/${id}`, payload);
 
-export const toggleSignal = (id: string) => client.patch<SignalRecord, Record<string, never>>(`/api/sentinel/signals/${id}/toggle`, {});
+export const toggleSignal = (id: string) => client.patch<SignalRecord, Record<string, never>>(`/api/megabat/signals/${id}/toggle`, {});
 
-export const deleteSignal = (id: string) => client.del<void>(`/api/sentinel/signals/${id}`);
+export const deleteSignal = (id: string) => client.del<void>(`/api/megabat/signals/${id}`);
 
 export const simulateSignal = (id: string, payload: Record<string, unknown>) =>
-  client.post<Record<string, unknown>, Record<string, unknown>>(`/api/sentinel/simulate/${id}/simulate`, payload);
+  client.post<Record<string, unknown>, Record<string, unknown>>(`/api/megabat/simulate/${id}/simulate`, payload);
 
 export const findFirstTrigger = (id: string, payload: Record<string, unknown>) =>
-  client.post<Record<string, unknown>, Record<string, unknown>>(`/api/sentinel/simulate/${id}/first-trigger`, payload);
+  client.post<Record<string, unknown>, Record<string, unknown>>(`/api/megabat/simulate/${id}/first-trigger`, payload);
 
-export const getSignalLogs = (id: string) => client.get<SignalHistoryResponse>(`/api/sentinel/signals/${id}/history?include_notifications=true`);
+export const getSignalLogs = (id: string) => client.get<SignalHistoryResponse>(`/api/megabat/signals/${id}/history?include_notifications=true`);
 
 export const getSignalHistory = (id: string) =>
-  client.get<SignalHistoryResponse>(`/api/sentinel/signals/${id}/history?include_notifications=true`);
+  client.get<SignalHistoryResponse>(`/api/megabat/signals/${id}/history?include_notifications=true`);

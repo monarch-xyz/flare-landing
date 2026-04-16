@@ -4,11 +4,11 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { SESSION_COOKIE } from '@/lib/auth/constants';
 
-const SENTINEL_BASE_URL_FALLBACK = 'http://localhost:3000/api/v1';
+const MEGABAT_BASE_URL_FALLBACK = 'http://localhost:3000/api/v1';
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 
-const normalizeSentinelBaseUrl = (value: string) => {
+const normalizeMegabatBaseUrl = (value: string) => {
   const withScheme = /^[a-z][a-z\d+\-.]*:\/\//i.test(value) ? value : `http://${value}`;
   const url = new URL(withScheme);
 
@@ -19,17 +19,17 @@ const normalizeSentinelBaseUrl = (value: string) => {
   return trimTrailingSlash(url.toString());
 };
 
-export const getSentinelApiBaseUrl = () =>
-  normalizeSentinelBaseUrl(
-    process.env.SENTINEL_API_BASE_URL ?? SENTINEL_BASE_URL_FALLBACK
+export const getMegabatApiBaseUrl = () =>
+  normalizeMegabatBaseUrl(
+    process.env.MEGABAT_API_BASE_URL ?? MEGABAT_BASE_URL_FALLBACK
   );
 
-export const buildSentinelApiUrl = (path: string, search: string = '') => {
+export const buildMegabatApiUrl = (path: string, search: string = '') => {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${getSentinelApiBaseUrl()}${normalizedPath}${search}`;
+  return `${getMegabatApiBaseUrl()}${normalizedPath}${search}`;
 };
 
-const getSentinelSessionCookieHeader = async () => {
+const getMegabatSessionCookieHeader = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   if (!token) {
@@ -39,10 +39,10 @@ const getSentinelSessionCookieHeader = async () => {
   return `${SESSION_COOKIE}=${token}`;
 };
 
-const buildSentinelAuthHeaders = async (headersInit?: HeadersInit) => {
+const buildMegabatAuthHeaders = async (headersInit?: HeadersInit) => {
   const headers = new Headers(headersInit);
   if (!headers.has('X-API-Key') && !headers.has('Authorization') && !headers.has('Cookie')) {
-    const cookieHeader = await getSentinelSessionCookieHeader();
+    const cookieHeader = await getMegabatSessionCookieHeader();
     if (cookieHeader) {
       headers.set('Cookie', cookieHeader);
     }
@@ -51,14 +51,14 @@ const buildSentinelAuthHeaders = async (headersInit?: HeadersInit) => {
   return headers;
 };
 
-export const fetchSentinel = async (path: string, init: RequestInit = {}) => {
-  const headers = await buildSentinelAuthHeaders(init.headers);
+export const fetchMegabat = async (path: string, init: RequestInit = {}) => {
+  const headers = await buildMegabatAuthHeaders(init.headers);
 
   if (init.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
-  return fetch(buildSentinelApiUrl(path), {
+  return fetch(buildMegabatApiUrl(path), {
     ...init,
     headers,
     cache: 'no-store',
@@ -88,7 +88,7 @@ const copyResponseHeaders = (from: Response, to: Headers) => {
   }
 };
 
-export const proxyRequestToSentinel = async (request: Request, path: string, search = '') => {
+export const proxyRequestToMegabat = async (request: Request, path: string, search = '') => {
   const headers = new Headers();
 
   const contentType = request.headers.get('content-type');
@@ -119,7 +119,7 @@ export const proxyRequestToSentinel = async (request: Request, path: string, sea
   const hasBody = request.method !== 'GET' && request.method !== 'HEAD';
   const body = hasBody ? await request.text() : undefined;
 
-  const response = await fetchSentinel(`${path}${search}`, {
+  const response = await fetchMegabat(`${path}${search}`, {
     method: request.method,
     headers,
     body,

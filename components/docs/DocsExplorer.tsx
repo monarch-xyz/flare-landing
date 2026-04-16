@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import {
-  SENTINEL_API_DOCS_URL,
-  SENTINEL_ARCHITECTURE_DOCS_URL,
-  SENTINEL_AUTH_DOCS_URL,
-  SENTINEL_DSL_DOCS_URL,
-  SENTINEL_GITHUB_URL,
-  SENTINEL_SOURCES_DOCS_URL,
-} from '@/lib/sentinel-links';
+  MEGABAT_API_DOCS_URL,
+  MEGABAT_ARCHITECTURE_DOCS_URL,
+  MEGABAT_AUTH_DOCS_URL,
+  MEGABAT_DSL_DOCS_URL,
+  MEGABAT_GITHUB_URL,
+  MEGABAT_SOURCES_DOCS_URL,
+} from '@/lib/megabat-links';
 import { cn } from '@/lib/utils';
 import { FamilyExamplesAccordion } from './FamilyExamplesAccordion';
 
@@ -34,7 +34,7 @@ const sections = [
     id: 'sources',
     label: 'Source Families',
     description:
-      'Sentinel exposes three source families: `state`, `indexed`, and `raw`. State now has both a raw public surface, `state_ref`, and a sugared metric layer on top.',
+      'Megabat exposes three source families: `state`, `indexed`, and `raw`. State now has both a raw public surface, `state_ref`, and a sugared metric layer on top.',
   },
   {
     id: 'logic',
@@ -77,7 +77,7 @@ const signalFields = [
   ['definition.scope', 'Chains, markets, addresses, and protocol.'],
   ['definition.window', 'Evaluation lookback window.'],
   ['definition.logic', 'Top-level `AND` or `OR` across conditions.'],
-  ['definition.conditions[]', 'The actual checks Sentinel evaluates across state, indexed, and raw families.'],
+  ['definition.conditions[]', 'The actual checks Megabat evaluates across state, indexed, and raw families.'],
   ['condition.metric | condition.state_ref', 'State conditions can use metric sugar or the raw public `state_ref` surface.'],
   ['delivery | webhook_url', 'Managed delivery or explicit override.'],
   ['repeat_policy', 'Optional repeat behavior: `cooldown`, `post_first_alert_snooze`, or `until_resolved`.'],
@@ -130,8 +130,8 @@ const authRows = [
 ] as const;
 
 const deliveryRows = [
-  ['Managed Telegram', 'Send `delivery: { provider: "telegram" }` and let Sentinel resolve the target server-side.'],
-  ['Telegram actions', 'Inline `Why`, `Snooze 1h`, and `Snooze 1d` actions are managed by Sentinel backend services, not browser callbacks.'],
+  ['Managed Telegram', 'Send `delivery: { provider: "telegram" }` and let Megabat resolve the target server-side.'],
+  ['Telegram actions', 'Inline `Why`, `Snooze 1h`, and `Snooze 1d` actions are managed by Megabat backend services, not browser callbacks.'],
   ['Custom webhook', 'Send `webhook_url` only when you intentionally want your own endpoint.'],
   ['Repeat policy', 'Set `repeat_policy` on create or update to choose cooldown, incident snooze, or until-resolved behavior.'],
 ] as const;
@@ -383,7 +383,7 @@ const familyExamples = [
 
 const contentsExample = `POST /api/v1/signals
 Content-Type: application/json
-X-API-Key: sentinel_...
+X-API-Key: megabat_...
 
 {
   "name": "Vault Shares Drop",
@@ -471,7 +471,7 @@ Content-Type: application/json
 {
   "user_id": "550e8400-e29b-41d4-a716-446655440000",
   "api_key_id": "2e4d1e12-3a0d-4b0c-9b54-7a1f4d8c3ed1",
-  "api_key": "sentinel_..."
+  "api_key": "megabat_..."
 }`;
 
 const deliveryExample = `{
@@ -546,7 +546,7 @@ const historyExample = `{
 
 const routesExample = `POST /api/v1/simulate/:id/simulate
 Content-Type: application/json
-X-API-Key: sentinel_...
+X-API-Key: megabat_...
 
 {
   "start_time": "2026-01-01T00:00:00Z",
@@ -651,12 +651,12 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'API.md',
-                  href: SENTINEL_API_DOCS_URL,
+                  href: MEGABAT_API_DOCS_URL,
                   note: 'Request wrapper for `POST /api/v1/signals` and protected route behavior.',
                 },
                 {
                   label: 'DSL.md',
-                  href: SENTINEL_DSL_DOCS_URL,
+                  href: MEGABAT_DSL_DOCS_URL,
                   note: 'Canonical `definition` shape, condition types, and examples.',
                 },
               ]}
@@ -718,12 +718,12 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'SOURCES.md',
-                  href: SENTINEL_SOURCES_DOCS_URL,
+                  href: MEGABAT_SOURCES_DOCS_URL,
                   note: 'Canonical source-family contract and capability gating.',
                 },
                 {
                   label: 'DSL.md',
-                  href: SENTINEL_DSL_DOCS_URL,
+                  href: MEGABAT_DSL_DOCS_URL,
                   note: 'Which condition types belong to raw state, metric sugar, indexed, and raw events.',
                 },
               ]}
@@ -735,7 +735,7 @@ export function DocsExplorer() {
           <>
             <RowList rows={logicRows} />
             <p className="mt-6 text-sm leading-relaxed text-secondary">
-              Sentinel has internal arithmetic in the engine AST, but customers do not author free-form
+              Megabat has internal arithmetic in the engine AST, but customers do not author free-form
               `add` or `sub` expressions in the public DSL today. The public surface stays declarative:
               metric sugar, raw state refs, indexed metrics, and raw event scans.
             </p>
@@ -743,17 +743,17 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'DSL.md',
-                  href: SENTINEL_DSL_DOCS_URL,
+                  href: MEGABAT_DSL_DOCS_URL,
                   note: 'Public `logic`, `group`, and condition-type contract.',
                 },
                 {
                   label: 'SOURCES.md',
-                  href: SENTINEL_SOURCES_DOCS_URL,
+                  href: MEGABAT_SOURCES_DOCS_URL,
                   note: 'Mixed-source planning belongs in the engine and metric registry.',
                 },
                 {
                   label: 'ARCHITECTURE.md',
-                  href: SENTINEL_ARCHITECTURE_DOCS_URL,
+                  href: MEGABAT_ARCHITECTURE_DOCS_URL,
                   note: 'Compiler, planner, and evaluator boundaries.',
                 },
               ]}
@@ -773,12 +773,12 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'AUTH.md',
-                  href: SENTINEL_AUTH_DOCS_URL,
+                  href: MEGABAT_AUTH_DOCS_URL,
                   note: 'API key lifecycle, SIWE session flow, and protected route rules.',
                 },
                 {
                   label: 'API.md',
-                  href: SENTINEL_API_DOCS_URL,
+                  href: MEGABAT_API_DOCS_URL,
                   note: 'Register, SIWE nonce, and SIWE verify endpoints.',
                 },
               ]}
@@ -800,12 +800,12 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'API.md',
-                  href: SENTINEL_API_DOCS_URL,
+                  href: MEGABAT_API_DOCS_URL,
                   note: 'Signal delivery contract and outbound webhook payload shape.',
                 },
                 {
                   label: 'GitHub',
-                  href: SENTINEL_GITHUB_URL,
+                  href: MEGABAT_GITHUB_URL,
                   note: 'Repository source of truth for implementation details.',
                 },
               ]}
@@ -826,7 +826,7 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'API.md',
-                  href: SENTINEL_API_DOCS_URL,
+                  href: MEGABAT_API_DOCS_URL,
                   note: 'History response shape and normalized explanation field additions.',
                 },
               ]}
@@ -848,12 +848,12 @@ export function DocsExplorer() {
               links={[
                 {
                   label: 'API.md',
-                  href: SENTINEL_API_DOCS_URL,
+                  href: MEGABAT_API_DOCS_URL,
                   note: 'Health, chains, catalog, signal CRUD, history, and simulation endpoints.',
                 },
                 {
                   label: 'SOURCES.md',
-                  href: SENTINEL_SOURCES_DOCS_URL,
+                  href: MEGABAT_SOURCES_DOCS_URL,
                   note: 'Capability gating behavior for disabled families.',
                 },
               ]}
@@ -867,7 +867,7 @@ export function DocsExplorer() {
   return (
     <div className="mx-auto max-w-6xl">
       <header className="max-w-3xl">
-        <h1 className="text-4xl tracking-tight text-foreground sm:text-5xl">Sentinel Docs</h1>
+        <h1 className="text-4xl tracking-tight text-foreground sm:text-5xl">Megabat Docs</h1>
         <p className="mt-4 text-base leading-relaxed text-secondary sm:text-lg">
           Reference for `state_ref`, metric sugar, indexed metrics, raw events, repeat policy, history, auth, delivery, and routes.
         </p>
@@ -910,7 +910,7 @@ export function DocsExplorer() {
           Open app
         </Link>
         <a
-          href={SENTINEL_GITHUB_URL}
+          href={MEGABAT_GITHUB_URL}
           target="_blank"
           rel="noreferrer"
           className="text-foreground no-underline transition-colors hover:text-[#ff6b35]"

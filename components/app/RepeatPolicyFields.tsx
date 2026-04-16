@@ -58,11 +58,11 @@ export function RepeatPolicyFields({
             onChange={(event) => onCooldownMinutesChange(event.target.value)}
             className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
           />
-          <span className="text-xs text-secondary">Sentinel uses this value only for cooldown repeat mode.</span>
+          <span className="text-xs text-secondary">Megabat uses this value only for cooldown repeat mode.</span>
         </label>
       ) : (
         <div className="rounded-sm border border-border/80 bg-background/50 p-4 text-sm text-secondary">
-          Sentinel sends one alert per incident, then waits until the signal evaluates false before alerting again.
+          Megabat sends one alert per incident, then waits until the signal evaluates false before alerting again.
         </div>
       )}
     </>

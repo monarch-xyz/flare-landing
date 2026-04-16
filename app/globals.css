@@ -1,13 +1,13 @@
 @import "tailwindcss";
 /* Fonts loaded via next/font in layout.tsx for optimal performance */
 
-/* Theme configuration - Sentinel Design System (based on Monarch) */
+/* Theme configuration - Megabat Design System (based on Monarch) */
 @theme {
-  /* Sentinel primary colors */
+  /* Megabat primary colors */
   --color-primary: #ff6b35;
-  --color-sentinel-primary: #ff6b35;
-  --color-sentinel-accent: #ff9f1c;
-  --color-sentinel-glow: #ff6b3530;
+  --color-megabat-primary: #ff6b35;
+  --color-megabat-accent: #ff9f1c;
+  --color-megabat-glow: #ff6b3530;
 }
 
 @theme inline {
@@ -134,7 +134,7 @@
   --grid-cell-active: rgba(255, 107, 53, 0.6);
 
   /* Palette */
-  --palette-sentinel: #ff6b35;
+  --palette-megabat: #ff6b35;
   --palette-ember: #ff9f1c;
   --palette-white: #f0f2f7;
   --palette-bg-hovered: #f6f8fb;
@@ -180,7 +180,7 @@
   --grid-cell-active: rgba(255, 107, 53, 0.6);
 
   /* Palette - dark */
-  --palette-sentinel: #ff6b35;
+  --palette-megabat: #ff6b35;
   --palette-ember: #ff9f1c;
   --palette-bg-black: #16181a;
   --palette-bg-black-secondary: #202426;
@@ -274,8 +274,8 @@ body::before {
   background-color: var(--color-background-hovered);
 }
 
-.bg-sentinel-primary {
-  background-color: var(--palette-sentinel);
+.bg-megabat-primary {
+  background-color: var(--palette-megabat);
 }
 
 .text-primary {

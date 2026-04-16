@@ -14,7 +14,7 @@ import {
   ASSISTED_VAULT_EXAMPLES,
   CUSTOM_SIGNAL_FALLBACK,
   HUMAN_SIGNAL_CATEGORIES,
-  SENTINEL_ONE_LINER,
+  MEGABAT_ONE_LINER,
   getHumanSignalCategory,
   type HumanSignalCategoryId,
 } from '@/lib/signals/create-flow-catalog';
@@ -31,7 +31,7 @@ export function HumanSignalBuilder() {
       <CreateFlowHeader
         eyebrow="Human builder"
         title="Start from simple examples"
-        summary={`${SENTINEL_ONE_LINER} Pick a layer, then pick a source.`}
+        summary={`${MEGABAT_ONE_LINER} Pick a layer, then pick a source.`}
       />
 
       <div className="rounded-md border border-border bg-surface p-4">

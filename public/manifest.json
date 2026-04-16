@@ -1,6 +1,6 @@
 {
-  "name": "Sentinel - Event Triggers for DeFi Agents",
-  "short_name": "Sentinel",
+  "name": "Megabat - Event Triggers for DeFi Agents",
+  "short_name": "Megabat",
   "description": "Composable signal monitoring for DeFi. Watch the chain while you sleep.",
   "start_url": "/",
   "display": "standalone",

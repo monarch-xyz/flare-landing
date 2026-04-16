@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { RiGithubFill, RiDiscordFill, RiBookLine, RiMenuLine, RiCloseLine, RiMoonLine, RiSunLine, RiLoginCircleLine } from 'react-icons/ri';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
-import { SENTINEL_GITHUB_URL, SENTINEL_SITE_DOCS_PATH } from '@/lib/sentinel-links';
+import { MEGABAT_GITHUB_URL, MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -36,8 +36,8 @@ export function Header() {
   };
 
   const navLinks = [
-    { href: SENTINEL_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
-    { href: SENTINEL_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
+    { href: MEGABAT_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
+    { href: MEGABAT_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
     { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
   ];
 
@@ -53,7 +53,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 no-underline">
             <span className="text-2xl">🔥</span>
-            <span className="font-serif text-xl font-medium text-foreground">Sentinel</span>
+            <span className="font-serif text-xl font-medium text-foreground">Megabat</span>
           </Link>
 
           {/* Desktop Nav */}

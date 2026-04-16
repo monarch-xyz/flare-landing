@@ -2,10 +2,10 @@ import 'server-only';
 
 import { cookies } from 'next/headers';
 import { SESSION_COOKIE } from '@/lib/auth/constants';
-import type { SentinelAuthenticatedUser } from '@/lib/auth/types';
-import { fetchSentinel } from '@/lib/sentinel/server';
+import type { MegabatAuthenticatedUser } from '@/lib/auth/types';
+import { fetchMegabat } from '@/lib/megabat/server';
 
-export const getWalletAddressFromUser = (user: SentinelAuthenticatedUser): string | null => {
+export const getWalletAddressFromUser = (user: MegabatAuthenticatedUser): string | null => {
   const walletIdentity = user.identities.find((identity) => identity.provider === 'wallet');
   if (!walletIdentity) {
     return null;
@@ -19,21 +19,21 @@ export const getWalletAddressFromUser = (user: SentinelAuthenticatedUser): strin
   return walletIdentity.provider_subject.toLowerCase();
 };
 
-export const getAuthenticatedUser = async (): Promise<SentinelAuthenticatedUser | null> => {
+export const getAuthenticatedUser = async (): Promise<MegabatAuthenticatedUser | null> => {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   if (!token) {
     return null;
   }
 
-  const response = await fetchSentinel('/auth/me');
+  const response = await fetchMegabat('/auth/me');
   if (response.status === 401) {
     return null;
   }
 
   if (!response.ok) {
-    throw new Error(`Sentinel auth bootstrap failed (${response.status})`);
+    throw new Error(`Megabat auth bootstrap failed (${response.status})`);
   }
 
-  return (await response.json()) as SentinelAuthenticatedUser;
+  return (await response.json()) as MegabatAuthenticatedUser;
 };

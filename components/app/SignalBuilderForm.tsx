@@ -266,10 +266,10 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
       ? 'ERC-4626 owner withdrawal % signal'
       : 'ERC-20 transfer raw-event signal';
   const previewDescription = isMorphoWhalePreset
-    ? 'Sentinel watches the tracked Morpho suppliers and alerts on coordinated exits.'
+    ? 'Megabat watches the tracked Morpho suppliers and alerts on coordinated exits.'
     : isErc4626WithdrawPreset
-      ? 'Sentinel watches tracked vault owners and alerts on share withdrawals.'
-      : 'Sentinel watches ERC-20 transfer flow for one address.';
+      ? 'Megabat watches tracked vault owners and alerts on share withdrawals.'
+      : 'Megabat watches ERC-20 transfer flow for one address.';
 
   const previewStats = isMorphoWhalePreset
     ? [
@@ -296,7 +296,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
     <div className="space-y-6">
       <div className="rounded-md border border-border bg-surface p-4">
         <p className="mb-2 text-xs uppercase tracking-[0.3em] text-secondary">Template</p>
-        <p className="mb-4 max-w-3xl text-sm text-secondary">Pick a template family, then fill the exact inputs Sentinel should watch.</p>
+        <p className="mb-4 max-w-3xl text-sm text-secondary">Pick a template family, then fill the exact inputs Megabat should watch.</p>
 
         <div className="space-y-4">
           {TEMPLATE_GROUPS.map((group) => (
@@ -366,7 +366,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                     className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
                   />
                   <span className="text-xs text-secondary">
-                    Chain is set separately. If you paste a Monarch market URL, Sentinel extracts and stores only the final market id.
+                    Chain is set separately. If you paste a Monarch market URL, Megabat extracts and stores only the final market id.
                   </span>
                 </label>
 
@@ -404,7 +404,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                     className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground font-mono"
                   />
                   <span className="text-xs text-secondary">
-                    Sentinel reads `balanceOf(owner)` on this ERC-4626 vault through archive RPC.
+                    Megabat reads `balanceOf(owner)` on this ERC-4626 vault through archive RPC.
                   </span>
                 </label>
 
@@ -499,7 +499,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                 type="text"
                 value={formState.description}
                 onChange={(event) => updateField('description', event.target.value)}
-                placeholder="Optional description shown in Sentinel"
+                placeholder="Optional description shown in Megabat"
                 className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
               />
             </label>
@@ -530,12 +530,12 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                 className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground font-mono"
               />
               <span className="text-xs text-secondary">
-                One owner per line or comma-separated. Sentinel injects each owner into the group condition at evaluation time.
+                One owner per line or comma-separated. Megabat injects each owner into the group condition at evaluation time.
               </span>
             </label>
           ) : (
             <div className="mt-4 rounded-sm border border-border/80 bg-background/50 p-4 text-sm text-secondary">
-              This template uses Sentinel’s `raw-events` ERC-20 transfer preset. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. The broader raw-event catalog also includes approvals, ERC-721 events, ERC-4626 deposits and withdrawals, swap presets, and `contract_event` for custom ABI signatures.
+              This template uses Megabat’s `raw-events` ERC-20 transfer preset. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. The broader raw-event catalog also includes approvals, ERC-721 events, ERC-4626 deposits and withdrawals, swap presets, and `contract_event` for custom ABI signatures.
             </div>
           )}
 

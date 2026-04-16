@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-export const alt = 'Sentinel - State, Indexed, and Raw Signals for Agents';
+export const alt = 'Megabat - State, Indexed, and Raw Signals for Agents';
 export const size = {
   width: 1200,
   height: 630,
@@ -59,7 +59,7 @@ export default async function Image() {
                 fontFamily: 'sans-serif',
               }}
             >
-              Sentinel
+              Megabat
             </span>
           </div>
 

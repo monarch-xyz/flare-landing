@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { Button } from './ui/Button';
-import { SENTINEL_API_DOCS_URL } from '@/lib/sentinel-links';
+import { MEGABAT_API_DOCS_URL } from '@/lib/megabat-links';
 
 const endpoints = [
   {
@@ -146,7 +146,7 @@ export function ApiReference() {
             className="text-center"
           >
             <a
-              href={SENTINEL_API_DOCS_URL}
+              href={MEGABAT_API_DOCS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="no-underline inline-block"

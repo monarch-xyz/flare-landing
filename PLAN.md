@@ -1,15 +1,15 @@
-# Sentinel Landing Page - Implementation Plan
+# Megabat Landing Page - Implementation Plan
 
 ## Overview
-Static landing page for Sentinel — "Event Triggers for DeFi Agents"
+Static landing page for Megabat — "Event Triggers for DeFi Agents"
 
-**Narrative:** AI agents need reliable blockchain event sources. Sentinel provides composable signal monitoring that watches the chain while you sleep.
+**Narrative:** AI agents need reliable blockchain event sources. Megabat provides composable signal monitoring that watches the chain while you sleep.
 
 ## Design System (Match Monarch)
 
 ### Colors
-- **Sentinel Primary:** `#ff6b35` (fire orange, slightly more vibrant than Monarch's #f45f2d)
-- **Sentinel Accent:** `#ff9f1c` (ember yellow for gradients)
+- **Megabat Primary:** `#ff6b35` (fire orange, slightly more vibrant than Monarch's #f45f2d)
+- **Megabat Accent:** `#ff9f1c` (ember yellow for gradients)
 - **Dark BG:** `#16181a` (same as Monarch)
 - **Dark Secondary:** `#202426`
 - **Light BG:** `#f0f2f7`
@@ -73,11 +73,11 @@ Show real DSL examples:
 - **Fonts:** Google Fonts (Inter, Zen Kaku Gothic New) + local Victor Mono
 - **Icons:** react-icons (Remix Icons)
 - **Animations:** Framer Motion (subtle)
-- **Deployment:** Vercel (sentinel.monarch.xyz)
+- **Deployment:** Vercel (megabat.monarch.xyz)
 
 ## File Structure
 ```
-sentinel-landing/
+megabat-landing/
 ├── app/
 │   ├── layout.tsx
 │   ├── page.tsx
@@ -152,22 +152,22 @@ sentinel-landing/
 - 06:00 - Review and handoff
 
 ### Phase 6: Deployment ✅
-- [x] GitHub repo created: monarch-xyz/sentinel-landing
+- [x] GitHub repo created: monarch-xyz/megabat-landing
 - [x] ESLint errors fixed
 - [x] Build passes clean
-- [ ] Deploy to Vercel (sentinel.monarch.xyz) — **READY**
+- [ ] Deploy to Vercel (megabat.monarch.xyz) — **READY**
 
 ## Deployment
 
-**Repository:** https://github.com/monarch-xyz/sentinel-landing
+**Repository:** https://github.com/monarch-xyz/megabat-landing
 
 **To deploy:**
 1. Import to Vercel: https://vercel.com/new
-2. Select `monarch-xyz/sentinel-landing`
-3. Set custom domain: `sentinel.monarch.xyz`
+2. Select `monarch-xyz/megabat-landing`
+3. Set custom domain: `megabat.monarch.xyz`
 4. Deploy
 
 ## Notes
 - Keep it STATIC — no backend, no auth, just info
 - Optimize for agents reading (clear structure, code-first)
-- Match Monarch's premium feel but with Sentinel's identity
+- Match Monarch's premium feel but with Megabat's identity

@@ -143,7 +143,7 @@ export function Capabilities() {
               Two concrete <span className="text-[#ff6b35]">signal definitions</span>
             </h2>
             <p className="text-secondary max-w-2xl">
-              Click a use case to inspect how a precise DSL can describe the actual state change you want Sentinel to evaluate.
+              Click a use case to inspect how a precise DSL can describe the actual state change you want Megabat to evaluate.
             </p>
           </motion.div>
 

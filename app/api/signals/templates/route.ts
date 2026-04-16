@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/session';
 import { buildSignalTemplate, SignalTemplateError, type SignalTemplateRequest } from '@/lib/signals/templates';
-import { requestSentinel, SentinelRequestError } from '@/lib/sentinel/user-server';
+import { requestMegabat, MegabatRequestError } from '@/lib/megabat/user-server';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import type { CreateSignalRequest, SignalRecord } from '@/lib/types/signal';
 
@@ -16,7 +16,7 @@ const extractNestedDetails = (payload: unknown): string | null => {
     (typeof record.message === 'string' ? record.message : undefined) ??
     (typeof record.error === 'string' ? record.error : undefined);
 
-  if (direct && !direct.startsWith('Sentinel request failed')) {
+  if (direct && !direct.startsWith('Megabat request failed')) {
     return direct;
   }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     const templatePayload = buildSignalTemplate(payload);
     const createSignalPayload: CreateSignalRequest = templatePayload;
 
-    const signal = await requestSentinel<SignalRecord>('/signals', {
+    const signal = await requestMegabat<SignalRecord>('/signals', {
       method: 'POST',
       body: JSON.stringify(createSignalPayload),
     });
@@ -75,10 +75,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (error instanceof SentinelRequestError) {
+    if (error instanceof MegabatRequestError) {
       return NextResponse.json(
         {
-          error: 'sentinel_create_failed',
+          error: 'megabat_create_failed',
           details: extractNestedDetails(error.payload) ?? error.message,
           payload: error.payload,
         },

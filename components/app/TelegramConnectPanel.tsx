@@ -40,7 +40,7 @@ export function TelegramConnectPanel({ initialStatus, returnTo }: TelegramConnec
               ? 'Telegram is ready.'
               : isTemplateFlow
                 ? 'Open the bot once and finish Telegram before you start building a signal.'
-                : 'Open the bot once and Sentinel will connect this account when you return.'}
+                : 'Open the bot once and Megabat will connect this account when you return.'}
           </p>
         </div>
         <div
@@ -82,7 +82,7 @@ export function TelegramConnectPanel({ initialStatus, returnTo }: TelegramConnec
       ) : (
         <>
           <div className="rounded-sm border border-border/80 bg-background/50 p-3 text-sm text-secondary">
-            Open {telegramBotLabel}, send <span className="font-mono text-foreground">/start</span>, then tap the connect button in Telegram. If you need to sign in first, Sentinel will finish the link when you return.
+            Open {telegramBotLabel}, send <span className="font-mono text-foreground">/start</span>, then tap the connect button in Telegram. If you need to sign in first, Megabat will finish the link when you return.
           </div>
 
           <Link href={openTelegramHref} className="inline-flex w-fit no-underline">

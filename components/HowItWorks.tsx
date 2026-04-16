@@ -17,9 +17,9 @@ const steps = [
   {
     icon: RiCloudLine,
     title: 'Deploy',
-    description: 'Register your query via API once. Sentinel continuously evaluates state changes and smart filters.',
+    description: 'Register your query via API once. Megabat continuously evaluates state changes and smart filters.',
     code: `POST /api/v1/signals
-X-API-Key: sentinel_...
+X-API-Key: megabat_...
 { "name": "High-Signal Watch",
   "repeat_policy": { "mode": "cooldown" },
   ... }`,
@@ -100,7 +100,7 @@ export function HowItWorks() {
                 <h3 className="font-zen text-lg md:text-xl font-bold mb-2">{step.title}</h3>
                 <p className="text-secondary mb-4 text-sm leading-relaxed">{step.description}</p>
                 
-                {/* Mini code block with Sentinel syntax colors */}
+                {/* Mini code block with Megabat syntax colors */}
                 <div className="relative text-xs bg-[#0d1117] rounded-md p-3 overflow-x-auto font-mono custom-scrollbar border border-[#30363d] group-hover:border-[#ff6b35]/20 transition-colors">
                   <div className="absolute inset-0 bg-[#ff6b35]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-md pointer-events-none" />
                   

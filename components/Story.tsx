@@ -60,7 +60,7 @@ events.on("Transfer", notify)
     id: 'solution',
     tag: 'DSL Infrastructure',
     title: 'Write intent. Rely on the infrastructure.',
-    content: `Your agent can use DSL to describe exactly what it wants, while Sentinel handles the hard part: continuous evaluation, stateful windows, logic composition, and reliable delivery. That keeps the signal definition precise without making the production path fragile.`,
+    content: `Your agent can use DSL to describe exactly what it wants, while Megabat handles the hard part: continuous evaluation, stateful windows, logic composition, and reliable delivery. That keeps the signal definition precise without making the production path fragile.`,
     code: `POST /api/v1/signals
 {
   "name": "3 of 5 vault owners withdrew >1e18 shares",

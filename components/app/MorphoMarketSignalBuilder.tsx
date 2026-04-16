@@ -245,7 +245,7 @@ export function MorphoMarketSignalBuilder() {
               <p className="text-xs uppercase tracking-[0.3em] text-secondary">Protocol source</p>
               <h2 className="mt-2 font-zen text-2xl">Morpho markets</h2>
               <p className="mt-2 text-sm text-secondary">
-                Pick a Morpho market, pick suppliers, and let Sentinel watch for coordinated exits.
+                Pick a Morpho market, pick suppliers, and let Megabat watch for coordinated exits.
               </p>
             </div>
             {selectedMarket ? (
@@ -442,7 +442,7 @@ export function MorphoMarketSignalBuilder() {
                 type="text"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="Optional description shown in Sentinel"
+                placeholder="Optional description shown in Megabat"
                 className="rounded-sm border border-border bg-transparent px-3 py-2 text-sm text-foreground"
               />
             </label>

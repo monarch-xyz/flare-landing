@@ -1,10 +1,10 @@
 /**
- * Custom Sentinel syntax highlighting theme
- * Designed to match Sentinel's orange/ember brand colors while maintaining readability
+ * Custom Megabat syntax highlighting theme
+ * Designed to match Megabat's orange/ember brand colors while maintaining readability
  */
 import type { PrismTheme } from 'prism-react-renderer';
 
-export const sentinelTheme: PrismTheme = {
+export const megabatTheme: PrismTheme = {
   plain: {
     color: '#e6e6e6',
     backgroundColor: '#0d1117',
@@ -38,13 +38,13 @@ export const sentinelTheme: PrismTheme = {
     {
       types: ['entity', 'url', 'symbol', 'number', 'boolean', 'variable', 'constant', 'regex', 'inserted'],
       style: {
-        color: '#ff9f1c', // Ember yellow - Sentinel accent
+        color: '#ff9f1c', // Ember yellow - Megabat accent
       },
     },
     {
       types: ['property'],
       style: {
-        color: '#ff6b35', // Sentinel orange for JSON keys
+        color: '#ff6b35', // Megabat orange for JSON keys
       },
     },
     {
@@ -87,7 +87,7 @@ export const sentinelTheme: PrismTheme = {
 };
 
 // Dark variant with more contrast
-export const sentinelDarkTheme: PrismTheme = {
+export const megabatDarkTheme: PrismTheme = {
   plain: {
     color: '#e6edf3',
     backgroundColor: '#0d1117',
@@ -133,7 +133,7 @@ export const sentinelDarkTheme: PrismTheme = {
     {
       types: ['property'],
       style: {
-        color: '#ff6b35', // Sentinel primary for properties
+        color: '#ff6b35', // Megabat primary for properties
         fontWeight: '500',
       },
     },

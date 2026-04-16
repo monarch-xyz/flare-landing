@@ -26,7 +26,7 @@ export function AuthShell({ title, description, children }: AuthShellProps) {
         <div className="py-10">
           <Link href="/" className="inline-flex items-center gap-2 text-secondary hover:text-foreground transition-colors no-underline">
             <span className="text-xl">🔥</span>
-            <span className="font-zen text-lg">Sentinel</span>
+            <span className="font-zen text-lg">Megabat</span>
           </Link>
         </div>
 

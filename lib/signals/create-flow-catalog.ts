@@ -34,7 +34,7 @@ export interface AgentGuideResource {
   href: string;
 }
 
-export const SENTINEL_ONE_LINER = 'Sentinel turns onchain conditions into managed alerts.';
+export const MEGABAT_ONE_LINER = 'Megabat turns onchain conditions into managed alerts.';
 
 export const CREATE_SIGNAL_PERSONAS: CreateSignalPersonaOption[] = [
   {
@@ -43,7 +43,7 @@ export const CREATE_SIGNAL_PERSONAS: CreateSignalPersonaOption[] = [
     title: 'Guided builder',
     summary: 'Guided alerts',
     helpText:
-      'Sentinel builds the alert for you from guided vault and protocol surfaces. Today that includes Morpho vaults, Euler vaults, Morpho markets, and a custom fallback.',
+      'Megabat builds the alert for you from guided vault and protocol surfaces. Today that includes Morpho vaults, Euler vaults, Morpho markets, and a custom fallback.',
     cta: 'Open human builder',
   },
   {
@@ -52,7 +52,7 @@ export const CREATE_SIGNAL_PERSONAS: CreateSignalPersonaOption[] = [
     title: 'Docs and prompt',
     summary: 'Agent-authored alerts',
     helpText:
-      'Sentinel exposes docs, DSL, API routes, and a starter prompt so an agent can author the alert directly.',
+      'Megabat exposes docs, DSL, API routes, and a starter prompt so an agent can author the alert directly.',
     cta: 'Open agent guide',
   },
 ];
@@ -63,7 +63,7 @@ export const HUMAN_SIGNAL_CATEGORIES: HumanSignalCategoryOption[] = [
     title: 'Vaults',
     summary: 'Vault alerts',
     helpText:
-      'Pick a vault, pick holders, and let Sentinel watch ERC-4626 share changes for you.',
+      'Pick a vault, pick holders, and let Megabat watch ERC-4626 share changes for you.',
   },
   {
     id: 'protocols',
@@ -80,7 +80,7 @@ export const ASSISTED_VAULT_EXAMPLES: AssistedExampleOption<AssistedVaultExample
     title: 'Morpho',
     summary: 'Vault alert',
     helpText:
-      'Search Morpho vaults, select holders, and let Sentinel create the vault alert.',
+      'Search Morpho vaults, select holders, and let Megabat create the vault alert.',
     badge: 'Live now',
     status: 'live',
   },
@@ -89,7 +89,7 @@ export const ASSISTED_VAULT_EXAMPLES: AssistedExampleOption<AssistedVaultExample
     title: 'Euler',
     summary: 'Vault alert',
     helpText:
-      'Search Euler Earn vaults, select holders, and let Sentinel create the vault alert.',
+      'Search Euler Earn vaults, select holders, and let Megabat create the vault alert.',
     badge: 'Live now',
     status: 'live',
   },
@@ -110,7 +110,7 @@ export const ASSISTED_PROTOCOL_EXAMPLES: AssistedExampleOption<AssistedProtocolE
     title: 'Morpho markets',
     summary: 'Protocol alert',
     helpText:
-      'Use backend-indexed Morpho markets to select suppliers and let Sentinel watch for coordinated exits.',
+      'Use backend-indexed Morpho markets to select suppliers and let Megabat watch for coordinated exits.',
     badge: 'Live now',
     status: 'live',
   },
@@ -120,7 +120,7 @@ export const CUSTOM_SIGNAL_FALLBACK = {
   title: 'Custom inputs',
   summary: 'Manual fallback',
   helpText:
-    "Use this when the guided flow doesn't expose the exact vault, market, token, or address set you need yet, but you still want Sentinel to manage the alert.",
+    "Use this when the guided flow doesn't expose the exact vault, market, token, or address set you need yet, but you still want Megabat to manage the alert.",
   cta: 'Open custom builder',
 };
 
@@ -133,12 +133,12 @@ export const AGENT_GUIDE_RESOURCES: AgentGuideResource[] = [
   {
     title: 'DSL reference',
     helpText: 'Canonical DSL syntax and condition structure for agent-authored signals.',
-    href: 'https://github.com/monarch-xyz/sentinel/blob/main/docs/DSL.md',
+    href: 'https://github.com/monarch-xyz/megabat/blob/main/docs/DSL.md',
   },
   {
     title: 'API reference',
     helpText: 'Signal creation payloads, auth, and delivery behavior for direct agent integration.',
-    href: 'https://github.com/monarch-xyz/sentinel/blob/main/docs/API.md',
+    href: 'https://github.com/monarch-xyz/megabat/blob/main/docs/API.md',
   },
 ];
 

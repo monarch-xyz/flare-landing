@@ -5,7 +5,7 @@ import { RiRobot2Line } from 'react-icons/ri';
 import { SectionTag } from './ui/SectionTag';
 import { GridDivider } from './ui/GridDivider';
 
-const agentCode = `app.post('/sentinel-webhook', async (req, res) => {
+const agentCode = `app.post('/megabat-webhook', async (req, res) => {
   const {
     signal_id,
     signal_name,
@@ -51,9 +51,9 @@ export function ForAgents() {
               </h2>
               
               <p className="text-secondary leading-relaxed mb-6">
-                Sentinel works naturally with agents because the DSL is structured enough for them to understand,
+                Megabat works naturally with agents because the DSL is structured enough for them to understand,
                 create, update, or cancel signals directly from human intent. Agents can mix metric sugar, raw state refs,
-                indexed metrics, and raw event scans, then route webhook payloads off the structured context Sentinel returns.
+                indexed metrics, and raw event scans, then route webhook payloads off the structured context Megabat returns.
               </p>
 
               <ul className="space-y-3 text-secondary">

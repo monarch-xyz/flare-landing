@@ -4,7 +4,7 @@ import { SignalRow } from '@/components/app/SignalRow';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { getAuthenticatedUser } from '@/lib/auth/session';
-import { requestSentinel, SentinelRequestError } from '@/lib/sentinel/user-server';
+import { requestMegabat, MegabatRequestError } from '@/lib/megabat/user-server';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import { buildTemplateEntryPath } from '@/lib/telegram/setup-flow';
 import type { SignalRecord } from '@/lib/types/signal';
@@ -19,10 +19,10 @@ export default async function SignalsPage() {
 
   if (user) {
     try {
-      signals = await requestSentinel<SignalRecord[]>('/signals');
+      signals = await requestMegabat<SignalRecord[]>('/signals');
     } catch (error) {
       signalsError =
-        error instanceof SentinelRequestError
+        error instanceof MegabatRequestError
           ? { message: error.message, status: error.status }
           : { message: error instanceof Error ? error.message : 'Unable to load signals.' };
     }

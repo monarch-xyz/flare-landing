@@ -27,7 +27,7 @@ const ebGaramond = EB_Garamond({
   style: ['normal', 'italic'],
 });
 
-const DEFAULT_SITE_URL = 'https://sentinel.monarchlend.xyz';
+const DEFAULT_SITE_URL = 'https://megabat.monarchlend.xyz';
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 
@@ -52,8 +52,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: 'Sentinel - DeFi Signals That Matter',
-      template: '%s | Sentinel',
+      default: 'Megabat - DeFi Signals That Matter',
+      template: '%s | Megabat',
     },
     description:
       'Monitor RPC state, indexed history, and raw events through one signal DSL. Get Telegram alerts or trigger your agent via webhook. Built by Monarch.',
@@ -89,10 +89,10 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     openGraph: {
-      title: 'Sentinel - DeFi Signals That Matter',
+      title: 'Megabat - DeFi Signals That Matter',
       description: 'Monitor state, indexed history, and raw events through one signal DSL. Built by Monarch.',
       url: siteUrl,
-      siteName: 'Sentinel by Monarch',
+      siteName: 'Megabat by Monarch',
       locale: 'en_US',
       type: 'website',
       images: [
@@ -100,21 +100,21 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `${siteUrl}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: 'Sentinel - State, Indexed, and Raw Signals for Agents',
+          alt: 'Megabat - State, Indexed, and Raw Signals for Agents',
           type: 'image/png',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Sentinel - DeFi Signals That Matter',
+      title: 'Megabat - DeFi Signals That Matter',
       description: 'Monitor state, indexed history, and raw events through one signal DSL.',
       creator: '@monarchxyz',
       site: '@monarchxyz',
       images: [
         {
           url: `${siteUrl}/twitter-image`,
-          alt: 'Sentinel - State, Indexed, and Raw Signals for Agents',
+          alt: 'Megabat - State, Indexed, and Raw Signals for Agents',
         },
       ],
     },
@@ -134,7 +134,7 @@ export default async function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Sentinel',
+    name: 'Megabat',
     description: 'DeFi signal monitoring across RPC state, indexed history, and raw events.',
     url: siteUrl,
     applicationCategory: 'FinanceApplication',
