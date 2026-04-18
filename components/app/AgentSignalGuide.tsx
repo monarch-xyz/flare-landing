@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { RiArrowRightLine, RiBookOpenLine, RiFileCodeLine } from 'react-icons/ri';
 import { CreateFlowHeader } from '@/components/app/CreateFlowHeader';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { HelpHint } from '@/components/ui/HelpHint';
+import { MEGABAT_DOCS_OVERVIEW_URL } from '@/lib/megabat-links';
 import { AGENT_GUIDE_RESOURCES, MEGABAT_ONE_LINER } from '@/lib/signals/create-flow-catalog';
 
 const agentPrompt = `Read the Megabat docs and create a signal for me.
@@ -36,9 +36,11 @@ export function AgentSignalGuide() {
 
           <div className="space-y-3">
             {AGENT_GUIDE_RESOURCES.map((resource) => (
-              <Link
+              <a
                 key={resource.href}
                 href={resource.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="ui-option flex items-start justify-between gap-3 px-4 py-3 no-underline"
               >
                 <div className="flex items-center gap-2">
@@ -46,16 +48,16 @@ export function AgentSignalGuide() {
                   <HelpHint text={resource.helpText} />
                 </div>
                 <RiArrowRightLine className="mt-1 h-4 w-4 shrink-0 text-secondary" />
-              </Link>
+              </a>
             ))}
           </div>
 
-          <Link href="/docs" className="no-underline">
+          <a href={MEGABAT_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
             <Button className="gap-2">
               Open docs
               <RiBookOpenLine className="h-4 w-4" />
             </Button>
-          </Link>
+          </a>
         </Card>
 
         <Card className="space-y-5">

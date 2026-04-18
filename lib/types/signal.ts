@@ -153,8 +153,8 @@ export interface SignalRecord {
   name: string;
   description?: string | null;
   definition: SignalDefinition;
-  webhook_url: string;
-  delivery?: ManagedSignalDelivery;
+  webhook_url?: string | null;
+  delivery?: ManagedSignalDelivery | null;
   cooldown_minutes: number;
   repeat_policy?: SignalRepeatPolicy | null;
   is_active: boolean;

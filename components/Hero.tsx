@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { RiArrowDownLine, RiArrowRightLine } from 'react-icons/ri';
+import { RiArrowDownLine, RiArrowRightLine, RiArrowRightUpLine } from 'react-icons/ri';
 import { CodeBlock } from './ui/CodeBlock';
 import { SectionTag } from './ui/SectionTag';
-import { MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
+import { MEGABAT_DOCS_OVERVIEW_URL } from '@/lib/megabat-links';
 
 const previewSignals = [
   { label: 'State', value: 'Vault shares dropped 22% across 3 of 5 addresses', tone: 'accent' },
@@ -84,12 +83,12 @@ export function Hero() {
                     <RiArrowDownLine className="h-4 w-4" />
                   </span>
                 </button>
-                <Link href={MEGABAT_SITE_DOCS_PATH} className="no-underline">
+                <a href={MEGABAT_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
                   <span className="ui-button px-5 py-3.5" data-variant="secondary">
                     Read The Docs
-                    <RiArrowRightLine className="h-4 w-4" />
+                    <RiArrowRightUpLine className="h-4 w-4" />
                   </span>
-                </Link>
+                </a>
               </motion.div>
             </div>
 

@@ -1,3 +1,9 @@
+import {
+  MEGABAT_DOCS_API_REFERENCE_URL,
+  MEGABAT_DOCS_OVERVIEW_URL,
+  MEGABAT_DOCS_WRITING_SIGNALS_URL,
+} from '@/lib/megabat-links';
+
 export type CreateSignalPersonaId = 'human' | 'agent';
 export type HumanSignalCategoryId = 'vaults' | 'protocols';
 export type AssistedVaultExampleId = 'morpho' | 'euler' | 'aave-v3';
@@ -126,19 +132,19 @@ export const CUSTOM_SIGNAL_FALLBACK = {
 
 export const AGENT_GUIDE_RESOURCES: AgentGuideResource[] = [
   {
-    title: 'App docs',
-    helpText: 'Structured docs for state metrics, raw events, delivery, and route shapes.',
-    href: '/docs',
+    title: 'Docs overview',
+    helpText: 'Current docs map for integrators, reading order, and page-level navigation.',
+    href: MEGABAT_DOCS_OVERVIEW_URL,
   },
   {
-    title: 'DSL reference',
-    helpText: 'Canonical DSL syntax and condition structure for agent-authored signals.',
-    href: 'https://github.com/monarch-xyz/megabat/blob/main/docs/DSL.md',
+    title: 'Writing signals',
+    helpText: 'Top-level request shape, condition examples, and repeat-policy-aware payload structure.',
+    href: MEGABAT_DOCS_WRITING_SIGNALS_URL,
   },
   {
     title: 'API reference',
-    helpText: 'Signal creation payloads, auth, and delivery behavior for direct agent integration.',
-    href: 'https://github.com/monarch-xyz/megabat/blob/main/docs/API.md',
+    helpText: 'Protected routes, signal CRUD, history, simulation, and response behavior.',
+    href: MEGABAT_DOCS_API_REFERENCE_URL,
   },
 ];
 

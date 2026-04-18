@@ -3,9 +3,10 @@
 import { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { RiAddLine, RiBookOpenLine, RiDashboardLine, RiFlashlightLine, RiLogoutCircleRLine, RiTelegram2Line } from 'react-icons/ri';
+import { RiAddLine, RiArrowRightUpLine, RiBookOpenLine, RiDashboardLine, RiFlashlightLine, RiLogoutCircleRLine, RiTelegram2Line } from 'react-icons/ri';
 import { Button } from '@/components/ui/Button';
 import { buildLoginHref } from '@/lib/auth/redirect';
+import { MEGABAT_DOCS_OVERVIEW_URL } from '@/lib/megabat-links';
 import { buildTemplateEntryPath } from '@/lib/telegram/setup-flow';
 import { cn } from '@/lib/utils';
 
@@ -18,7 +19,7 @@ const navItems = [
   { href: '/app', label: 'Dashboard', icon: RiDashboardLine },
   { href: '/signals', label: 'Signals', icon: RiFlashlightLine },
   { href: '/telegram', label: 'Telegram', icon: RiTelegram2Line },
-  { href: '/docs', label: 'Docs', icon: RiBookOpenLine },
+  { href: MEGABAT_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookOpenLine, external: true },
 ];
 
 const isActivePath = (pathname: string | null, href: string) => {
@@ -79,9 +80,21 @@ export function AppShell({ children, telegramLinked }: AppShellProps) {
 
             <nav className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pb-1 scrollbar-hide xl:justify-center xl:pb-0">
               {navItems.map((item) => {
-                const active = isActivePath(pathname, item.href);
+                const active = item.external ? false : isActivePath(pathname, item.href);
 
-                return (
+                return item.external ? (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ui-option inline-flex items-center gap-2 px-4 py-2.5 text-sm no-underline"
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                    <RiArrowRightUpLine className="h-3.5 w-3.5 text-[color:var(--ink-muted)]" />
+                  </a>
+                ) : (
                   <Link
                     key={item.href}
                     href={item.href}

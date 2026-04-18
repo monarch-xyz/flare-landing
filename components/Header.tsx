@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { RiArrowRightUpLine, RiBookLine, RiDiscordFill, RiGithubFill, RiLoginCircleLine, RiMenuLine, RiCloseLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import { MEGABAT_GITHUB_URL, MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
+import { MEGABAT_DOCS_OVERVIEW_URL, MEGABAT_GITHUB_URL } from '@/lib/megabat-links';
 
 const navLinks = [
-  { href: MEGABAT_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
+  { href: MEGABAT_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookLine, external: true },
   { href: MEGABAT_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
   { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
 ];

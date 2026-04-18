@@ -1,9 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { RiBookOpenLine, RiDiscordLine, RiGithubLine } from 'react-icons/ri';
-import { MEGABAT_GITHUB_URL, MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
+import { MEGABAT_DOCS_OVERVIEW_URL, MEGABAT_GITHUB_URL } from '@/lib/megabat-links';
 
 export function FinalCTA() {
   return (
@@ -37,12 +36,12 @@ export function FinalCTA() {
                   GitHub
                 </span>
               </a>
-              <Link href={MEGABAT_SITE_DOCS_PATH} className="no-underline">
+              <a href={MEGABAT_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
                 <span className="ui-button px-5 py-3.5" data-variant="ghost">
                   <RiBookOpenLine className="h-4 w-4" />
                   Docs
                 </span>
-              </Link>
+              </a>
             </div>
           </div>
         </motion.div>

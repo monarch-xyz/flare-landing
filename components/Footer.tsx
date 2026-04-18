@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { RiArrowRightUpLine, RiBookLine, RiDiscordFill, RiExternalLinkLine, RiGithubFill } from 'react-icons/ri';
-import { MEGABAT_GITHUB_URL, MEGABAT_SITE_DOCS_PATH } from '@/lib/megabat-links';
+import { MEGABAT_DOCS_OVERVIEW_URL, MEGABAT_GITHUB_URL } from '@/lib/megabat-links';
 
 const links = [
-  { href: MEGABAT_SITE_DOCS_PATH, label: 'Docs', icon: RiBookLine, external: false },
+  { href: MEGABAT_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookLine, external: true },
   { href: MEGABAT_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
   { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
 ];
@@ -28,34 +27,21 @@ export function Footer() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-              {links.map((link) =>
-                link.external ? (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ui-option flex items-center justify-between px-4 py-3 no-underline"
-                  >
-                    <span className="flex items-center gap-2 text-sm text-foreground">
-                      <link.icon className="h-4 w-4 text-[color:var(--signal-copper)]" />
-                      {link.label}
-                    </span>
-                    <RiArrowRightUpLine className="h-4 w-4 text-[color:var(--ink-muted)]" />
-                  </a>
-                ) : (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="ui-option flex items-center justify-between px-4 py-3 no-underline"
-                  >
-                    <span className="flex items-center gap-2 text-sm text-foreground">
-                      <link.icon className="h-4 w-4 text-[color:var(--signal-copper)]" />
-                      {link.label}
-                    </span>
-                  </Link>
-                )
-              )}
+              {links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ui-option flex items-center justify-between px-4 py-3 no-underline"
+                >
+                  <span className="flex items-center gap-2 text-sm text-foreground">
+                    <link.icon className="h-4 w-4 text-[color:var(--signal-copper)]" />
+                    {link.label}
+                  </span>
+                  <RiArrowRightUpLine className="h-4 w-4 text-[color:var(--ink-muted)]" />
+                </a>
+              ))}
             </div>
           </div>
 
