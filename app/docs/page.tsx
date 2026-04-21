@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { MEGABAT_DOCS_SITE_URL } from '@/lib/megabat-links';
+import { IRUKA_DOCS_SITE_URL } from '@/lib/iruka-links';
 
 export default function DocsPage() {
-  redirect(MEGABAT_DOCS_SITE_URL);
+  redirect(IRUKA_DOCS_SITE_URL);
 }

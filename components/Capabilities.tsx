@@ -85,7 +85,7 @@ export function Capabilities() {
         <div className="grid gap-6 xl:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)]">
           <div className="ui-panel p-6 sm:p-7">
             <SectionTag>Detection Patterns</SectionTag>
-            <h2 className="ui-section-title mt-5">Megabat can watch subtle movement without collapsing back to one-off infra.</h2>
+            <h2 className="ui-section-title mt-5">Iruka can watch subtle movement without collapsing back to one-off infra.</h2>
             <p className="ui-copy mt-4">
               Pick a concrete pattern to inspect how the DSL turns a noisy chain surface into one durable watch.
             </p>

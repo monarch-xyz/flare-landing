@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { HelpHint } from '@/components/ui/HelpHint';
-import { MEGABAT_DOCS_OVERVIEW_URL } from '@/lib/megabat-links';
-import { AGENT_GUIDE_RESOURCES, MEGABAT_ONE_LINER } from '@/lib/signals/create-flow-catalog';
+import { IRUKA_DOCS_OVERVIEW_URL } from '@/lib/iruka-links';
+import { AGENT_GUIDE_RESOURCES, IRUKA_ONE_LINER } from '@/lib/signals/create-flow-catalog';
 
-const agentPrompt = `Read the Megabat docs and create a signal for me.
+const agentPrompt = `Read the Iruka docs and create a signal for me.
 
 Goal:
 - Watch ERC4626.Position.shares for a vault I specify
@@ -24,7 +24,7 @@ export function AgentSignalGuide() {
       <CreateFlowHeader
         eyebrow="Agent guide"
         title="Point your agent at the docs"
-        summary={`${MEGABAT_ONE_LINER} Use docs and a starter prompt.`}
+        summary={`${IRUKA_ONE_LINER} Use docs and a starter prompt.`}
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
@@ -52,7 +52,7 @@ export function AgentSignalGuide() {
             ))}
           </div>
 
-          <a href={MEGABAT_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
+          <a href={IRUKA_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
             <Button className="gap-2">
               Open docs
               <RiBookOpenLine className="h-4 w-4" />

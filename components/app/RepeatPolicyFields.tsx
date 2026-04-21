@@ -58,11 +58,11 @@ export function RepeatPolicyFields({
             onChange={(event) => onCooldownMinutesChange(event.target.value)}
             className="ui-input"
           />
-          <span className="ui-helper">Megabat uses this value only for cooldown repeat mode.</span>
+          <span className="ui-helper">Iruka uses this value only for cooldown repeat mode.</span>
         </label>
       ) : (
         <div className="ui-panel-ghost p-4 text-sm text-secondary">
-          Megabat sends one alert per incident, then waits until the signal evaluates false before alerting again.
+          Iruka sends one alert per incident, then waits until the signal evaluates false before alerting again.
         </div>
       )}
     </>

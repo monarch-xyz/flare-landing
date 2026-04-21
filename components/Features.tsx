@@ -33,7 +33,7 @@ export function Features() {
       <div className="page-gutter">
         <div className="mx-auto max-w-3xl text-center">
           <div className="ui-kicker justify-center">System Traits</div>
-          <h2 className="ui-section-title mt-5">Megabat stays focused on disciplined detection instead of ornamental dashboard clutter.</h2>
+          <h2 className="ui-section-title mt-5">Iruka stays focused on disciplined detection instead of ornamental dashboard clutter.</h2>
           <p className="ui-copy mx-auto mt-4">
             The design system should reflect the same posture as the product: quiet where it can be, explicit when it matters.
           </p>

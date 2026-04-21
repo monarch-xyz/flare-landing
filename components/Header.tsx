@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { RiArrowRightUpLine, RiBookLine, RiDiscordFill, RiGithubFill, RiLoginCircleLine, RiMenuLine, RiCloseLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import { MEGABAT_DOCS_OVERVIEW_URL, MEGABAT_GITHUB_URL } from '@/lib/megabat-links';
+import { IRUKA_DOCS_OVERVIEW_URL, IRUKA_GITHUB_URL } from '@/lib/iruka-links';
 
 const navLinks = [
-  { href: MEGABAT_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookLine, external: true },
-  { href: MEGABAT_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
+  { href: IRUKA_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookLine, external: true },
+  { href: IRUKA_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
   { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
 ];
 
@@ -49,7 +49,7 @@ export function Header() {
             <Link href="/" className="flex items-center gap-3 no-underline">
               <BrandMark />
               <div className="min-w-0">
-                <div className="font-display text-[1.45rem] leading-none text-foreground">Megabat</div>
+                <div className="font-display text-[1.45rem] leading-none text-foreground">Iruka</div>
                 <div className="mt-1 text-[0.68rem] uppercase tracking-[0.22em] text-[color:color-mix(in_oklch,var(--ink-primary)_88%,var(--signal-copper))]">
                   Open Data For Smarter Agents
                 </div>

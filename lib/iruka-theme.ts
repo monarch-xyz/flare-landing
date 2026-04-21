@@ -64,7 +64,7 @@ const sharedStyles: PrismTheme['styles'] = [
   },
 ];
 
-export const megabatTheme: PrismTheme = {
+export const irukaTheme: PrismTheme = {
   plain: {
     color: '#4c3e34',
     backgroundColor: '#fbf7f2',
@@ -72,7 +72,7 @@ export const megabatTheme: PrismTheme = {
   styles: sharedStyles,
 };
 
-export const megabatDarkTheme: PrismTheme = {
+export const irukaDarkTheme: PrismTheme = {
   plain: {
     color: '#f4eee8',
     backgroundColor: '#130f11',

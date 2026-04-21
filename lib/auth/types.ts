@@ -1,7 +1,7 @@
 export type AuthProvider = 'wallet' | 'email' | 'google';
 export type AuthMethod = 'session' | 'api_key';
 
-export interface MegabatIdentity {
+export interface IrukaIdentity {
   id: string;
   provider: AuthProvider;
   provider_subject: string;
@@ -9,14 +9,14 @@ export interface MegabatIdentity {
   metadata?: Record<string, unknown> | null;
 }
 
-export interface MegabatAuthenticatedUser {
+export interface IrukaAuthenticatedUser {
   user_id: string;
   name: string | null;
   created_at: string;
   auth_method: AuthMethod;
   api_key_id: string | null;
   session_id: string | null;
-  identities: MegabatIdentity[];
+  identities: IrukaIdentity[];
 }
 
 export interface AuthError {

@@ -165,7 +165,7 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'erc20-inflow-watch',
     kind: 'erc20-transfer',
     title: 'ERC-20 Inflow Watch',
-    description: 'Use Megabat’s `raw-events` ERC-20 transfer preset to sum gross inbound value to one address.',
+    description: 'Use Iruka’s `raw-events` ERC-20 transfer preset to sum gross inbound value to one address.',
     accent: 'raw-events · sum(value) to address',
     direction: 'inflow',
     defaults: {
@@ -179,7 +179,7 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
     id: 'erc20-outflow-watch',
     kind: 'erc20-transfer',
     title: 'ERC-20 Outflow Watch',
-    description: 'Use Megabat’s `raw-events` ERC-20 transfer preset to sum gross outbound value from one address.',
+    description: 'Use Iruka’s `raw-events` ERC-20 transfer preset to sum gross outbound value from one address.',
     accent: 'raw-events · sum(value) from address',
     direction: 'outflow',
     defaults: {
@@ -800,7 +800,7 @@ export const buildErc20TransferTemplate = (input: Erc20TransferTemplateRequest):
   return buildManagedTelegramSignal(
     input.name?.trim() || generatedName,
     input.description?.trim() ||
-      `Uses the Megabat raw-events ERC-20 transfer preset for ${tokenContract} and triggers when gross ${directionLabel} for ${watchedAddress} exceeds ${amountThreshold} base units over ${windowDuration}.`,
+      `Uses the Iruka raw-events ERC-20 transfer preset for ${tokenContract} and triggers when gross ${directionLabel} for ${watchedAddress} exceeds ${amountThreshold} base units over ${windowDuration}.`,
     definition,
     cooldownMinutes,
     repeatPolicy

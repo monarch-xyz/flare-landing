@@ -1,7 +1,7 @@
-import { proxyRequestToMegabat } from '@/lib/megabat/server';
+import { proxyRequestToIruka } from '@/lib/iruka/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
-  return proxyRequestToMegabat(request, '/auth/siwe/nonce');
+  return proxyRequestToIruka(request, '/auth/siwe/nonce');
 }

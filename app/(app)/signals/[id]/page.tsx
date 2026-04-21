@@ -5,7 +5,7 @@ import { SignalDeleteButton } from '@/components/app/SignalDeleteButton';
 import { SignalDslPanel } from '@/components/app/SignalDslPanel';
 import { Button } from '@/components/ui/Button';
 import { getAuthenticatedUser } from '@/lib/auth/session';
-import { requestMegabat, MegabatRequestError } from '@/lib/megabat/user-server';
+import { requestIruka, IrukaRequestError } from '@/lib/iruka/user-server';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import { buildTemplateEntryPath } from '@/lib/telegram/setup-flow';
 import type {
@@ -139,11 +139,11 @@ export default async function SignalDetailPage({ params }: SignalDetailPageProps
 
   try {
     [signal, history] = await Promise.all([
-      requestMegabat<SignalRecord>(`/signals/${id}`),
-      requestMegabat<SignalHistoryResponse>(`/signals/${id}/history?include_notifications=true`),
+      requestIruka<SignalRecord>(`/signals/${id}`),
+      requestIruka<SignalHistoryResponse>(`/signals/${id}/history?include_notifications=true`),
     ]);
   } catch (error) {
-    if (error instanceof MegabatRequestError && error.status === 404) {
+    if (error instanceof IrukaRequestError && error.status === 404) {
       notFound();
     }
 

@@ -12,13 +12,13 @@ export const buildSiweMessage = ({
   address,
   nonce,
   chainId,
-  domain = typeof window !== 'undefined' ? window.location.host : 'megabat.monarchlend.xyz',
-  uri = typeof window !== 'undefined' ? window.location.origin : 'https://megabat.monarchlend.xyz',
+  domain = typeof window !== 'undefined' ? window.location.host : 'iruka.tech',
+  uri = typeof window !== 'undefined' ? window.location.origin : 'https://iruka.tech',
 }: BuildSiweMessageInput) => {
   const message = new SiweMessage({
     domain,
     address,
-    statement: 'Sign in to Megabat to manage your signals.',
+    statement: 'Sign in to Iruka to manage your signals.',
     uri,
     version: '1',
     chainId,

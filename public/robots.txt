@@ -1,8 +1,8 @@
-# Flare by Monarch - robots.txt
-# https://flare.monarch.xyz
+# Iruka - robots.txt
+# https://iruka.tech
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://flare.monarch.xyz/sitemap.xml
+Sitemap: https://iruka.tech/sitemap.xml

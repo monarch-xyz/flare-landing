@@ -5,16 +5,16 @@ const normalizeBaseUrl = (value: string) => {
   return trimTrailingSlash(new URL(withScheme).toString());
 };
 
-const getConfiguredMegabatApiBaseUrl = () => {
-  if (process.env.MEGABAT_API_BASE_URL) {
-    return process.env.MEGABAT_API_BASE_URL;
+const getConfiguredIrukaApiBaseUrl = () => {
+  if (process.env.IRUKA_API_BASE_URL) {
+    return process.env.IRUKA_API_BASE_URL;
   }
 
   const fallbackEntry = Object.entries(process.env).find(
     ([key, value]) =>
       key.endsWith('_API_BASE_URL') &&
       key !== 'DELIVERY_BASE_URL' &&
-      key !== 'MEGABAT_API_BASE_URL' &&
+      key !== 'IRUKA_API_BASE_URL' &&
       !key.startsWith('NEXT_PUBLIC_') &&
       typeof value === 'string' &&
       value.length > 0
@@ -24,8 +24,8 @@ const getConfiguredMegabatApiBaseUrl = () => {
 };
 
 const inferDeliveryBaseUrl = () => {
-  const megabatApiBase = getConfiguredMegabatApiBaseUrl() ?? 'http://localhost:3000/api/v1';
-  return normalizeBaseUrl(megabatApiBase).replace(/\/api\/v1$/, '');
+  const irukaApiBase = getConfiguredIrukaApiBaseUrl() ?? 'http://localhost:3000/api/v1';
+  return normalizeBaseUrl(irukaApiBase).replace(/\/api\/v1$/, '');
 };
 
 export const getDeliveryBaseUrl = () =>

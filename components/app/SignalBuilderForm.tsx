@@ -266,10 +266,10 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
       ? 'ERC-4626 owner withdrawal % signal'
       : 'ERC-20 transfer raw-event signal';
   const previewDescription = isMorphoWhalePreset
-    ? 'Megabat watches the tracked Morpho suppliers and alerts on coordinated exits.'
+    ? 'Iruka watches the tracked Morpho suppliers and alerts on coordinated exits.'
     : isErc4626WithdrawPreset
-      ? 'Megabat watches tracked vault owners and alerts on share withdrawals.'
-      : 'Megabat watches ERC-20 transfer flow for one address.';
+      ? 'Iruka watches tracked vault owners and alerts on share withdrawals.'
+      : 'Iruka watches ERC-20 transfer flow for one address.';
 
   const previewStats = isMorphoWhalePreset
     ? [
@@ -296,7 +296,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
     <div className="space-y-6">
       <div className="ui-panel p-4">
         <p className="ui-stat-label mb-2">Template</p>
-        <p className="mb-4 max-w-3xl text-sm text-secondary">Pick a template family, then fill the exact inputs Megabat should watch.</p>
+        <p className="mb-4 max-w-3xl text-sm text-secondary">Pick a template family, then fill the exact inputs Iruka should watch.</p>
 
         <div className="space-y-4">
           {TEMPLATE_GROUPS.map((group) => (
@@ -359,11 +359,11 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                     type="text"
                     value={formState.marketId}
                     onChange={(event) => updateField('marketId', event.target.value)}
-                    placeholder="0xb8fc70e82bc5... or full Monarch URL"
+                    placeholder="0xb8fc70e82bc5... or full market URL"
                     className="ui-input"
                   />
                   <span className="ui-helper">
-                    Chain is set separately. If you paste a Monarch market URL, Megabat extracts and stores only the final market id.
+                    Chain is set separately. If you paste a supported market URL, Iruka extracts and stores only the final market id.
                   </span>
                 </label>
 
@@ -401,7 +401,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                     className="ui-input font-mono"
                   />
                   <span className="ui-helper">
-                    Megabat reads `balanceOf(owner)` on this ERC-4626 vault through archive RPC.
+                    Iruka reads `balanceOf(owner)` on this ERC-4626 vault through archive RPC.
                   </span>
                 </label>
 
@@ -496,7 +496,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                 type="text"
                 value={formState.description}
                 onChange={(event) => updateField('description', event.target.value)}
-                placeholder="Optional description shown in Megabat"
+                placeholder="Optional description shown in Iruka"
                 className="ui-input"
               />
             </label>
@@ -527,12 +527,12 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                 className="ui-textarea font-mono"
               />
               <span className="ui-helper">
-                One owner per line or comma-separated. Megabat injects each owner into the group condition at evaluation time.
+                One owner per line or comma-separated. Iruka injects each owner into the group condition at evaluation time.
               </span>
             </label>
           ) : (
             <div className="ui-panel-ghost mt-4 p-4 text-sm text-secondary">
-              This template uses Megabat’s `raw-events` ERC-20 transfer preset. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. The broader raw-event catalog also includes approvals, ERC-721 events, ERC-4626 deposits and withdrawals, swap presets, and `contract_event` for custom ABI signatures.
+              This template uses Iruka’s `raw-events` ERC-20 transfer preset. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. The broader raw-event catalog also includes approvals, ERC-721 events, ERC-4626 deposits and withdrawals, swap presets, and `contract_event` for custom ABI signatures.
             </div>
           )}
 

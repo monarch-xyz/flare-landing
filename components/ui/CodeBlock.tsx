@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Highlight } from 'prism-react-renderer';
 import { RiCheckLine, RiCodeSSlashLine, RiFileCopyLine, RiFileTextLine, RiTerminalLine } from 'react-icons/ri';
-import { megabatDarkTheme } from '@/lib/megabat-theme';
+import { irukaDarkTheme } from '@/lib/iruka-theme';
 import { cn } from '@/lib/utils';
 
 interface CodeBlockProps {
@@ -166,7 +166,7 @@ export function CodeBlock({
             </code>
           </pre>
         ) : (
-          <Highlight theme={megabatDarkTheme} code={trimmedCode} language={language}>
+          <Highlight theme={irukaDarkTheme} code={trimmedCode} language={language}>
             {({ className: preClassName, style, tokens, getLineProps, getTokenProps }) => (
               <pre
                 className={cn(

@@ -42,7 +42,7 @@ test('signal templates default to cooldown repeat policy', () => {
   assert.deepEqual(payload.repeat_policy, { mode: 'cooldown' });
 });
 
-test('whale movement templates stay compatible with the current Megabat docs schema', () => {
+test('whale movement templates stay compatible with the current Iruka docs schema', () => {
   const payload = buildSignalTemplate({
     templateId: 'whale-exit-pair',
     marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
@@ -56,7 +56,7 @@ test('whale movement templates stay compatible with the current Megabat docs sch
   assert.deepEqual(payload.delivery, { provider: 'telegram' });
 });
 
-test('erc20 raw-event templates stay compatible with the current Megabat docs schema', () => {
+test('erc20 raw-event templates stay compatible with the current Iruka docs schema', () => {
   const payload = buildSignalTemplate({
     templateId: 'erc20-inflow-watch',
     tokenContract: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
@@ -72,7 +72,7 @@ test('erc20 raw-event templates stay compatible with the current Megabat docs sc
   }
 });
 
-test('erc4626 withdraw templates stay compatible with the current Megabat docs schema', () => {
+test('erc4626 withdraw templates stay compatible with the current Iruka docs schema', () => {
   const payload = buildSignalTemplate({
     templateId: 'erc4626-withdraw-percent-watch',
     vaultContract: '0x1111111111111111111111111111111111111111',

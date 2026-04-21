@@ -5,7 +5,7 @@ import { RiRobot2Line } from 'react-icons/ri';
 import { SectionTag } from './ui/SectionTag';
 import { CodeBlock } from './ui/CodeBlock';
 
-const agentCode = `app.post('/megabat-webhook', async (req, res) => {
+const agentCode = `app.post('/iruka-webhook', async (req, res) => {
   const { signal_id, signal_name, context, conditions_met } = req.body;
 
   await routeSignal({
@@ -40,7 +40,7 @@ export function ForAgents() {
             <SectionTag>For Agents</SectionTag>
             <h2 className="ui-section-title mt-5">Give agents one durable detection surface instead of a pile of moving chain reads.</h2>
             <p className="ui-copy mt-4">
-              Megabat works naturally with agents because the authoring model is structured enough for them to
+              Iruka works naturally with agents because the authoring model is structured enough for them to
               express intent, and the runtime is durable enough to keep evaluating after they stop polling.
             </p>
 

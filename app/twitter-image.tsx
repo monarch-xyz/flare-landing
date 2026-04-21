@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-export const alt = 'Megabat - Open data signals for smarter agents';
+export const alt = 'Iruka - Open data signals for smarter agents';
 export const size = {
   width: 1200,
   height: 630,
@@ -88,7 +88,7 @@ function SocialImage() {
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '58px', lineHeight: 1, fontWeight: 500 }}>Megabat</span>
+              <span style={{ fontSize: '58px', lineHeight: 1, fontWeight: 500 }}>Iruka</span>
               <span style={{ fontSize: '16px', letterSpacing: '0.28em', textTransform: 'uppercase', color: '#8e7c6b' }}>
                 Open Data Signals
               </span>

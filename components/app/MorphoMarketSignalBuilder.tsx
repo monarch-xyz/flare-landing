@@ -245,7 +245,7 @@ export function MorphoMarketSignalBuilder() {
               <p className="ui-stat-label">Protocol source</p>
               <h2 className="mt-3 font-display text-[1.8rem] leading-none text-foreground">Morpho markets</h2>
               <p className="mt-2 text-sm text-secondary">
-                Pick a Morpho market, pick suppliers, and let Megabat watch for coordinated exits.
+                Pick a Morpho market, pick suppliers, and let Iruka watch for coordinated exits.
               </p>
             </div>
             {selectedMarket ? (
@@ -438,7 +438,7 @@ export function MorphoMarketSignalBuilder() {
                 type="text"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="Optional description shown in Megabat"
+                placeholder="Optional description shown in Iruka"
                 className="ui-input"
               />
             </label>

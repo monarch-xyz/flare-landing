@@ -114,7 +114,7 @@ export function SignalDslPanel({
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-foreground">Raw DSL</p>
-          <span className="text-xs text-secondary">JSON definition sent to Megabat</span>
+          <span className="text-xs text-secondary">JSON definition sent to Iruka</span>
         </div>
         <div className={cn(compact ? 'max-h-[360px] overflow-auto' : '')}>
           <CodeBlock

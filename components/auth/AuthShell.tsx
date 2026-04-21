@@ -16,7 +16,7 @@ export function AuthShell({ title, description, children }: AuthShellProps) {
             <span className="inline-flex h-10 w-10 items-center justify-center rounded-[0.6rem] border border-border bg-[color:var(--surface-panel)]">
               <span className="h-2 w-2 rounded-full bg-[color:var(--signal-copper)]" />
             </span>
-            <span className="font-display text-[1.35rem] text-foreground">Megabat</span>
+            <span className="font-display text-[1.35rem] text-foreground">Iruka</span>
           </Link>
           <span className="ui-chip" data-tone="accent">
             Access

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { Button } from './ui/Button';
-import { MEGABAT_API_DOCS_URL } from '@/lib/megabat-links';
+import { IRUKA_API_DOCS_URL } from '@/lib/iruka-links';
 
 const endpoints = [
   ['GET', '/health', 'Fast liveness plus source-family capability status.'],
@@ -45,7 +45,7 @@ export function ApiReference() {
           </div>
 
           <div className="mt-6 flex justify-center">
-            <a href={MEGABAT_API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
+            <a href={IRUKA_API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
               <Button size="lg" className="gap-2">
                 Full API Documentation
                 <RiArrowRightLine className="h-5 w-5" />

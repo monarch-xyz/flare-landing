@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/session';
 import { buildSignalTemplate, SignalTemplateError, type SignalTemplateRequest } from '@/lib/signals/templates';
-import { requestMegabat, MegabatRequestError } from '@/lib/megabat/user-server';
+import { requestIruka, IrukaRequestError } from '@/lib/iruka/user-server';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import type { CreateSignalRequest, SignalRecord } from '@/lib/types/signal';
 
@@ -16,7 +16,7 @@ const extractNestedDetails = (payload: unknown): string | null => {
     (typeof record.message === 'string' ? record.message : undefined) ??
     (typeof record.error === 'string' ? record.error : undefined);
 
-  if (direct && !direct.startsWith('Megabat request failed')) {
+  if (direct && !direct.startsWith('Iruka request failed')) {
     return direct;
   }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     const templatePayload = buildSignalTemplate(payload);
     const createSignalPayload: CreateSignalRequest = templatePayload;
 
-    const signal = await requestMegabat<SignalRecord>('/signals', {
+    const signal = await requestIruka<SignalRecord>('/signals', {
       method: 'POST',
       body: JSON.stringify(createSignalPayload),
     });
@@ -75,10 +75,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (error instanceof MegabatRequestError) {
+    if (error instanceof IrukaRequestError) {
       return NextResponse.json(
         {
-          error: 'megabat_create_failed',
+          error: 'iruka_create_failed',
           details: extractNestedDetails(error.payload) ?? error.message,
           payload: error.payload,
         },

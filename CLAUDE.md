@@ -1,16 +1,16 @@
-# CLAUDE.md - Megabat Landing Page
+# CLAUDE.md - Iruka Web App
 
 ## Project Context
-Static landing page for **Megabat** — "Event Triggers for DeFi Agents"
+Web app and marketing surface for **Iruka** — "Open Data Signals for Smarter Agents"
 
-**Narrative:** AI agents need reliable blockchain event sources. Megabat provides composable signal monitoring that watches the chain while you sleep. Built by the Monarch team.
+**Narrative:** AI agents need reliable blockchain event sources. Iruka provides composable signal monitoring that listens through chain noise until exact conditions resolve.
 
 ## Design System
-**MUST match Monarch's style** (see `/Users/anton/projects/monarch/` for reference)
+Use the repo design system and keep product surfaces restrained, precise, and operational.
 
 ### Colors
-- Primary: `#ff6b35` (megabat orange)
-- Accent: `#ff9f1c` (ember yellow)
+- Primary: muted copper / operational signal tone
+- Accent: deep teal for secondary signal states
 - Dark BG: `#16181a`, Secondary: `#202426`
 - Light BG: `#f0f2f7`
 
@@ -22,8 +22,8 @@ Static landing page for **Megabat** — "Event Triggers for DeFi Agents"
 ### Key Classes (from globals.css)
 - `bg-dot-grid` - dot texture background
 - `bg-line-grid` - line texture background
-- `bg-gradient-megabat` - orange-yellow gradient
-- `text-gradient-megabat` - gradient text
+- `bg-gradient-iruka` - Iruka brand gradient
+- `text-gradient-iruka` - gradient text
 - `bg-surface` - card background
 - `bg-main` - page background
 - `font-zen` - heading font
@@ -36,7 +36,7 @@ Static landing page for **Megabat** — "Event Triggers for DeFi Agents"
 ## Page Sections
 
 ### 1. Header
-- Logo: "🔥 Megabat" (left)
+- Logo: "Iruka" (left)
 - Nav: Docs | GitHub | Discord (right)
 - Dark mode toggle
 - Sticky, transparent initially, solid on scroll
@@ -44,7 +44,7 @@ Static landing page for **Megabat** — "Event Triggers for DeFi Agents"
 
 ### 2. Hero
 - Section tag: "Event Infrastructure for Agents"
-- Headline: `<h1 class="font-zen text-4xl md:text-5xl">Watch the Chain<br/>While You Sleep</h1>`
+- Headline: `<h1 class="font-zen text-4xl md:text-5xl">Listen Through<br/>Chain Noise</h1>`
 - Subline with typing effect showing use cases
 - CTAs: "View Docs" (primary), "Try Simulator" (secondary)
 - Background: bg-dot-grid with radial fade
@@ -58,7 +58,7 @@ Static landing page for **Megabat** — "Event Triggers for DeFi Agents"
 - Multi-Condition Logic (AND/OR groups)
 - Time Windows (track changes over 1h to 30d)
 - Protocol-Native Metrics (Morpho data)
-- Battle-Tested (built by Monarch)
+- Operator-Ready (designed for DeFi operators and agent builders)
 
 ### 5. Code Examples
 Real DSL examples with syntax highlighting:
@@ -89,7 +89,7 @@ Simple table:
 
 ### 8. Footer
 - Links: Docs, GitHub, Discord
-- "Built by Monarch" badge with link
+- iruka.tech link
 - Copyright
 
 ## Component Structure
@@ -131,7 +131,7 @@ pnpm lint     # Check linting
 ```
 
 ## Quality Checklist
-- [ ] Matches Monarch visual style
+- [ ] Matches Iruka visual direction
 - [ ] Dark mode works correctly
 - [ ] Mobile responsive (375px - 1440px)
 - [ ] All links work
@@ -141,7 +141,5 @@ pnpm lint     # Check linting
 - [ ] No console errors
 
 ## Reference Files
-- Monarch global.css: `/Users/anton/projects/monarch/app/global.css`
-- Monarch home: `/Users/anton/projects/monarch/src/features/home/home-view.tsx`
-- Megabat docs: `/Users/anton/projects/megabat/docs/ARCHITECTURE.md`
-- Megabat API: `/Users/anton/projects/megabat/docs/API.md`
+- Iruka docs: `/Users/anton/projects/iruka/docs/ARCHITECTURE.md`
+- Iruka API: `/Users/anton/projects/iruka/docs/API.md`

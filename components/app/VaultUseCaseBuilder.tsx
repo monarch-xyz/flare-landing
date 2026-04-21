@@ -31,8 +31,8 @@ const getProtocolHeading = (protocol: SupportedVaultProtocolId) =>
 
 const getProtocolDescription = (protocol: SupportedVaultProtocolId) =>
   protocol === 'morpho'
-    ? 'Pick a Morpho vault, pick holders, and let Megabat create the alert.'
-    : 'Pick an Euler vault, pick holders, and let Megabat create the alert.';
+    ? 'Pick a Morpho vault, pick holders, and let Iruka create the alert.'
+    : 'Pick an Euler vault, pick holders, and let Iruka create the alert.';
 
 const getProtocolSearchPlaceholder = (protocol: SupportedVaultProtocolId) =>
   protocol === 'morpho'
@@ -444,7 +444,7 @@ export function VaultUseCaseBuilder({ protocol }: VaultUseCaseBuilderProps) {
                 type="text"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="Optional description shown in Megabat"
+                placeholder="Optional description shown in Iruka"
                 className="ui-input"
               />
             </label>

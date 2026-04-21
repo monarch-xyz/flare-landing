@@ -1,11 +1,11 @@
 'use client';
 
 import { RiArrowRightUpLine, RiBookLine, RiDiscordFill, RiExternalLinkLine, RiGithubFill } from 'react-icons/ri';
-import { MEGABAT_DOCS_OVERVIEW_URL, MEGABAT_GITHUB_URL } from '@/lib/megabat-links';
+import { IRUKA_DOCS_OVERVIEW_URL, IRUKA_GITHUB_URL } from '@/lib/iruka-links';
 
 const links = [
-  { href: MEGABAT_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookLine, external: true },
-  { href: MEGABAT_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
+  { href: IRUKA_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookLine, external: true },
+  { href: IRUKA_GITHUB_URL, label: 'GitHub', icon: RiGithubFill, external: true },
   { href: 'https://discord.gg/Ur4dwN3aPS', label: 'Discord', icon: RiDiscordFill, external: true },
 ];
 
@@ -16,11 +16,11 @@ export function Footer() {
         <div className="ui-panel px-6 py-8 sm:px-8">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end">
             <div className="space-y-4">
-              <div className="ui-kicker">Megabat</div>
+              <div className="ui-kicker">Iruka</div>
               <div>
                 <h2 className="ui-section-title max-w-xl">A signal layer that helps agents get smarter from open data.</h2>
                 <p className="ui-copy mt-4">
-                  Define the condition once. Let Megabat keep listening across state, indexed history,
+                  Define the condition once. Let Iruka keep listening across state, indexed history,
                   and raw events until open data resolves into something your agent can actually use.
                 </p>
               </div>
@@ -46,14 +46,14 @@ export function Footer() {
           </div>
 
           <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 text-sm text-secondary md:flex-row md:items-center md:justify-between">
-            <p>© {new Date().getFullYear()} Monarch. Megabat turns open data into agent-ready signal.</p>
+            <p>© {new Date().getFullYear()} Iruka. Open data signals for agent-ready monitoring.</p>
             <a
-              href="https://monarchlend.xyz"
+              href="https://iruka.tech"
               target="_blank"
               rel="noopener noreferrer"
               className="ui-link inline-flex items-center gap-2 no-underline"
             >
-              Built by Monarch
+              iruka.tech
               <RiExternalLinkLine className="h-4 w-4" />
             </a>
           </div>

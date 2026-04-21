@@ -26,7 +26,7 @@ const guideSteps = [
   },
   {
     title: 'Tap Connect Account',
-    body: 'Megabat will attach Telegram to the signed-in account automatically.',
+    body: 'Iruka will attach Telegram to the signed-in account automatically.',
   },
 ];
 
@@ -122,7 +122,7 @@ export function TelegramSetupGuide({
                   <div>
                     <p className="text-foreground">After setup</p>
                     <p className="mt-1 text-sm leading-relaxed text-secondary">
-                      If Megabat asks you to sign in, do that once and the Telegram link will finish automatically.
+                      If Iruka asks you to sign in, do that once and the Telegram link will finish automatically.
                     </p>
                   </div>
                 </div>

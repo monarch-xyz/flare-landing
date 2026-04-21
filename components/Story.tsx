@@ -23,7 +23,7 @@ events.on("Transfer", notify)
     tag: 'Abstraction',
     title: 'Describe the condition, not the plumbing.',
     content:
-      'Megabat turns the watch target into one explicit pattern: scope, thresholds, time windows, and boolean logic. The result is a durable rule instead of a stack of one-off reads.',
+      'Iruka turns the watch target into one explicit pattern: scope, thresholds, time windows, and boolean logic. The result is a durable rule instead of a stack of one-off reads.',
     code: `{
   "scope": { "chains": [1], "protocol": "all" },
   "conditions": [
@@ -48,9 +48,9 @@ events.on("Transfer", notify)
   {
     id: 'runtime',
     tag: 'Runtime',
-    title: 'Megabat keeps watch after setup.',
+    title: 'Iruka keeps watch after setup.',
     content:
-      'Once the pattern exists, Megabat owns the continuous evaluation loop, manages windows, and delivers structured context only when the pattern actually resolves.',
+      'Once the pattern exists, Iruka owns the continuous evaluation loop, manages windows, and delivers structured context only when the pattern actually resolves.',
     code: `POST /api/v1/signals
 {
   "name": "Vault withdrawal cluster",
@@ -67,8 +67,8 @@ export function Story() {
     <section id="story" className="relative py-16 md:py-24">
       <div className="page-gutter">
         <div className="mb-10 max-w-3xl">
-          <SectionTag>Why Megabat</SectionTag>
-          <h2 className="ui-section-title mt-5">Megabat is a watch loop for exact conditions, not another stream of raw telemetry.</h2>
+          <SectionTag>Why Iruka</SectionTag>
+          <h2 className="ui-section-title mt-5">Iruka is a watch loop for exact conditions, not another stream of raw telemetry.</h2>
           <p className="ui-copy mt-4">
             The product exists to make monitoring composable, durable, and useful for the person or agent
             that needs to act. Every layer below exists to support that one outcome.

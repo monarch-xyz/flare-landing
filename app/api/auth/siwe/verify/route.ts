@@ -1,5 +1,5 @@
-import { proxyRequestToMegabat } from '@/lib/megabat/server';
+import { proxyRequestToIruka } from '@/lib/iruka/server';
 
 export async function POST(request: Request) {
-  return proxyRequestToMegabat(request, '/auth/siwe/verify');
+  return proxyRequestToIruka(request, '/auth/siwe/verify');
 }

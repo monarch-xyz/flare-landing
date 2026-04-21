@@ -2,7 +2,7 @@ import { sanitizeReturnTo } from '@/lib/auth/redirect';
 
 export const TELEGRAM_STATUS_PARAM = 'telegram';
 export const TELEGRAM_RETURN_TO_PARAM = 'returnTo';
-export const TELEGRAM_RETURN_TO_COOKIE = 'megabat_telegram_return_to';
+export const TELEGRAM_RETURN_TO_COOKIE = 'iruka_telegram_return_to';
 export const DEFAULT_TEMPLATE_PATH = '/signals/new';
 export const HUMAN_TEMPLATE_PATH = '/signals/new/human';
 export const AGENT_TEMPLATE_PATH = '/signals/new/agent';

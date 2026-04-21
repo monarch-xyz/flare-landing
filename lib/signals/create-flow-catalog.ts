@@ -1,8 +1,8 @@
 import {
-  MEGABAT_DOCS_API_REFERENCE_URL,
-  MEGABAT_DOCS_OVERVIEW_URL,
-  MEGABAT_DOCS_WRITING_SIGNALS_URL,
-} from '@/lib/megabat-links';
+  IRUKA_DOCS_API_REFERENCE_URL,
+  IRUKA_DOCS_OVERVIEW_URL,
+  IRUKA_DOCS_WRITING_SIGNALS_URL,
+} from '@/lib/iruka-links';
 
 export type CreateSignalPersonaId = 'human' | 'agent';
 export type HumanSignalCategoryId = 'vaults' | 'protocols';
@@ -40,7 +40,7 @@ export interface AgentGuideResource {
   href: string;
 }
 
-export const MEGABAT_ONE_LINER = 'Megabat turns onchain conditions into managed alerts.';
+export const IRUKA_ONE_LINER = 'Iruka turns onchain conditions into managed alerts.';
 
 export const CREATE_SIGNAL_PERSONAS: CreateSignalPersonaOption[] = [
   {
@@ -49,7 +49,7 @@ export const CREATE_SIGNAL_PERSONAS: CreateSignalPersonaOption[] = [
     title: 'Guided builder',
     summary: 'Guided alerts',
     helpText:
-      'Megabat builds the alert for you from guided vault and protocol surfaces. Today that includes Morpho vaults, Euler vaults, Morpho markets, and a custom fallback.',
+      'Iruka builds the alert for you from guided vault and protocol surfaces. Today that includes Morpho vaults, Euler vaults, Morpho markets, and a custom fallback.',
     cta: 'Open human builder',
   },
   {
@@ -58,7 +58,7 @@ export const CREATE_SIGNAL_PERSONAS: CreateSignalPersonaOption[] = [
     title: 'Docs and prompt',
     summary: 'Agent-authored alerts',
     helpText:
-      'Megabat exposes docs, DSL, API routes, and a starter prompt so an agent can author the alert directly.',
+      'Iruka exposes docs, DSL, API routes, and a starter prompt so an agent can author the alert directly.',
     cta: 'Open agent guide',
   },
 ];
@@ -69,7 +69,7 @@ export const HUMAN_SIGNAL_CATEGORIES: HumanSignalCategoryOption[] = [
     title: 'Vaults',
     summary: 'Vault alerts',
     helpText:
-      'Pick a vault, pick holders, and let Megabat watch ERC-4626 share changes for you.',
+      'Pick a vault, pick holders, and let Iruka watch ERC-4626 share changes for you.',
   },
   {
     id: 'protocols',
@@ -86,7 +86,7 @@ export const ASSISTED_VAULT_EXAMPLES: AssistedExampleOption<AssistedVaultExample
     title: 'Morpho',
     summary: 'Vault alert',
     helpText:
-      'Search Morpho vaults, select holders, and let Megabat create the vault alert.',
+      'Search Morpho vaults, select holders, and let Iruka create the vault alert.',
     badge: 'Live now',
     status: 'live',
   },
@@ -95,7 +95,7 @@ export const ASSISTED_VAULT_EXAMPLES: AssistedExampleOption<AssistedVaultExample
     title: 'Euler',
     summary: 'Vault alert',
     helpText:
-      'Search Euler Earn vaults, select holders, and let Megabat create the vault alert.',
+      'Search Euler Earn vaults, select holders, and let Iruka create the vault alert.',
     badge: 'Live now',
     status: 'live',
   },
@@ -116,7 +116,7 @@ export const ASSISTED_PROTOCOL_EXAMPLES: AssistedExampleOption<AssistedProtocolE
     title: 'Morpho markets',
     summary: 'Protocol alert',
     helpText:
-      'Use backend-indexed Morpho markets to select suppliers and let Megabat watch for coordinated exits.',
+      'Use backend-indexed Morpho markets to select suppliers and let Iruka watch for coordinated exits.',
     badge: 'Live now',
     status: 'live',
   },
@@ -126,7 +126,7 @@ export const CUSTOM_SIGNAL_FALLBACK = {
   title: 'Custom inputs',
   summary: 'Manual fallback',
   helpText:
-    "Use this when the guided flow doesn't expose the exact vault, market, token, or address set you need yet, but you still want Megabat to manage the alert.",
+    "Use this when the guided flow doesn't expose the exact vault, market, token, or address set you need yet, but you still want Iruka to manage the alert.",
   cta: 'Open custom builder',
 };
 
@@ -134,17 +134,17 @@ export const AGENT_GUIDE_RESOURCES: AgentGuideResource[] = [
   {
     title: 'Docs overview',
     helpText: 'Current docs map for integrators, reading order, and page-level navigation.',
-    href: MEGABAT_DOCS_OVERVIEW_URL,
+    href: IRUKA_DOCS_OVERVIEW_URL,
   },
   {
     title: 'Writing signals',
     helpText: 'Top-level request shape, condition examples, and repeat-policy-aware payload structure.',
-    href: MEGABAT_DOCS_WRITING_SIGNALS_URL,
+    href: IRUKA_DOCS_WRITING_SIGNALS_URL,
   },
   {
     title: 'API reference',
     helpText: 'Protected routes, signal CRUD, history, simulation, and response behavior.',
-    href: MEGABAT_DOCS_API_REFERENCE_URL,
+    href: IRUKA_DOCS_API_REFERENCE_URL,
   },
 ];
 

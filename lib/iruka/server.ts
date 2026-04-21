@@ -4,20 +4,20 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { getSessionCookie } from '@/lib/auth/constants';
 
-const MEGABAT_BASE_URL_FALLBACK = 'http://localhost:3000/api/v1';
+const IRUKA_BASE_URL_FALLBACK = 'http://localhost:3000/api/v1';
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 
-const getConfiguredMegabatApiBaseUrl = () => {
-  if (process.env.MEGABAT_API_BASE_URL) {
-    return process.env.MEGABAT_API_BASE_URL;
+const getConfiguredIrukaApiBaseUrl = () => {
+  if (process.env.IRUKA_API_BASE_URL) {
+    return process.env.IRUKA_API_BASE_URL;
   }
 
   const fallbackEntry = Object.entries(process.env).find(
     ([key, value]) =>
       key.endsWith('_API_BASE_URL') &&
       key !== 'DELIVERY_BASE_URL' &&
-      key !== 'MEGABAT_API_BASE_URL' &&
+      key !== 'IRUKA_API_BASE_URL' &&
       !key.startsWith('NEXT_PUBLIC_') &&
       typeof value === 'string' &&
       value.length > 0
@@ -26,7 +26,7 @@ const getConfiguredMegabatApiBaseUrl = () => {
   return fallbackEntry?.[1];
 };
 
-const normalizeMegabatBaseUrl = (value: string) => {
+const normalizeIrukaBaseUrl = (value: string) => {
   const withScheme = /^[a-z][a-z\d+\-.]*:\/\//i.test(value) ? value : `http://${value}`;
   const url = new URL(withScheme);
 
@@ -37,17 +37,17 @@ const normalizeMegabatBaseUrl = (value: string) => {
   return trimTrailingSlash(url.toString());
 };
 
-export const getMegabatApiBaseUrl = () =>
-  normalizeMegabatBaseUrl(
-    getConfiguredMegabatApiBaseUrl() ?? MEGABAT_BASE_URL_FALLBACK
+export const getIrukaApiBaseUrl = () =>
+  normalizeIrukaBaseUrl(
+    getConfiguredIrukaApiBaseUrl() ?? IRUKA_BASE_URL_FALLBACK
   );
 
-export const buildMegabatApiUrl = (path: string, search: string = '') => {
+export const buildIrukaApiUrl = (path: string, search: string = '') => {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${getMegabatApiBaseUrl()}${normalizedPath}${search}`;
+  return `${getIrukaApiBaseUrl()}${normalizedPath}${search}`;
 };
 
-const getMegabatSessionCookieHeader = async () => {
+const getIrukaSessionCookieHeader = async () => {
   const cookieStore = await cookies();
   const sessionCookie = getSessionCookie(cookieStore);
   if (!sessionCookie?.value) {
@@ -57,10 +57,10 @@ const getMegabatSessionCookieHeader = async () => {
   return `${sessionCookie.name}=${sessionCookie.value}`;
 };
 
-const buildMegabatAuthHeaders = async (headersInit?: HeadersInit) => {
+const buildIrukaAuthHeaders = async (headersInit?: HeadersInit) => {
   const headers = new Headers(headersInit);
   if (!headers.has('X-API-Key') && !headers.has('Authorization') && !headers.has('Cookie')) {
-    const cookieHeader = await getMegabatSessionCookieHeader();
+    const cookieHeader = await getIrukaSessionCookieHeader();
     if (cookieHeader) {
       headers.set('Cookie', cookieHeader);
     }
@@ -69,14 +69,14 @@ const buildMegabatAuthHeaders = async (headersInit?: HeadersInit) => {
   return headers;
 };
 
-export const fetchMegabat = async (path: string, init: RequestInit = {}) => {
-  const headers = await buildMegabatAuthHeaders(init.headers);
+export const fetchIruka = async (path: string, init: RequestInit = {}) => {
+  const headers = await buildIrukaAuthHeaders(init.headers);
 
   if (init.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
-  return fetch(buildMegabatApiUrl(path), {
+  return fetch(buildIrukaApiUrl(path), {
     ...init,
     headers,
     cache: 'no-store',
@@ -106,7 +106,7 @@ const copyResponseHeaders = (from: Response, to: Headers) => {
   }
 };
 
-export const proxyRequestToMegabat = async (request: Request, path: string, search = '') => {
+export const proxyRequestToIruka = async (request: Request, path: string, search = '') => {
   const headers = new Headers();
 
   const contentType = request.headers.get('content-type');
@@ -137,7 +137,7 @@ export const proxyRequestToMegabat = async (request: Request, path: string, sear
   const hasBody = request.method !== 'GET' && request.method !== 'HEAD';
   const body = hasBody ? await request.text() : undefined;
 
-  const response = await fetchMegabat(`${path}${search}`, {
+  const response = await fetchIruka(`${path}${search}`, {
     method: request.method,
     headers,
     body,

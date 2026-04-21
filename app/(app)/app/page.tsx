@@ -4,7 +4,7 @@ import { SignalRow } from '@/components/app/SignalRow';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { getAuthenticatedUser, getWalletAddressFromUser } from '@/lib/auth/session';
-import { requestMegabat, MegabatRequestError } from '@/lib/megabat/user-server';
+import { requestIruka, IrukaRequestError } from '@/lib/iruka/user-server';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
 import { buildTemplateEntryPath } from '@/lib/telegram/setup-flow';
 import type { SignalRecord } from '@/lib/types/signal';
@@ -19,10 +19,10 @@ export default async function AppHome() {
 
   if (user) {
     try {
-      signals = await requestMegabat<SignalRecord[]>('/signals');
+      signals = await requestIruka<SignalRecord[]>('/signals');
     } catch (error) {
       signalsError =
-        error instanceof MegabatRequestError
+        error instanceof IrukaRequestError
           ? { message: error.message, status: error.status }
           : { message: error instanceof Error ? error.message : 'Unable to load signals.' };
     }
@@ -46,7 +46,7 @@ export default async function AppHome() {
       ? {
           href: createSignalHref,
           label: 'Create your first signal',
-          description: 'Start from a template, tune the inputs, and let Megabat register the final JSON.',
+          description: 'Start from a template, tune the inputs, and let Iruka register the final JSON.',
         }
       : {
           href: createSignalHref,
@@ -55,10 +55,10 @@ export default async function AppHome() {
         };
   const pageTitle = hasSignals ? 'Signal workspace' : telegramStatus.linked ? 'Start with a signal' : 'Telegram comes first';
   const pageDescription = hasSignals
-    ? 'Megabat is already tracking active definitions for this account.'
+    ? 'Iruka is already tracking active definitions for this account.'
     : telegramStatus.linked
       ? 'Telegram is ready. Start with one signal and this space becomes your operating surface.'
-      : 'Connect Telegram once, then Megabat can attach managed template delivery to the signals you create.';
+      : 'Connect Telegram once, then Iruka can attach managed template delivery to the signals you create.';
 
   return (
     <div className="space-y-6">
@@ -103,7 +103,7 @@ export default async function AppHome() {
       {signalsError ? (
         <Card>
           <div className="ui-notice" data-tone="danger">
-            <p className="text-foreground">The workspace loaded, but Megabat signal data is unavailable.</p>
+            <p className="text-foreground">The workspace loaded, but Iruka signal data is unavailable.</p>
             <p className="mt-2 text-sm">{signalsError.message}</p>
           </div>
         </Card>
@@ -137,7 +137,7 @@ export default async function AppHome() {
             <p className="ui-copy mx-auto mt-4">
               {telegramStatus.linked
                 ? 'Template selection and configuration live in the builder. Once you create the first signal, this dashboard becomes the operating surface.'
-                : 'Connect Telegram once, then come back here to pick a template and define the first signal Megabat should watch.'}
+                : 'Connect Telegram once, then come back here to pick a template and define the first signal Iruka should watch.'}
             </p>
           </div>
           <div className="mt-7">

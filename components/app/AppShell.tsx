@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { RiAddLine, RiArrowRightUpLine, RiBookOpenLine, RiDashboardLine, RiFlashlightLine, RiLogoutCircleRLine, RiTelegram2Line } from 'react-icons/ri';
 import { Button } from '@/components/ui/Button';
 import { buildLoginHref } from '@/lib/auth/redirect';
-import { MEGABAT_DOCS_OVERVIEW_URL } from '@/lib/megabat-links';
+import { IRUKA_DOCS_OVERVIEW_URL } from '@/lib/iruka-links';
 import { buildTemplateEntryPath } from '@/lib/telegram/setup-flow';
 import { cn } from '@/lib/utils';
 
@@ -19,7 +19,7 @@ const navItems = [
   { href: '/app', label: 'Dashboard', icon: RiDashboardLine },
   { href: '/signals', label: 'Signals', icon: RiFlashlightLine },
   { href: '/telegram', label: 'Telegram', icon: RiTelegram2Line },
-  { href: MEGABAT_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookOpenLine, external: true },
+  { href: IRUKA_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookOpenLine, external: true },
 ];
 
 const isActivePath = (pathname: string | null, href: string) => {
@@ -70,7 +70,7 @@ export function AppShell({ children, telegramLinked }: AppShellProps) {
                   <span className="h-2.5 w-2.5 rounded-full bg-[color:var(--signal-copper)]" />
                 </span>
                 <div className="min-w-0">
-                  <div className="font-display text-[1.5rem] leading-none text-foreground">Megabat</div>
+                  <div className="font-display text-[1.5rem] leading-none text-foreground">Iruka</div>
                   <div className="mt-1 text-[0.68rem] uppercase tracking-[0.28em] text-secondary">
                     Operator Console
                   </div>

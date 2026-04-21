@@ -1,26 +1,26 @@
-# Megabat Landing Page - Implementation Plan
+# Iruka Web App - Implementation Plan
 
 ## Overview
-Static landing page for Megabat — "Event Triggers for DeFi Agents"
+Web app and marketing surface for Iruka — "Open Data Signals for Smarter Agents"
 
-**Narrative:** AI agents need reliable blockchain event sources. Megabat provides composable signal monitoring that watches the chain while you sleep.
+**Narrative:** AI agents need reliable blockchain event sources. Iruka provides composable signal monitoring that listens through chain noise until exact conditions resolve.
 
-## Design System (Match Monarch)
+## Design System
 
 ### Colors
-- **Megabat Primary:** `#ff6b35` (fire orange, slightly more vibrant than Monarch's #f45f2d)
-- **Megabat Accent:** `#ff9f1c` (ember yellow for gradients)
-- **Dark BG:** `#16181a` (same as Monarch)
+- **Iruka Primary:** muted copper / operational signal tone
+- **Iruka Accent:** deep teal for secondary signal states
+- **Dark BG:** `#16181a`
 - **Dark Secondary:** `#202426`
 - **Light BG:** `#f0f2f7`
 
 ### Typography
-- **Headings:** Zen Kaku Gothic New (same as Monarch)
+- **Headings:** Rajdhani / display sans
 - **Body:** Inter
 - **Code:** Victor Mono / monospace
 
 ### Spacing & Roundness
-- Border radius: sm=2px, md=6px, lg=8px (same as Monarch)
+- Border radius: small and controlled; avoid pill-shaped controls by default
 - Container padding: px-6 sm:px-8 md:px-12 lg:px-16
 - Grid textures: bg-dot-grid, bg-line-grid with fade masks
 
@@ -28,7 +28,7 @@ Static landing page for Megabat — "Event Triggers for DeFi Agents"
 
 ### 1. Hero Section
 - Tag: "Event Infrastructure for Agents"
-- Headline: "Watch the Chain While You Sleep"
+- Headline: "Listen Through Chain Noise"
 - Subline: Typing animation showing use cases:
   - "Alert when a whale exits"
   - "Track position drops in real-time"  
@@ -45,7 +45,7 @@ Static landing page for Megabat — "Event Triggers for DeFi Agents"
 - **Multi-Condition Logic** - AND/OR groups, nested conditions
 - **Time Windows** - Track changes over 1h, 7d, 30d
 - **Protocol-Native Metrics** - Morpho positions, markets, events
-- **Battle-Tested** - Built by Monarch team
+- **Operator-Ready** - designed for DeFi operators and agent builders
 
 ### 4. Code Examples
 Show real DSL examples:
@@ -64,8 +64,7 @@ Show real DSL examples:
 - POST /simulate - Test without deploying
 
 ### 7. Footer
-- Links: Docs, GitHub, Discord, Monarch
-- "Built by Monarch" badge
+- Links: Docs, GitHub, Discord, iruka.tech
 
 ## Tech Stack
 - **Framework:** Next.js 14 (App Router)
@@ -73,11 +72,11 @@ Show real DSL examples:
 - **Fonts:** Google Fonts (Inter, Zen Kaku Gothic New) + local Victor Mono
 - **Icons:** react-icons (Remix Icons)
 - **Animations:** Framer Motion (subtle)
-- **Deployment:** Vercel (megabat.monarch.xyz)
+- **Deployment:** Vercel (iruka.tech)
 
 ## File Structure
 ```
-megabat-landing/
+iruka-web/
 ├── app/
 │   ├── layout.tsx
 │   ├── page.tsx
@@ -115,7 +114,7 @@ megabat-landing/
 
 ### Phase 1: Setup (30 min) ✅
 - [x] Create Next.js project
-- [x] Configure Tailwind with Monarch colors
+- [x] Configure Tailwind with Iruka tokens
 - [x] Set up fonts (Inter, JetBrains Mono, Zen Kaku Gothic New)
 - [x] Create global.css with theme variables
 
@@ -152,22 +151,22 @@ megabat-landing/
 - 06:00 - Review and handoff
 
 ### Phase 6: Deployment ✅
-- [x] GitHub repo created: monarch-xyz/megabat-landing
+- [x] GitHub repo created: iruka-tech/iruka
 - [x] ESLint errors fixed
 - [x] Build passes clean
-- [ ] Deploy to Vercel (megabat.monarch.xyz) — **READY**
+- [ ] Deploy to Vercel (iruka.tech) — **READY**
 
 ## Deployment
 
-**Repository:** https://github.com/monarch-xyz/megabat-landing
+**Repository:** https://github.com/iruka-tech/iruka
 
 **To deploy:**
 1. Import to Vercel: https://vercel.com/new
-2. Select `monarch-xyz/megabat-landing`
-3. Set custom domain: `megabat.monarch.xyz`
+2. Select `iruka-tech/iruka`
+3. Set custom domain: `iruka.tech`
 4. Deploy
 
 ## Notes
-- Keep it STATIC — no backend, no auth, just info
+- Keep marketing surfaces static where possible; app workspace proxies to the Iruka API
 - Optimize for agents reading (clear structure, code-first)
-- Match Monarch's premium feel but with Megabat's identity
+- Keep Iruka restrained, precise, and operational

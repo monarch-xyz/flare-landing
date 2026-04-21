@@ -1,7 +1,7 @@
 import { createApiClient } from '@/lib/api/client';
 import {
   LogoutResponse,
-  MegabatAuthenticatedUser,
+  IrukaAuthenticatedUser,
   SiweNonceResponse,
   SiweVerifyRequest,
   SiweVerifyResponse,
@@ -15,6 +15,6 @@ export const requestSiweNonce = () =>
 export const verifySiwe = (payload: SiweVerifyRequest) =>
   localClient.post<SiweVerifyResponse, SiweVerifyRequest>('/api/auth/siwe/verify', payload);
 
-export const getCurrentUser = () => localClient.get<MegabatAuthenticatedUser>('/api/auth/me');
+export const getCurrentUser = () => localClient.get<IrukaAuthenticatedUser>('/api/auth/me');
 
 export const logout = () => localClient.post<LogoutResponse, Record<string, never>>('/api/auth/logout', {});

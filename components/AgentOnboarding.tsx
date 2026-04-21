@@ -4,27 +4,27 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { RiCheckLine, RiFileCopyLine, RiRobot2Line } from 'react-icons/ri';
 import { CodeBlock } from './ui/CodeBlock';
-import { MEGABAT_ARCHITECTURE_DOCS_URL } from '@/lib/megabat-links';
+import { IRUKA_ARCHITECTURE_DOCS_URL } from '@/lib/iruka-links';
 
 const steps = [
   {
     number: 1,
     title: 'Teach the agent the surface',
-    description: 'Give the agent the Megabat primitives and DSL shape it can author against.',
+    description: 'Give the agent the Iruka primitives and DSL shape it can author against.',
     code: `## Capabilities
 - Monitor open data sources for changes
 - Track market state aliases
 - Query raw event presets
 - Receive structured webhooks`,
     language: 'markdown',
-    filename: 'megabat-skill.md',
+    filename: 'iruka-skill.md',
   },
   {
     number: 2,
     title: 'Create the signal',
-    description: 'Post one definition to Megabat instead of building bespoke watcher loops.',
-    code: `curl -X POST https://your-megabat-host/api/v1/signals \\
-  -H "X-API-Key: $MEGABAT_API_KEY" \\
+    description: 'Post one definition to Iruka instead of building bespoke watcher loops.',
+    code: `curl -X POST https://your-iruka-host/api/v1/signals \\
+  -H "X-API-Key: $IRUKA_API_KEY" \\
   -H "Content-Type: application/json"`,
     language: 'bash',
     filename: 'create-signal.sh',
@@ -102,7 +102,7 @@ export function AgentOnboarding() {
         </div>
 
         <div className="mt-8 text-center">
-          <a href={MEGABAT_ARCHITECTURE_DOCS_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
+          <a href={IRUKA_ARCHITECTURE_DOCS_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
             <span className="ui-button px-5 py-3.5" data-variant="primary">
               <RiRobot2Line className="h-5 w-5" />
               Read Full Agent Docs

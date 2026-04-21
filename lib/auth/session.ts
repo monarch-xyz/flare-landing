@@ -2,10 +2,10 @@ import 'server-only';
 
 import { cookies } from 'next/headers';
 import { getSessionCookie } from '@/lib/auth/constants';
-import type { MegabatAuthenticatedUser } from '@/lib/auth/types';
-import { fetchMegabat } from '@/lib/megabat/server';
+import type { IrukaAuthenticatedUser } from '@/lib/auth/types';
+import { fetchIruka } from '@/lib/iruka/server';
 
-export const getWalletAddressFromUser = (user: MegabatAuthenticatedUser): string | null => {
+export const getWalletAddressFromUser = (user: IrukaAuthenticatedUser): string | null => {
   const walletIdentity = user.identities.find((identity) => identity.provider === 'wallet');
   if (!walletIdentity) {
     return null;
@@ -19,21 +19,21 @@ export const getWalletAddressFromUser = (user: MegabatAuthenticatedUser): string
   return walletIdentity.provider_subject.toLowerCase();
 };
 
-export const getAuthenticatedUser = async (): Promise<MegabatAuthenticatedUser | null> => {
+export const getAuthenticatedUser = async (): Promise<IrukaAuthenticatedUser | null> => {
   const cookieStore = await cookies();
   const sessionCookie = getSessionCookie(cookieStore);
   if (!sessionCookie?.value) {
     return null;
   }
 
-  const response = await fetchMegabat('/auth/me');
+  const response = await fetchIruka('/auth/me');
   if (response.status === 401) {
     return null;
   }
 
   if (!response.ok) {
-    throw new Error(`Megabat auth bootstrap failed (${response.status})`);
+    throw new Error(`Iruka auth bootstrap failed (${response.status})`);
   }
 
-  return (await response.json()) as MegabatAuthenticatedUser;
+  return (await response.json()) as IrukaAuthenticatedUser;
 };

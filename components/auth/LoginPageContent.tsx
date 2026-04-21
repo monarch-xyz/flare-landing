@@ -13,7 +13,7 @@ interface LoginPageContentProps {
 export function LoginPageContent({ returnTo, isReturningToProtectedPage }: LoginPageContentProps) {
   return (
     <AuthShell
-      title="Access Megabat"
+      title="Access Iruka"
       description={
         isReturningToProtectedPage
           ? 'Sign in with your wallet to continue where you left off.'

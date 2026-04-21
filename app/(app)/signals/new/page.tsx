@@ -13,7 +13,7 @@ import {
   buildTemplatePath,
 } from '@/lib/telegram/setup-flow';
 import { getTelegramLinkStatus } from '@/lib/telegram/link-state';
-import { MEGABAT_ONE_LINER, getCreateSignalPersona } from '@/lib/signals/create-flow-catalog';
+import { IRUKA_ONE_LINER, getCreateSignalPersona } from '@/lib/signals/create-flow-catalog';
 
 interface NewSignalPageProps {
   searchParams?: Promise<{ preset?: string }> | { preset?: string };
@@ -39,7 +39,7 @@ export default async function NewSignalPage({ searchParams }: NewSignalPageProps
       <CreateFlowHeader
         eyebrow="Create"
         title="Choose who is creating the signal"
-        summary={`${MEGABAT_ONE_LINER} Choose who is setting it up.`}
+        summary={`${IRUKA_ONE_LINER} Choose who is setting it up.`}
       />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">

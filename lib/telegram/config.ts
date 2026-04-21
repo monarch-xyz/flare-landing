@@ -1,4 +1,4 @@
-const DEFAULT_TELEGRAM_BOT_HANDLE = 'sentinel_beta_bot';
+const DEFAULT_TELEGRAM_BOT_HANDLE = 'iruka_tech_bot';
 
 const normalizeTelegramBotHandle = (value: string | undefined) => {
   const normalized = value?.trim().replace(/^@/, '');

@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { RiArrowDownLine, RiArrowRightLine, RiArrowRightUpLine } from 'react-icons/ri';
+import { RiArrowDownLine, RiArrowRightUpLine } from 'react-icons/ri';
 import { CodeBlock } from './ui/CodeBlock';
 import { SectionTag } from './ui/SectionTag';
-import { MEGABAT_DOCS_OVERVIEW_URL } from '@/lib/megabat-links';
+import { IRUKA_DOCS_OVERVIEW_URL } from '@/lib/iruka-links';
 
 const previewSignals = [
   { label: 'State', value: 'Vault shares dropped 22% across 3 of 5 addresses', tone: 'accent' },
@@ -58,7 +58,7 @@ export function Hero() {
                 transition={{ duration: 0.45, delay: 0.14 }}
                 className="ui-display mt-5"
               >
-                Let Megabat listen through the noise until a real signal resolves.
+                Let Iruka listen through the noise until a real signal resolves.
               </motion.h1>
 
               <motion.p
@@ -67,8 +67,8 @@ export function Hero() {
                 transition={{ duration: 0.45, delay: 0.2 }}
                 className="ui-copy mt-6 text-base sm:text-lg"
               >
-                Megabat watches archive RPC state, indexed history, and raw events in one loop.
-                You describe the condition that matters. Megabat keeps watch until it becomes true.
+                Iruka watches archive RPC state, indexed history, and raw events in one loop.
+                You describe the condition that matters. Iruka keeps watch until it becomes true.
               </motion.p>
 
               <motion.div
@@ -83,7 +83,7 @@ export function Hero() {
                     <RiArrowDownLine className="h-4 w-4" />
                   </span>
                 </button>
-                <a href={MEGABAT_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
+                <a href={IRUKA_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
                   <span className="ui-button px-5 py-3.5" data-variant="secondary">
                     Read The Docs
                     <RiArrowRightUpLine className="h-4 w-4" />

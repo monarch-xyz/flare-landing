@@ -18,9 +18,9 @@ const steps = [
   {
     icon: RiCloudLine,
     title: 'Register',
-    description: 'Post the signal once. Megabat owns the continuous evaluation loop from there.',
+    description: 'Post the signal once. Iruka owns the continuous evaluation loop from there.',
     code: `POST /api/v1/signals
-X-API-Key: megabat_...
+X-API-Key: iruka_...
 { "name": "High-Signal Watch" }`,
   },
   {
@@ -43,7 +43,7 @@ export function HowItWorks() {
           <div className="ui-kicker justify-center">Flow</div>
           <h2 className="ui-section-title mt-5">Three disciplined steps from watch definition to structured delivery.</h2>
           <p className="ui-copy mx-auto mt-4">
-            The product flow should read like the monitoring model itself: define the condition, let Megabat keep watch, then react only when signal arrives.
+            The product flow should read like the monitoring model itself: define the condition, let Iruka keep watch, then react only when signal arrives.
           </p>
         </div>
 

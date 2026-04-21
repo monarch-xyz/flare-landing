@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { RiBookOpenLine, RiDiscordLine, RiGithubLine } from 'react-icons/ri';
-import { MEGABAT_DOCS_OVERVIEW_URL, MEGABAT_GITHUB_URL } from '@/lib/megabat-links';
+import { IRUKA_DOCS_OVERVIEW_URL, IRUKA_GITHUB_URL } from '@/lib/iruka-links';
 
 export function FinalCTA() {
   return (
@@ -16,10 +16,10 @@ export function FinalCTA() {
           className="ui-hero px-6 py-8 text-center sm:px-8 sm:py-10"
         >
           <div className="relative z-10 mx-auto max-w-3xl">
-            <div className="ui-kicker justify-center">Megabat</div>
+            <div className="ui-kicker justify-center">Iruka</div>
             <h2 className="ui-section-title mt-5">Build on top of a signal layer that only speaks when the pattern is real.</h2>
             <p className="ui-copy mx-auto mt-4">
-              Define the condition once, then let Megabat stay awake through the telemetry until operators
+              Define the condition once, then let Iruka keep evaluating telemetry until operators
               or agents actually need to react.
             </p>
 
@@ -30,13 +30,13 @@ export function FinalCTA() {
                   Join Discord
                 </span>
               </a>
-              <a href={MEGABAT_GITHUB_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
+              <a href={IRUKA_GITHUB_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
                 <span className="ui-button px-5 py-3.5" data-variant="secondary">
                   <RiGithubLine className="h-4 w-4" />
                   GitHub
                 </span>
               </a>
-              <a href={MEGABAT_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
+              <a href={IRUKA_DOCS_OVERVIEW_URL} target="_blank" rel="noopener noreferrer" className="no-underline">
                 <span className="ui-button px-5 py-3.5" data-variant="ghost">
                   <RiBookOpenLine className="h-4 w-4" />
                   Docs
