@@ -8,7 +8,7 @@ const getRequestPath = (request: NextRequest) => {
   return `${request.nextUrl.pathname}${search}`;
 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const sessionToken = getSessionCookie(request.cookies)?.value;
 
   if (sessionToken) {
