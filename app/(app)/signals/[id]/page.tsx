@@ -91,7 +91,7 @@ const renderEvaluationLabel = (evaluation: SignalRunLogEntry) => {
 
 const renderNotificationLabel = (notification: SignalNotificationLogEntry) => {
   if (typeof notification.webhook_status === 'number' && notification.webhook_status < 400) {
-    return { label: 'Delivered', tone: 'success' as const };
+    return { label: 'Sent', tone: 'success' as const };
   }
 
   if (typeof notification.webhook_status === 'number') {
@@ -227,29 +227,43 @@ export default async function SignalDetailPage({ params }: SignalDetailPageProps
         <CardSection
           title="Recent notifications"
           items={history.notifications}
+          initialCount={3}
           renderItem={(notification) => {
             const matchedConditions = getNotificationConditionsMet(notification);
             const label = renderNotificationLabel(notification);
+            const statusDetail =
+              typeof notification.webhook_status === 'number'
+                ? `HTTP ${notification.webhook_status}`
+                : 'Waiting for result';
 
             return (
               <div className="ui-panel-ghost p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
+                  <div className="min-w-0">
                     <span className="ui-chip" data-tone={label.tone}>
                       {label.label}
                     </span>
                     <p className="mt-3 text-xs text-secondary">{formatTimestamp(notification.triggered_at)}</p>
                   </div>
-                  <div className="text-xs text-secondary">Retry count {notification.retry_count}</div>
+                  <div className="text-xs text-secondary sm:text-right">
+                    <p>{statusDetail}</p>
+                    <p className="mt-1">{notification.retry_count > 0 ? `${notification.retry_count} retries` : 'No retries'}</p>
+                  </div>
                 </div>
 
-                {notification.error_message ? (
-                  <div className="ui-notice mt-4 text-sm" data-tone="danger">
-                    {notification.error_message}
-                  </div>
+                {(notification.error_message || matchedConditions.length > 0) ? (
+                  <details className="mt-4 border-t border-border pt-4">
+                    <summary className="cursor-pointer text-xs text-secondary transition-colors hover:text-foreground">
+                      Details
+                    </summary>
+                    {notification.error_message ? (
+                      <div className="ui-notice mt-3 text-sm" data-tone="danger">
+                        {notification.error_message}
+                      </div>
+                    ) : null}
+                    <ExplanationSection title="Delivered conditions" items={matchedConditions} />
+                  </details>
                 ) : null}
-
-                <ExplanationSection title="Delivered conditions" items={matchedConditions} />
               </div>
             );
           }}
@@ -265,19 +279,34 @@ function CardSection<T>({
   items,
   renderItem,
   empty,
+  initialCount = 5,
 }: {
   title: string;
   items: T[];
   renderItem: (item: T) => ReactNode;
   empty: string;
+  initialCount?: number;
 }) {
+  const visibleItems = items.slice(0, initialCount);
+  const hiddenItems = items.slice(initialCount);
+
   return (
     <div className="ui-panel p-6">
       <div className="ui-kicker">{title}</div>
       <h2 className="mt-4 font-display text-[1.7rem] leading-none text-foreground">{title}</h2>
 
       {items.length > 0 ? (
-        <div className="mt-5 space-y-3">{items.slice(0, 8).map(renderItem)}</div>
+        <div className="mt-5 space-y-3">
+          {visibleItems.map(renderItem)}
+          {hiddenItems.length > 0 ? (
+            <details className="group">
+              <summary className="ui-button mt-3 inline-flex cursor-pointer px-3 py-2 text-xs" data-variant="secondary">
+                Show {hiddenItems.length} more
+              </summary>
+              <div className="space-y-3">{hiddenItems.map(renderItem)}</div>
+            </details>
+          ) : null}
+        </div>
       ) : (
         <p className="mt-5 text-sm text-secondary">{empty}</p>
       )}
