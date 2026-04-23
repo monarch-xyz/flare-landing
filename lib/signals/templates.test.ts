@@ -32,7 +32,7 @@ const assertDocCompatibleTemplatePayload = (payload: CreateSignalRequest) => {
   assert.ok(payload.definition.conditions.length > 0, 'template payloads require at least one condition');
   assert.deepEqual(payload.delivery, [{ type: 'telegram' }]);
   assert.ok(payload.metadata?.description, 'template payloads require metadata.description');
-  assert.ok(payload.metadata?.repeat_policy, 'template payloads require metadata.repeat_policy');
+  assert.ok(payload.policy?.repeat, 'template payloads require policy.repeat');
   payload.definition.conditions.forEach(assertDocCompatibleCondition);
 };
 
@@ -43,7 +43,7 @@ test('signal templates default to cooldown repeat policy', () => {
     whaleAddresses: ['0x1111111111111111111111111111111111111111'],
   });
 
-  assert.deepEqual(payload.metadata?.repeat_policy, { mode: 'cooldown', cooldown_minutes: 15 });
+  assert.deepEqual(payload.policy.repeat, { mode: 'cooldown', cooldown_minutes: 15 });
   assert.deepEqual(payload.triggers, [
     {
       type: 'schedule',
@@ -112,7 +112,7 @@ test('signal templates forward post-first-alert snooze repeat policy', () => {
     cooldownMinutes: 15,
   });
 
-  assert.deepEqual(payload.metadata?.repeat_policy, {
+  assert.deepEqual(payload.policy.repeat, {
     mode: 'post_first_alert_snooze',
     snooze_minutes: 1440,
   });

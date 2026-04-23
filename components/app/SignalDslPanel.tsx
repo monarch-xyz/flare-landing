@@ -43,7 +43,7 @@ export function SignalDslPanel({
   const chainList = signal.definition.scope.chains.join(', ');
   const focus = getSignalFocusDetails(signal.definition);
   const trackingSummary = getSignalTrackingSummary(signal.definition);
-  const repeatPolicySummary = describeSignalRepeatPolicy(signal.metadata?.repeat_policy);
+  const repeatPolicySummary = describeSignalRepeatPolicy(signal.policy.repeat);
   const signalDescription = signal.metadata?.description;
 
   return (

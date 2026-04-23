@@ -33,8 +33,10 @@ const previewCode = `{
   },
   "delivery": [{ "type": "telegram" }],
   "metadata": {
-    "description": "Alert when 2 of 3 tracked holders reduce shares by >=20%.",
-    "repeat_policy": { "mode": "until_resolved" }
+    "description": "Alert when 2 of 3 tracked holders reduce shares by >=20%."
+  },
+  "policy": {
+    "repeat": { "mode": "until_resolved" }
   }
 }`;
 
