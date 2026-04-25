@@ -37,10 +37,23 @@ export interface PublicStateRef {
   filters: SignalFilter[];
 }
 
+export interface AliasBlockSource {
+  kind: 'alias';
+  name: string;
+}
+
+export interface StateBlockSource {
+  kind: 'state';
+  state_ref: PublicStateRef;
+}
+
+export type NumericBlockSource = AliasBlockSource | StateBlockSource;
+
 export interface ThresholdCondition {
   type: 'threshold';
   metric?: string;
   state_ref?: PublicStateRef;
+  source?: NumericBlockSource;
   operator: ComparisonOperator;
   value: NumericInput;
   window?: TimeWindow;
@@ -55,6 +68,7 @@ export interface ChangeCondition {
   type: 'change';
   metric?: string;
   state_ref?: PublicStateRef;
+  source?: NumericBlockSource;
   direction: 'increase' | 'decrease' | 'any';
   by: { percent: number } | { absolute: NumericInput };
   window?: TimeWindow;

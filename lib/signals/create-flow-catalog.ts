@@ -5,7 +5,7 @@ import {
 } from '@/lib/iruka-links';
 
 export type CreateSignalPersonaId = 'human' | 'agent';
-export type HumanSignalCategoryId = 'vaults' | 'protocols';
+export type HumanSignalCategoryId = 'vaults' | 'protocols' | 'tokens';
 export type AssistedVaultExampleId = 'morpho' | 'euler' | 'aave-v3';
 export type AssistedProtocolExampleId = 'morpho-markets';
 
@@ -77,6 +77,13 @@ export const HUMAN_SIGNAL_CATEGORIES: HumanSignalCategoryOption[] = [
     summary: 'Protocol alerts',
     helpText:
       'Use protocol-specific indexed surfaces. Today that means Morpho markets, with room for more protocol builders later.',
+  },
+  {
+    id: 'tokens',
+    title: 'Tokens',
+    summary: 'Token balance alerts',
+    helpText:
+      'Start from common ERC-20 tokens like USDC, WETH, and sUSDe, then watch one holder address for balance changes over time.',
   },
 ];
 

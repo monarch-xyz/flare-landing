@@ -18,10 +18,10 @@ test('create-flow personas stay explicit and ordered', () => {
   assert.ok(CREATE_SIGNAL_PERSONAS.every((option) => option.summary.length > 0 && option.helpText.length > 0));
 });
 
-test('human categories stay split between vaults and protocols', () => {
+test('human categories stay split between vaults, protocols, and tokens', () => {
   assert.deepEqual(
     HUMAN_SIGNAL_CATEGORIES.map((option) => option.id),
-    ['vaults', 'protocols']
+    ['vaults', 'protocols', 'tokens']
   );
   assert.ok(HUMAN_SIGNAL_CATEGORIES.every((option) => option.summary.length > 0 && option.helpText.length > 0));
 });

@@ -132,6 +132,28 @@ test('erc20 raw-event templates stay compatible with the current Iruka docs sche
   }
 });
 
+test('erc20 balance drop templates stay compatible with the current Iruka docs schema', () => {
+  const payload = buildSignalTemplate({
+    templateId: 'erc20-balance-drop-watch',
+    tokenContract: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    watchedAddress: '0x1111111111111111111111111111111111111111',
+    dropPercent: 20,
+    windowDuration: '2h',
+  });
+
+  assertDocCompatibleTemplatePayload(payload);
+  const condition = payload.definition.conditions[0];
+  assert.equal(condition?.type, 'change');
+  if (condition?.type === 'change') {
+    assert.deepEqual(condition.source, { kind: 'alias', name: 'ERC20.Position.balance' });
+    assert.equal(condition.direction, 'decrease');
+    assert.deepEqual(condition.by, { percent: 20 });
+    assert.equal(condition.contract_address, '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');
+    assert.equal(condition.address, '0x1111111111111111111111111111111111111111');
+    assert.deepEqual(condition.window, { duration: '2h' });
+  }
+});
+
 test('erc4626 withdraw templates stay compatible with the current Iruka docs schema', () => {
   const payload = buildSignalTemplate({
     templateId: 'erc4626-withdraw-percent-watch',

@@ -13,12 +13,13 @@ import type {
 } from '@/lib/types/signal';
 import { DEFAULT_SIGNAL_REPEAT_POLICY, normalizeSignalRepeatPolicy } from '@/lib/signals/repeat-policy';
 
-export type SignalTemplateKind = 'morpho-whale' | 'erc20-transfer' | 'erc4626-withdraw';
+export type SignalTemplateKind = 'morpho-whale' | 'erc20-transfer' | 'erc20-balance-drop' | 'erc4626-withdraw';
 
 export type WhaleTemplateId = 'whale-exit-trio' | 'whale-exit-pair' | 'single-whale-exit';
 export type Erc20TransferTemplateId = 'erc20-inflow-watch' | 'erc20-outflow-watch';
+export type Erc20BalanceDropTemplateId = 'erc20-balance-drop-watch';
 export type Erc4626WithdrawTemplateId = 'erc4626-withdraw-percent-watch';
-export type SignalTemplateId = WhaleTemplateId | Erc20TransferTemplateId | Erc4626WithdrawTemplateId;
+export type SignalTemplateId = WhaleTemplateId | Erc20TransferTemplateId | Erc20BalanceDropTemplateId | Erc4626WithdrawTemplateId;
 
 interface BaseSignalTemplatePreset<TId extends SignalTemplateId, TKind extends SignalTemplateKind, TDefaults> {
   id: TId;
@@ -54,6 +55,17 @@ export type Erc20TransferTemplatePreset = BaseSignalTemplatePreset<
   direction: 'inflow' | 'outflow';
 };
 
+export type Erc20BalanceDropTemplatePreset = BaseSignalTemplatePreset<
+  Erc20BalanceDropTemplateId,
+  'erc20-balance-drop',
+  {
+    chainId: number;
+    windowDuration: string;
+    cooldownMinutes: number;
+    dropPercent: number;
+  }
+>;
+
 export type Erc4626WithdrawTemplatePreset = BaseSignalTemplatePreset<
   Erc4626WithdrawTemplateId,
   'erc4626-withdraw',
@@ -69,6 +81,7 @@ export type Erc4626WithdrawTemplatePreset = BaseSignalTemplatePreset<
 export type SignalTemplatePreset =
   | WhaleSignalTemplatePreset
   | Erc20TransferTemplatePreset
+  | Erc20BalanceDropTemplatePreset
   | Erc4626WithdrawTemplatePreset;
 
 interface BaseTemplateRequest<TId extends SignalTemplateId> {
@@ -95,6 +108,12 @@ export interface Erc20TransferTemplateRequest extends BaseTemplateRequest<Erc20T
   amountThreshold?: number;
 }
 
+export interface Erc20BalanceDropTemplateRequest extends BaseTemplateRequest<Erc20BalanceDropTemplateId> {
+  tokenContract: string;
+  watchedAddress: string;
+  dropPercent?: number;
+}
+
 export interface Erc4626WithdrawTemplateRequest extends BaseTemplateRequest<Erc4626WithdrawTemplateId> {
   vaultContract: string;
   ownerAddresses: string[] | string;
@@ -105,6 +124,7 @@ export interface Erc4626WithdrawTemplateRequest extends BaseTemplateRequest<Erc4
 export type SignalTemplateRequest =
   | WhaleTemplateRequest
   | Erc20TransferTemplateRequest
+  | Erc20BalanceDropTemplateRequest
   | Erc4626WithdrawTemplateRequest;
 
 export interface SignalFocusDetails {
@@ -189,6 +209,19 @@ export const SIGNAL_TEMPLATE_PRESETS: SignalTemplatePreset[] = [
       chainId: 1,
       amountThreshold: 1000000,
       windowDuration: '24h',
+      cooldownMinutes: 15,
+    },
+  },
+  {
+    id: 'erc20-balance-drop-watch',
+    kind: 'erc20-balance-drop',
+    title: 'ERC-20 Balance Drop %',
+    description: 'Track one holder address and alert when the ERC-20 balance drops by a percentage over a rolling window.',
+    accent: 'archive RPC · balanceOf(address) · % drop',
+    defaults: {
+      chainId: 1,
+      dropPercent: 20,
+      windowDuration: '2h',
       cooldownMinutes: 15,
     },
   },
@@ -904,6 +937,65 @@ export const buildErc20TransferTemplate = (input: Erc20TransferTemplateRequest):
   );
 };
 
+export const buildErc20BalanceDropTemplate = (input: Erc20BalanceDropTemplateRequest): CreateSignalRequest => {
+  const preset = getPreset(input.templateId);
+  if (preset.kind !== 'erc20-balance-drop') {
+    throw new SignalTemplateError(`Template ${input.templateId} is not an ERC-20 balance-drop template.`);
+  }
+
+  const chainId = input.chainId ?? preset.defaults.chainId;
+  const windowDuration = input.windowDuration?.trim() || preset.defaults.windowDuration;
+  const cooldownMinutes = input.cooldownMinutes ?? preset.defaults.cooldownMinutes;
+  const repeatPolicy = normalizeSignalRepeatPolicy(input.repeatPolicy);
+  const dropPercent = input.dropPercent ?? preset.defaults.dropPercent;
+  const tokenContract = parseRequiredAddress(input.tokenContract, 'Token contract address');
+  const watchedAddress = parseRequiredAddress(input.watchedAddress, 'Holder address');
+
+  assertPositiveChainId(chainId);
+
+  if (!Number.isFinite(dropPercent) || dropPercent <= 0) {
+    throw new SignalTemplateError('Balance drop percent must be greater than 0.');
+  }
+
+  assertNonNegativeCooldown(cooldownMinutes);
+  assertRepeatPolicy(repeatPolicy);
+
+  const definition: SignalDefinition = {
+    window: {
+      duration: windowDuration,
+    },
+    logic: 'AND',
+    conditions: [
+      {
+        type: 'change',
+        source: { kind: 'alias', name: 'ERC20.Position.balance' },
+        direction: 'decrease',
+        by: {
+          percent: dropPercent,
+        },
+        window: {
+          duration: windowDuration,
+        },
+        chain_id: chainId,
+        contract_address: tokenContract,
+        address: watchedAddress,
+      },
+    ],
+  };
+
+  const generatedName = `ERC-20 balance drop: ${formatCompactIdentifier(watchedAddress)} -${dropPercent}% in ${windowDuration}`;
+
+  return buildManagedTelegramSignal(
+    input.name?.trim() || generatedName,
+    input.description?.trim() ||
+      `Uses archive RPC ERC-20 balance reads for ${tokenContract} and triggers when ${watchedAddress} is down at least ${dropPercent}% over ${windowDuration}.`,
+    definition,
+    cooldownMinutes,
+    repeatPolicy,
+    input.schedule
+  );
+};
+
 export const buildErc4626WithdrawTemplate = (input: Erc4626WithdrawTemplateRequest): CreateSignalRequest => {
   const preset = getPreset(input.templateId);
   if (preset.kind !== 'erc4626-withdraw') {
@@ -994,6 +1086,8 @@ export const buildSignalTemplate = (input: SignalTemplateRequest): CreateSignalR
     case 'erc20-inflow-watch':
     case 'erc20-outflow-watch':
       return buildErc20TransferTemplate(input);
+    case 'erc20-balance-drop-watch':
+      return buildErc20BalanceDropTemplate(input);
     case 'erc4626-withdraw-percent-watch':
       return buildErc4626WithdrawTemplate(input);
   }

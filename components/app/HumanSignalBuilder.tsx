@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { CreateFlowHeader } from '@/components/app/CreateFlowHeader';
 import { MorphoMarketSignalBuilder } from '@/components/app/MorphoMarketSignalBuilder';
+import { SignalBuilderForm } from '@/components/app/SignalBuilderForm';
 import { VaultUseCaseBuilder } from '@/components/app/VaultUseCaseBuilder';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -83,23 +84,43 @@ export function HumanSignalBuilder() {
                 </button>
               );
             })
-          : ASSISTED_PROTOCOL_EXAMPLES.map((example) => (
-              <div key={example.id} className="ui-panel p-5 text-left">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="ui-stat-label">{example.badge}</p>
-                    <h2 className="mt-3 font-display text-[1.65rem] leading-none text-foreground">{example.title}</h2>
+          : category === 'protocols'
+            ? ASSISTED_PROTOCOL_EXAMPLES.map((example) => (
+                <div key={example.id} className="ui-panel p-5 text-left">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="ui-stat-label">{example.badge}</p>
+                      <h2 className="mt-3 font-display text-[1.65rem] leading-none text-foreground">{example.title}</h2>
+                    </div>
+                    <HelpHint text={example.helpText} align="right" />
                   </div>
-                  <HelpHint text={example.helpText} align="right" />
                 </div>
-              </div>
-            ))}
+              ))
+            : [
+                <div key="erc20-balance" className="ui-panel p-5 text-left lg:col-span-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="ui-stat-label">Live now</p>
+                      <h2 className="mt-3 font-display text-[1.65rem] leading-none text-foreground">ERC-20 balance change</h2>
+                      <p className="mt-2 max-w-2xl text-sm text-secondary">
+                        Start from USDC, WETH, or sUSDe, then point the alert at any holder address and any ERC-20 contract.
+                      </p>
+                    </div>
+                    <HelpHint
+                      text="This builder uses archive RPC-backed ERC-20 balance reads, so you can alert on percent decreases over a rolling window instead of only raw transfer bursts."
+                      align="right"
+                    />
+                  </div>
+                </div>,
+              ]}
       </div>
 
       {category === 'vaults' ? (
         <VaultUseCaseBuilder protocol={selectedVaultProtocol} />
-      ) : (
+      ) : category === 'protocols' ? (
         <MorphoMarketSignalBuilder />
+      ) : (
+        <SignalBuilderForm initialPreset="erc20-balance-drop-watch" telegramLinked />
       )}
 
       <Card className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">

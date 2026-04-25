@@ -59,8 +59,30 @@ const presetIcons: Record<SignalTemplateId, ReactNode> = {
   'single-whale-exit': <RiUserSearchLine className="w-5 h-5" />,
   'erc20-inflow-watch': <RiArrowDownLine className="w-5 h-5" />,
   'erc20-outflow-watch': <RiArrowUpLine className="w-5 h-5" />,
+  'erc20-balance-drop-watch': <RiExchangeDollarLine className="w-5 h-5" />,
   'erc4626-withdraw-percent-watch': <RiExchangeDollarLine className="w-5 h-5" />,
 };
+
+const COMMON_ERC20_TOKENS = [
+  {
+    label: 'USDC',
+    symbol: 'USDC',
+    address: '0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    note: 'Circle USD Coin on Ethereum',
+  },
+  {
+    label: 'WETH',
+    symbol: 'WETH',
+    address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    note: 'Wrapped Ether on Ethereum',
+  },
+  {
+    label: 'sUSDe',
+    symbol: 'sUSDe',
+    address: '0x9D39A5DE30E57443BFF2A8307A4256C8797A3497',
+    note: 'Ethena staked USDe on Ethereum',
+  },
+] as const;
 
 const formatCompactAddress = (value: string) => {
   const trimmed = value.trim();
@@ -85,7 +107,8 @@ const buildDefaultState = (templateId: SignalTemplateId): BuilderFormState => {
     whaleAddresses: '',
     vaultContract: '',
     ownerAddresses: '',
-    tokenContract: '',
+    tokenContract:
+      preset.kind === 'erc20-balance-drop' ? COMMON_ERC20_TOKENS[0].address : '',
     watchedAddress: '',
     chainId: String(preset.defaults.chainId),
     requiredCount:
@@ -126,6 +149,12 @@ const TEMPLATE_GROUPS: Array<{
     kinds: ['morpho-whale'],
   },
   {
+    title: 'Tokens',
+    summary: 'Balance-change templates',
+    helpText: 'Use archive-RPC-backed ERC-20 balance change templates for one holder address.',
+    kinds: ['erc20-balance-drop'],
+  },
+  {
     title: 'Raw events',
     summary: 'Event-level monitoring',
     helpText: 'Use raw events when you want lower-level flow checks instead of state metrics.',
@@ -148,6 +177,7 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
   const selectedPresetConfig = getTemplatePreset(selectedPreset);
   const isMorphoWhalePreset = selectedPresetConfig.kind === 'morpho-whale';
   const isErc20TransferPreset = selectedPresetConfig.kind === 'erc20-transfer';
+  const isErc20BalanceDropPreset = selectedPresetConfig.kind === 'erc20-balance-drop';
   const isErc4626WithdrawPreset = selectedPresetConfig.kind === 'erc4626-withdraw';
 
   const updateField = (field: keyof BuilderFormState, value: string) => {
@@ -195,24 +225,42 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
             name: formState.name,
             description: formState.description,
           }
-        : {
-            templateId: selectedPresetConfig.id,
-            vaultContract: formState.vaultContract,
-            ownerAddresses: formState.ownerAddresses,
-            chainId: Number(formState.chainId),
-            requiredCount: Number(formState.requiredCount),
-            dropPercent: Number(formState.dropPercent),
-            windowDuration: formState.windowDuration,
-            cooldownMinutes: Number(formState.cooldownMinutes),
-            schedule: formState.schedule,
-            repeatPolicy: buildSignalRepeatPolicy(
-              formState.repeatMode,
-              Number(formState.snoozeMinutes),
-              Number(formState.cooldownMinutes)
-            ),
-            name: formState.name,
-            description: formState.description,
-          };
+        : selectedPresetConfig.kind === 'erc20-balance-drop'
+          ? {
+              templateId: selectedPresetConfig.id,
+              tokenContract: formState.tokenContract,
+              watchedAddress: formState.watchedAddress,
+              chainId: Number(formState.chainId),
+              dropPercent: Number(formState.dropPercent),
+              windowDuration: formState.windowDuration,
+              cooldownMinutes: Number(formState.cooldownMinutes),
+              schedule: formState.schedule,
+              repeatPolicy: buildSignalRepeatPolicy(
+                formState.repeatMode,
+                Number(formState.snoozeMinutes),
+                Number(formState.cooldownMinutes)
+              ),
+              name: formState.name,
+              description: formState.description,
+            }
+          : {
+              templateId: selectedPresetConfig.id,
+              vaultContract: formState.vaultContract,
+              ownerAddresses: formState.ownerAddresses,
+              chainId: Number(formState.chainId),
+              requiredCount: Number(formState.requiredCount),
+              dropPercent: Number(formState.dropPercent),
+              windowDuration: formState.windowDuration,
+              cooldownMinutes: Number(formState.cooldownMinutes),
+              schedule: formState.schedule,
+              repeatPolicy: buildSignalRepeatPolicy(
+                formState.repeatMode,
+                Number(formState.snoozeMinutes),
+                Number(formState.cooldownMinutes)
+              ),
+              name: formState.name,
+              description: formState.description,
+            };
 
   let previewError: string | null = null;
   let previewDefinition: string | null = null;
@@ -271,12 +319,16 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
     ? 'Morpho whale movement signal'
     : isErc4626WithdrawPreset
       ? 'ERC-4626 owner withdrawal % signal'
-      : 'ERC-20 transfer raw-event signal';
+      : isErc20BalanceDropPreset
+        ? 'ERC-20 balance-drop signal'
+        : 'ERC-20 transfer raw-event signal';
   const previewDescription = isMorphoWhalePreset
     ? 'Iruka watches the tracked Morpho suppliers and alerts on coordinated exits.'
     : isErc4626WithdrawPreset
       ? 'Iruka watches tracked vault owners and alerts on share withdrawals.'
-      : 'Iruka watches ERC-20 transfer flow for one address.';
+      : isErc20BalanceDropPreset
+        ? 'Iruka watches one holder balance through archive RPC and alerts on percent drops.'
+        : 'Iruka watches ERC-20 transfer flow for one address.';
   const scheduleSummary =
     formState.schedule.kind === 'interval'
       ? `Every ${formState.schedule.interval_seconds}s`
@@ -296,12 +348,19 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
           { label: 'Required owners', value: formState.requiredCount || '0' },
           { label: 'Drop %', value: formState.dropPercent ? `${formState.dropPercent}%` : '—' },
         ]
-      : [
-          { label: 'Asset', value: formatCompactAddress(formState.tokenContract) },
-          { label: 'Address', value: formatCompactAddress(formState.watchedAddress) },
-          { label: 'Direction', value: isErc20TransferPreset && selectedPresetConfig.direction === 'inflow' ? 'Inflow' : 'Outflow' },
-          { label: 'Threshold', value: formState.amountThreshold ? `${formState.amountThreshold} base` : '0' },
-        ];
+      : isErc20BalanceDropPreset
+        ? [
+            { label: 'Asset', value: formatCompactAddress(formState.tokenContract) },
+            { label: 'Holder', value: formatCompactAddress(formState.watchedAddress) },
+            { label: 'Drop %', value: formState.dropPercent ? `${formState.dropPercent}%` : '—' },
+            { label: 'Window', value: formState.windowDuration || '—' },
+          ]
+        : [
+            { label: 'Asset', value: formatCompactAddress(formState.tokenContract) },
+            { label: 'Address', value: formatCompactAddress(formState.watchedAddress) },
+            { label: 'Direction', value: isErc20TransferPreset && selectedPresetConfig.direction === 'inflow' ? 'Inflow' : 'Outflow' },
+            { label: 'Threshold', value: formState.amountThreshold ? `${formState.amountThreshold} base` : '0' },
+          ];
   const previewStatsWithSchedule = [...previewStats, { label: 'Wake-up', value: scheduleSummary }];
 
   return (
@@ -361,6 +420,9 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                 onChange={(event) => updateField('chainId', event.target.value)}
                 className="ui-input"
               />
+              {isErc20BalanceDropPreset ? (
+                <span className="ui-helper">Popular token buttons fill Ethereum mainnet contracts and reset Chain ID to 1. You can still replace both values manually.</span>
+              ) : null}
             </label>
 
             {isMorphoWhalePreset ? (
@@ -440,6 +502,64 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                   <span className="ui-helper">
                     Triggers when each tracked owner reduces shares by at least this percentage over the window.
                   </span>
+                </label>
+              </>
+            ) : isErc20BalanceDropPreset ? (
+              <>
+                <div className="ui-field sm:col-span-2">
+                  Popular tokens
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {COMMON_ERC20_TOKENS.map((token) => (
+                      <button
+                        key={token.symbol}
+                        type="button"
+                        className="ui-option px-3 py-2 text-sm"
+                        onClick={() => {
+                          updateField('tokenContract', token.address);
+                          updateField('chainId', '1');
+                        }}
+                      >
+                        {token.label}
+                      </button>
+                    ))}
+                  </div>
+                  <span className="ui-helper">Start from a common mainnet token, or paste any ERC-20 contract below.</span>
+                </div>
+
+                <label className="ui-field">
+                  Token contract
+                  <input
+                    type="text"
+                    value={formState.tokenContract}
+                    onChange={(event) => updateField('tokenContract', event.target.value)}
+                    placeholder="0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+                    className="ui-input font-mono"
+                  />
+                  <span className="ui-helper">Common presets: USDC, WETH, and sUSDe. You can replace this with any ERC-20 contract.</span>
+                </label>
+
+                <label className="ui-field">
+                  Holder address
+                  <input
+                    type="text"
+                    value={formState.watchedAddress}
+                    onChange={(event) => updateField('watchedAddress', event.target.value)}
+                    placeholder="0x1111111111111111111111111111111111111111"
+                    className="ui-input font-mono"
+                  />
+                  <span className="ui-helper">Iruka compares this address&apos;s current balance to the balance at the start of the window.</span>
+                </label>
+
+                <label className="ui-field">
+                  Balance drop (%)
+                  <input
+                    type="number"
+                    min="1"
+                    value={formState.dropPercent}
+                    onChange={(event) => updateField('dropPercent', event.target.value)}
+                    className="ui-input"
+                  />
+                  <span className="ui-helper">Triggers when the holder balance is down by at least this percentage over the window.</span>
                 </label>
               </>
             ) : (
@@ -554,6 +674,10 @@ export function SignalBuilderForm({ initialPreset = 'whale-exit-trio', telegramL
                 One owner per line or comma-separated. Iruka injects each owner into the group condition at evaluation time.
               </span>
             </label>
+          ) : isErc20BalanceDropPreset ? (
+            <div className="ui-panel-ghost mt-4 p-4 text-sm text-secondary">
+              This template uses archive RPC-backed ERC-20 balance reads. Iruka compares the holder&apos;s current balance to the balance at the start of the window, so the alert reflects true balance change instead of gross transfer flow.
+            </div>
           ) : (
             <div className="ui-panel-ghost mt-4 p-4 text-sm text-secondary">
               This template uses Iruka’s `raw-events` ERC-20 transfer preset. Thresholds are compared against token base units, not formatted token decimals. It measures gross flow only, not true net balance change. The broader raw-event catalog also includes approvals, ERC-721 events, ERC-4626 deposits and withdrawals, swap presets, and `contract_event` for custom ABI signatures.
