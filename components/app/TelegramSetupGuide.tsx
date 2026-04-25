@@ -17,16 +17,16 @@ interface TelegramSetupGuideProps {
 
 const guideSteps = [
   {
-    title: `Open ${telegramBotLabel}`,
-    body: 'This is the only bot you need to message.',
+    title: `Start from ${telegramBotLabel}`,
+    body: 'Use the Open button here so Iruka can create a one-time challenge code.',
   },
   {
-    title: 'Send /start',
-    body: 'The bot sends a connect button for this Telegram chat.',
+    title: 'Complete /start in Telegram',
+    body: 'Telegram receives the command from the deep link. Send it to finish verification.',
   },
   {
-    title: 'Tap Connect Account',
-    body: 'Iruka will attach Telegram to the signed-in account automatically.',
+    title: 'Return to this console',
+    body: 'Refresh this page if needed. Telegram status updates after verification.',
   },
 ];
 
@@ -103,7 +103,7 @@ export function TelegramSetupGuide({
               <div className="grid gap-3">
                 {guideSteps.map((step, index) => (
                   <div key={step.title} className="ui-panel-ghost flex gap-4 p-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.75rem] border border-border bg-[color:color-mix(in_oklch,var(--signal-telegram)_10%,var(--surface-inset))] text-sm text-[color:var(--signal-telegram)]">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.45rem] border border-border bg-[color:color-mix(in_oklch,var(--signal-telegram)_10%,var(--surface-inset))] text-sm text-[color:var(--signal-telegram)]">
                       {index + 1}
                     </div>
                     <div>
@@ -120,9 +120,9 @@ export function TelegramSetupGuide({
                     <RiTelegram2Line className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-foreground">After setup</p>
+                    <p className="text-foreground">If the link fails</p>
                     <p className="mt-1 text-sm leading-relaxed text-secondary">
-                      If Iruka asks you to sign in, do that once and the Telegram link will finish automatically.
+                      Open setup from this page again to generate a fresh challenge code and deep link.
                     </p>
                   </div>
                 </div>

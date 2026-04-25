@@ -3,7 +3,7 @@ import { RiCheckboxCircleLine, RiSettings3Line, RiTelegram2Line } from 'react-ic
 import { TelegramSetupGuide } from '@/components/app/TelegramSetupGuide';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { telegramBotLabel } from '@/lib/telegram/config';
+import { telegramBotLabel, telegramBotUrl } from '@/lib/telegram/config';
 import { buildTelegramStartPath, DEFAULT_TEMPLATE_PATH } from '@/lib/telegram/setup-flow';
 
 interface TelegramConnectPanelProps {
@@ -26,7 +26,7 @@ const formatLinkedAt = (value: string | null) => {
 export function TelegramConnectPanel({ initialStatus, returnTo }: TelegramConnectPanelProps) {
   const linkedDate = formatLinkedAt(initialStatus.linkedAt);
   const isLinked = initialStatus.linked;
-  const openTelegramHref = buildTelegramStartPath(returnTo);
+  const setupTelegramHref = buildTelegramStartPath(returnTo);
   const isTemplateFlow = Boolean(returnTo?.startsWith(DEFAULT_TEMPLATE_PATH));
 
   return (
@@ -39,8 +39,8 @@ export function TelegramConnectPanel({ initialStatus, returnTo }: TelegramConnec
             {isLinked
               ? 'Telegram is ready.'
               : isTemplateFlow
-                ? 'Open the bot once and finish Telegram before you start building a signal.'
-                : 'Open the bot once and Iruka will connect this account when you return.'}
+                ? 'Create a one-time challenge and finish /start in Telegram before you build a signal.'
+                : 'Create a one-time challenge, then complete /start in Telegram to link this account.'}
           </p>
         </div>
         <div
@@ -73,21 +73,22 @@ export function TelegramConnectPanel({ initialStatus, returnTo }: TelegramConnec
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Link href={openTelegramHref} className="inline-flex w-fit no-underline">
+            <a href={telegramBotUrl} className="inline-flex w-fit no-underline" target="_blank" rel="noopener noreferrer">
               <Button type="button" variant="secondary" className="gap-2">
                 Open {telegramBotLabel}
                 <RiTelegram2Line className="h-4 w-4" />
               </Button>
-            </Link>
+            </a>
           </div>
         </>
       ) : (
         <>
           <div className="ui-panel-ghost p-3 text-sm text-secondary">
-            Open {telegramBotLabel}, send <span className="font-mono text-foreground">/start</span>, then tap the connect button in Telegram. If you need to sign in first, Iruka will finish the link when you return.
+            Iruka will create a one-time challenge and open {telegramBotLabel}. Complete <span className="font-mono text-foreground">/start</span>{' '}
+            in Telegram to link this account.
           </div>
 
-          <Link href={openTelegramHref} className="inline-flex w-fit no-underline">
+          <Link href={setupTelegramHref} className="inline-flex w-fit no-underline">
             <Button type="button" variant="secondary" className="gap-2">
               Open {telegramBotLabel}
               <RiTelegram2Line className="h-4 w-4" />

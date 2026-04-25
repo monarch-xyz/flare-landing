@@ -18,25 +18,10 @@ const telegramNotice = (value: string | undefined) => {
         tone: 'info' as const,
         message: 'Connect Telegram before you open a signal template.',
       };
-    case 'linked':
-      return {
-        tone: 'success' as const,
-        message: 'Telegram is now connected to this account.',
-      };
-    case 'expired':
+    case 'challenge-failed':
       return {
         tone: 'danger' as const,
-        message: 'That Telegram link expired. Open the bot again to create a fresh one.',
-      };
-    case 'missing-token':
-      return {
-        tone: 'danger' as const,
-        message: 'The Telegram handoff was missing its token. Open the bot again and use the latest connect button.',
-      };
-    case 'failed':
-      return {
-        tone: 'danger' as const,
-        message: 'Telegram could not be linked right now. Try the bot again in a moment.',
+        message: 'Iruka could not create a Telegram challenge right now. Try again in a moment.',
       };
     default:
       return null;
@@ -64,8 +49,8 @@ export default async function TelegramPage({ searchParams }: TelegramPageProps) 
       ? 'Telegram is linked. Continue to the signal builder when you are ready.'
       : 'Telegram is linked for this account and ready for managed delivery.'
     : isTemplateFlow
-      ? 'Template signals deliver through Telegram. Finish this once before you open the builder.'
-      : 'Open the bot once and complete the connect step there.';
+      ? 'Template signals deliver through Telegram. Create a one-time challenge and complete /start in Telegram.'
+      : 'Generate a one-time challenge, open the bot, and complete /start in Telegram.';
   const primaryLabel = telegramStatus.linked
     ? isTemplateFlow
       ? 'Continue to signal builder'

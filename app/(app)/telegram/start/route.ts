@@ -1,32 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { telegramBotUrl } from '@/lib/telegram/config';
-import { resolveTelegramReturnTo, TELEGRAM_RETURN_TO_COOKIE, TELEGRAM_RETURN_TO_PARAM } from '@/lib/telegram/setup-flow';
+import type { TelegramChallengeResponse } from '@/lib/auth/types';
+import { getSessionCookie } from '@/lib/auth/constants';
+import { buildLoginHref } from '@/lib/auth/redirect';
+import { buildRequestUrl } from '@/lib/http/origin';
+import { fetchIruka } from '@/lib/iruka/server';
+import { buildTelegramPath, resolveTelegramReturnTo, TELEGRAM_RETURN_TO_PARAM } from '@/lib/telegram/setup-flow';
 
-const expireReturnTo = (response: NextResponse) => {
-  response.cookies.set(TELEGRAM_RETURN_TO_COOKIE, '', {
-    httpOnly: true,
-    maxAge: 0,
-    path: '/',
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-  });
+const redirectTo = (request: NextRequest, location: string) =>
+  NextResponse.redirect(buildRequestUrl(request, location));
+
+const buildLoginPath = (request: NextRequest) => {
+  const returnTo = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+  return buildLoginHref(returnTo);
 };
 
 export async function GET(request: NextRequest) {
   const returnTo = resolveTelegramReturnTo(request.nextUrl.searchParams.get(TELEGRAM_RETURN_TO_PARAM));
-  const response = NextResponse.redirect(telegramBotUrl);
 
-  if (returnTo) {
-    response.cookies.set(TELEGRAM_RETURN_TO_COOKIE, returnTo, {
-      httpOnly: true,
-      maxAge: 60 * 60,
-      path: '/',
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-    });
-  } else {
-    expireReturnTo(response);
+  if (!getSessionCookie(request.cookies)?.value) {
+    return redirectTo(request, buildLoginPath(request));
   }
 
-  return response;
+  try {
+    const response = await fetchIruka('/me/integrations/telegram/challenge', {
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      const payload = (await response.json()) as TelegramChallengeResponse;
+      return NextResponse.redirect(payload.bot_deep_link);
+    }
+
+    if (response.status === 401) {
+      return redirectTo(request, buildLoginPath(request));
+    }
+  } catch {
+    // Fall through to challenge failure redirect.
+  }
+
+  return redirectTo(
+    request,
+    buildTelegramPath({
+      status: 'challenge-failed',
+      returnTo,
+    })
+  );
 }

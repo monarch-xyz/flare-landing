@@ -2,7 +2,6 @@ import { sanitizeReturnTo } from '@/lib/auth/redirect';
 
 export const TELEGRAM_STATUS_PARAM = 'telegram';
 export const TELEGRAM_RETURN_TO_PARAM = 'returnTo';
-export const TELEGRAM_RETURN_TO_COOKIE = 'iruka_telegram_return_to';
 export const DEFAULT_TEMPLATE_PATH = '/signals/new';
 export const HUMAN_TEMPLATE_PATH = '/signals/new/human';
 export const AGENT_TEMPLATE_PATH = '/signals/new/agent';
@@ -10,7 +9,7 @@ export const CUSTOM_TEMPLATE_PATH = '/signals/new/custom';
 export const ADVANCED_TEMPLATE_PATH = CUSTOM_TEMPLATE_PATH;
 export const SIMPLE_TEMPLATE_PATH = HUMAN_TEMPLATE_PATH;
 
-export type TelegramFlowStatus = 'linked' | 'expired' | 'missing-token' | 'failed' | 'required';
+export type TelegramFlowStatus = 'required' | 'challenge-failed';
 
 export const resolveTelegramReturnTo = (value: string | null | undefined): string | null => sanitizeReturnTo(value);
 

@@ -3,7 +3,7 @@
 import { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { RiAddLine, RiArrowRightUpLine, RiBookOpenLine, RiDashboardLine, RiFlashlightLine, RiLogoutCircleRLine, RiTelegram2Line } from 'react-icons/ri';
+import { RiAddLine, RiArrowRightUpLine, RiBookOpenLine, RiDashboardLine, RiFlashlightLine, RiKey2Line, RiLogoutCircleRLine, RiTelegram2Line } from 'react-icons/ri';
 import { Button } from '@/components/ui/Button';
 import { buildLoginHref } from '@/lib/auth/redirect';
 import { IRUKA_DOCS_OVERVIEW_URL } from '@/lib/iruka-links';
@@ -19,6 +19,7 @@ const navItems = [
   { href: '/app', label: 'Dashboard', icon: RiDashboardLine },
   { href: '/signals', label: 'Signals', icon: RiFlashlightLine },
   { href: '/telegram', label: 'Telegram', icon: RiTelegram2Line },
+  { href: '/api-keys', label: 'API keys', icon: RiKey2Line },
   { href: IRUKA_DOCS_OVERVIEW_URL, label: 'Docs', icon: RiBookOpenLine, external: true },
 ];
 

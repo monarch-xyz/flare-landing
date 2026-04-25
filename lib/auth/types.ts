@@ -64,3 +64,26 @@ export interface TelegramStatusResponse {
   telegram_username?: string;
   linked_at?: string;
 }
+
+export interface TelegramChallengeResponse {
+  provider: 'telegram';
+  app_user_id: string;
+  code: string;
+  expires_at: string;
+  bot_deep_link: string;
+  bot_start_command: string;
+}
+
+export interface ApiKeyMetadata {
+  id: string;
+  label: string | null;
+  prefix: string;
+  created_at: string;
+  last_used_at: string | null;
+  revoked_at: string | null;
+}
+
+export interface CreateApiKeyResponse {
+  api_key: string;
+  metadata: ApiKeyMetadata;
+}
