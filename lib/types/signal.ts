@@ -220,8 +220,8 @@ export interface SignalRecord {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  last_triggered_at?: string | null;
   last_evaluated_at?: string | null;
+  last_fired_at?: string | null;
 }
 
 export type CreateSignalRequest = PublicSignalEnvelope;

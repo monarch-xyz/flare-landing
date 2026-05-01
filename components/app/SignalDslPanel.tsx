@@ -112,7 +112,7 @@ export function SignalDslPanel({
           </div>
           <div className="ui-stat">
             <p className="ui-stat-label">Last Trigger</p>
-            <p className="mt-2 text-sm text-foreground">{formatTimestamp(signal.last_triggered_at)}</p>
+            <p className="mt-2 text-sm text-foreground">{formatTimestamp(signal.last_fired_at)}</p>
           </div>
         </div>
       ) : null}

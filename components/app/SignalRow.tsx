@@ -12,7 +12,7 @@ export function SignalRow({ signal }: SignalRowProps) {
   const targetingSummary = getSignalTargetingSummary(signal.definition);
   const scheduleSummary = getPrimaryScheduleSummary(signal.triggers);
   const updatedAt = new Date(signal.updated_at).toLocaleString();
-  const lastTriggeredAt = signal.last_triggered_at ? new Date(signal.last_triggered_at).toLocaleString() : '—';
+  const lastFiredAt = signal.last_fired_at ? new Date(signal.last_fired_at).toLocaleString() : '—';
 
   return (
     <div className="grid grid-cols-1 gap-4 py-4 sm:grid-cols-[minmax(0,2fr)_0.8fr_0.95fr_0.95fr_auto] sm:items-start">
@@ -37,7 +37,7 @@ export function SignalRow({ signal }: SignalRowProps) {
       </div>
       <div>
         <p className="ui-stat-label">Last Trigger</p>
-        <p className="mt-2 text-sm text-secondary">{lastTriggeredAt}</p>
+        <p className="mt-2 text-sm text-secondary">{lastFiredAt}</p>
       </div>
       <div>
         <p className="ui-stat-label">Updated</p>
