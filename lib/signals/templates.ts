@@ -547,6 +547,10 @@ const getConditionEntityId = (condition: SignalCondition): string | null => {
 };
 
 const getConditionContractAddress = (condition: SignalCondition): string | null => {
+  if ('token' in condition && typeof condition.token === 'string' && condition.token) {
+    return normalizeAddress(condition.token);
+  }
+
   if (
     'contract_address' in condition &&
     typeof condition.contract_address === 'string' &&
@@ -627,6 +631,11 @@ const getTrackedAddresses = (definition: SignalDefinition) => {
       continue;
     }
 
+    if ('account' in condition && typeof condition.account === 'string' && condition.account) {
+      addresses.add(normalizeAddress(condition.account));
+      continue;
+    }
+
     if ('address' in condition && typeof condition.address === 'string' && condition.address) {
       addresses.add(normalizeAddress(condition.address));
     }
@@ -652,8 +661,8 @@ export const describeSignalDefinition = (definition: SignalDefinition) => {
   const erc20Balance = getErc20BalanceCondition(definition);
   if (erc20Balance) {
     const duration = erc20Balance.window?.duration ?? definition.window.duration;
-    const holder = erc20Balance.address ? formatCompactIdentifier(erc20Balance.address) : 'holder';
-    const token = erc20Balance.contract_address ? formatCompactIdentifier(erc20Balance.contract_address) : 'asset';
+    const holder = erc20Balance.account ? formatCompactIdentifier(erc20Balance.account) : 'holder';
+    const token = erc20Balance.token ? formatCompactIdentifier(erc20Balance.token) : 'asset';
     const amount = 'percent' in erc20Balance.by ? `${erc20Balance.by.percent}%` : `${erc20Balance.by.absolute} absolute`;
     return `${token} balance for ${holder} ${erc20Balance.direction}s by at least ${amount} within ${duration}.`;
   }
@@ -826,15 +835,15 @@ export const getSignalFocusDetails = (definition: SignalDefinition): SignalFocus
   }
 
   const erc20Balance = getErc20BalanceCondition(definition);
-  if (erc20Balance?.contract_address) {
+  if (erc20Balance?.token) {
     return {
       label: 'Asset',
-      value: normalizeAddress(erc20Balance.contract_address),
+      value: normalizeAddress(erc20Balance.token),
       hint:
-        erc20Balance.address && primaryChainId !== null
-          ? `${erc20Balance.direction === 'increase' ? 'Holder gains' : 'Holder losses'} · ${formatCompactIdentifier(erc20Balance.address)} · Chain ${primaryChainId}`
-          : erc20Balance.address
-            ? `${erc20Balance.direction === 'increase' ? 'Holder gains' : 'Holder losses'} · ${formatCompactIdentifier(erc20Balance.address)}`
+        erc20Balance.account && primaryChainId !== null
+          ? `${erc20Balance.direction === 'increase' ? 'Holder gains' : 'Holder losses'} · ${formatCompactIdentifier(erc20Balance.account)} · Chain ${primaryChainId}`
+          : erc20Balance.account
+            ? `${erc20Balance.direction === 'increase' ? 'Holder gains' : 'Holder losses'} · ${formatCompactIdentifier(erc20Balance.account)}`
             : primaryChainId !== null
               ? `Chain ${primaryChainId}`
               : undefined,
@@ -1156,8 +1165,8 @@ export const buildErc20BalanceTemplate = (input: Erc20BalanceTemplateRequest): C
           duration: windowDuration,
         },
         chain_id: chainId,
-        contract_address: tokenContract,
-        address: watchedAddress,
+        token: tokenContract,
+        account: watchedAddress,
       },
     ],
   };
@@ -1237,7 +1246,7 @@ export const buildErc4626WithdrawTemplate = (input: Erc4626WithdrawTemplateReque
               duration: windowDuration,
             },
             chain_id: chainId,
-            contract_address: vaultContract,
+            token: vaultContract,
           },
         ],
       },

@@ -156,8 +156,8 @@ test('erc20 balance templates support percent decreases', () => {
     assert.deepEqual(condition.source, { kind: 'alias', name: 'ERC20.Position.balance' });
     assert.equal(condition.direction, 'decrease');
     assert.deepEqual(condition.by, { percent: 20 });
-    assert.equal(condition.contract_address, '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');
-    assert.equal(condition.address, '0x1111111111111111111111111111111111111111');
+    assert.equal(condition.token, '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');
+    assert.equal(condition.account, '0x1111111111111111111111111111111111111111');
     assert.deepEqual(condition.window, { duration: '2h' });
   }
 });
@@ -192,8 +192,8 @@ test('describeSignalDefinition uses alias sources for threshold summaries', () =
         operator: '>',
         value: '100000000000000000000000',
         chain_id: 1,
-        contract_address: '0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8',
-        address: '0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8',
+        token: '0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8',
+        account: '0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8',
       },
     ],
   };
@@ -214,6 +214,17 @@ test('erc4626 withdraw templates stay compatible with the current Iruka docs sch
 
   assertDocCompatibleTemplatePayload(payload);
   assert.deepEqual(payload.delivery, [{ type: 'telegram' }]);
+  const groupCondition = payload.definition.conditions[0];
+  assert.equal(groupCondition?.type, 'group');
+  if (groupCondition?.type === 'group') {
+    const changeCondition = groupCondition.conditions[0];
+    assert.equal(changeCondition?.type, 'change');
+    if (changeCondition?.type === 'change') {
+      assert.equal(changeCondition.metric, 'ERC4626.Position.shares');
+      assert.equal(changeCondition.token, '0x1111111111111111111111111111111111111111');
+      assert.equal('contract_address' in changeCondition ? changeCondition.contract_address : undefined, undefined);
+    }
+  }
 });
 
 test('signal templates forward post-first-alert snooze repeat policy', () => {

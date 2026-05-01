@@ -62,6 +62,8 @@ export interface ThresholdCondition {
   entity_id?: string;
   contract_address?: string;
   address?: string;
+  token?: string;
+  account?: string;
 }
 
 export interface ChangeCondition {
@@ -76,6 +78,8 @@ export interface ChangeCondition {
   entity_id?: string;
   contract_address?: string;
   address?: string;
+  token?: string;
+  account?: string;
 }
 
 export interface GroupCondition {

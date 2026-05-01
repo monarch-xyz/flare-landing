@@ -35,8 +35,8 @@ const previewCode = `{
         "direction": "decrease",
         "by": { "percent": 20 },
         "chain_id": 1,
-        "contract_address": "0xvault",
-        "address": "0xholder"
+        "token": "0xvault",
+        "account": "0xholder"
       }
     ]
   },
