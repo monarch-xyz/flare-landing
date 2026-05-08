@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { JetBrains_Mono, Zen_Kaku_Gothic_New } from 'next/font/google';
+import '@daimo/sdk/web/theme.css';
 import './globals.css';
-import { WagmiProviders } from '@/components/auth/WagmiProviders';
+import { AppProviders } from '@/components/AppProviders';
 
 const zenKakuGothic = Zen_Kaku_Gothic_New({
   subsets: ['latin'],
@@ -153,9 +154,9 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${zenKakuGothic.variable} ${jetbrainsMono.variable} antialiased`} suppressHydrationWarning>
-        <WagmiProviders>
+        <AppProviders>
           {children}
-        </WagmiProviders>
+        </AppProviders>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { UpgradeProButton } from '@/components/app/UpgradeProButton';
 import type { SignalPlanLimits } from '@/lib/types/signal';
 
 interface SignalComplexityIndicatorProps {
@@ -20,6 +21,7 @@ export function SignalComplexityIndicator({ limits }: SignalComplexityIndicatorP
 
   const { used, limit } = limits.active_complexity;
   const isOverLimit = used > limit;
+  const isPro = limits.plan.key === 'pro';
 
   return (
     <div className="ui-panel-ghost max-w-xl px-4 py-3">
@@ -30,9 +32,12 @@ export function SignalComplexityIndicator({ limits }: SignalComplexityIndicatorP
             {used} / {limit} active complexity units · {limits.plan.name}
           </p>
         </div>
-        <span className="ui-chip" data-tone={isOverLimit ? 'danger' : 'accent'}>
-          {formatPercent(used, limit)} used
-        </span>
+        <div className="flex items-center gap-2 sm:justify-end">
+          {!isPro ? <UpgradeProButton /> : null}
+          <span className="ui-chip" data-tone={isOverLimit ? 'danger' : 'accent'}>
+            {formatPercent(used, limit)} used
+          </span>
+        </div>
       </div>
       <p className="mt-3 text-xs leading-relaxed text-secondary">
         Scheduled signals use credits based on interval and provider work.{' '}
