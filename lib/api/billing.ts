@@ -3,6 +3,7 @@ import {
   BillingCheckoutSession,
   BillingPlanKey,
   BillingProvider,
+  X402PaymentPayload,
   normalizeBillingCheckoutSession,
 } from '@/lib/billing/checkout';
 
@@ -20,6 +21,26 @@ export async function createBillingCheckoutSession(
   const session = normalizeBillingCheckoutSession(payload);
   if (!session) {
     throw new Error('Iruka returned an invalid checkout session');
+  }
+  return session;
+}
+
+export async function finalizeBillingCheckoutSession(input: {
+  checkoutId: string;
+  sessionId: string;
+  paymentPayload: X402PaymentPayload;
+}): Promise<BillingCheckoutSession> {
+  const payload = await client.post<unknown, { provider: 'x402'; session_id: string; payment_payload: X402PaymentPayload }>(
+    `/api/iruka/billing/checkout-sessions/${input.checkoutId}/finalize`,
+    {
+      provider: 'x402',
+      session_id: input.sessionId,
+      payment_payload: input.paymentPayload,
+    },
+  );
+  const session = normalizeBillingCheckoutSession(payload);
+  if (!session) {
+    throw new Error('Iruka returned an invalid checkout result');
   }
   return session;
 }
