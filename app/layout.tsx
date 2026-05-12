@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { JetBrains_Mono, Zen_Kaku_Gothic_New } from 'next/font/google';
-import '@daimo/sdk/web/theme.css';
 import './globals.css';
 import { AppProviders } from '@/components/AppProviders';
 

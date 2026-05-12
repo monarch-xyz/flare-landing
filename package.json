@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@daimo/sdk": "1.4.2",
     "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.90.21",
     "clsx": "^2.1.1",
