@@ -50,7 +50,6 @@ export function X402CheckoutPanel() {
   const requirement = session?.x402PaymentRequirements?.accepts[0];
   const amount = useMemo(() => formatUsdcAmount(getX402RequirementAmount(requirement)), [requirement]);
   const isBusy = status === 'creating' || status === 'signing' || status === 'finalizing';
-  const canFinalize = Boolean(session && paymentPayload) && status !== 'succeeded';
   const primaryLabel = paymentPayload
     ? 'Retry verification'
     : status === 'creating'
@@ -124,20 +123,6 @@ export function X402CheckoutPanel() {
     }
   };
 
-  const retryFinalize = async () => {
-    if (!session || !paymentPayload) {
-      return;
-    }
-    setError(null);
-    setStatus('finalizing');
-    try {
-      await finalizePayment(session, paymentPayload);
-    } catch (caught) {
-      setStatus('idle');
-      setError(getFailureMessage(caught));
-    }
-  };
-
   return (
     <div className="mx-auto max-w-3xl">
       <div className="ui-panel p-5 sm:p-6">
@@ -194,11 +179,6 @@ export function X402CheckoutPanel() {
             <Button type="button" size="lg" onClick={startCheckout} disabled={isBusy || status === 'succeeded'}>
               {primaryLabel}
             </Button>
-            {canFinalize ? (
-              <Button type="button" size="lg" variant="secondary" onClick={retryFinalize} disabled={isBusy}>
-                Retry verification
-              </Button>
-            ) : null}
           </div>
         </div>
       </div>
